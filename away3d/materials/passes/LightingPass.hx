@@ -265,16 +265,16 @@ class LightingPass extends CompiledPass {
         var offset:Int;
         l = _lightVertexConstantIndex;
         k = _lightFragmentConstantIndex;
-        var cast : Int = 0;
+        var __cast : Int = 0;
         var dirLights : Vector<DirectionalLight> = _lightPicker.directionalLights;
         offset = _directionalLightsOffset;
         len = _lightPicker.directionalLights.length;
         if(offset > len) {
-        cast = 1;
+        __cast = 1;
         offset -= len;
         }
-        while(cast < numLightTypes) {
-        if(cast) dirLights = _lightPicker.castingDirectionalLights;
+        while(__cast < numLightTypes) {
+        if(__cast>0) dirLights = _lightPicker.castingDirectionalLights;
         len = dirLights.length;
         if(len > _numDirectionalLights) len = _numDirectionalLights;
         i = 0;
@@ -312,11 +312,11 @@ class LightingPass extends CompiledPass {
         if(++total == _numDirectionalLights) {
 // break loop
         i = len;
-        cast = numLightTypes;
+        __cast = numLightTypes;
         }
         ++i;
         }
-        ++cast;
+        ++__cast;
         }
 // more directional supported than currently picked, need to clamp all to 0
         if(_numDirectionalLights > total) {
@@ -328,13 +328,13 @@ class LightingPass extends CompiledPass {
         offset = _pointLightsOffset;
         len = _lightPicker.pointLights.length;
         if(offset > len) {
-        cast = 1;
+        __cast = 1;
         offset -= len;
         }
 
-        else cast = 0;
-        while(cast < numLightTypes) {
-        if(cast) pointLights = _lightPicker.castingPointLights;
+        else __cast = 0;
+        while(__cast < numLightTypes) {
+        if(__cast>0) pointLights = _lightPicker.castingPointLights;
         len = pointLights.length;
         i = 0;
         while(i < len) {
@@ -371,11 +371,11 @@ class LightingPass extends CompiledPass {
         if(++total == _numPointLights) {
 // break loop
         i = len;
-        cast = numLightTypes;
+        __cast = numLightTypes;
         }
         ++i;
         }
-        ++cast;
+        ++__cast;
         }
 // more directional supported than currently picked, need to clamp all to 0
         if(_numPointLights > total) {

@@ -16,7 +16,7 @@ import away3d.core.base.SubMesh;
 import away3d.animators.states.IUVAnimationState;
 import flash.Vector;
 import away3d.animators.data.UVAnimationFrame;
-import away3d.Arcane;
+
 import away3d.cameras.Camera3D;
 
 import flash.display3D.Context3DProgramType;

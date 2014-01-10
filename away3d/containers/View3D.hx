@@ -115,18 +115,23 @@ class View3D extends Sprite {
     }
 
     private function initRightClickMenu():Void {
+			#if flash
         _menu0 = new ContextMenuItem("Away3D.com	v" + Away3D.MAJOR_VERSION + "." + Away3D.MINOR_VERSION + "." + Away3D.REVISION, true, true, true);
         _menu1 = new ContextMenuItem("View Source", true, true, true);
         _menu0.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, visitWebsite);
         _menu1.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, viewSource);
         _ViewContextMenu = new ContextMenu();
         updateRightClickMenu();
+		#end
     }
 
     private function updateRightClickMenu():Void {
+		#if flash
         if (_rightClickMenuEnabled) _ViewContextMenu.customItems = (_sourceURL != null) ? [_menu0, _menu1] : [_menu0]
         else _ViewContextMenu.customItems = [];
+
         contextMenu = _ViewContextMenu;
+		#end
     }
 
     public function new(scene:Scene3D = null, camera:Camera3D = null, renderer:RendererBase = null, forceSoftware:Bool = false, profile:String = "baseline") {
@@ -249,7 +254,7 @@ class View3D extends Sprite {
         _hitField.graphics.drawRect(0, 0, 100, 100);
         addChild(_hitField);
     }
-
+#if flash
 /**
 	 * Not supported. Use filters3d instead.
 	 */
@@ -267,7 +272,7 @@ class View3D extends Sprite {
         throw new Error("filters is not supported in View3D. Use filters3d instead.");
         return value;
     }
-
+#end
     public function get_filters3d():Array<Dynamic> {
         return (_filter3DRenderer != null) ? _filter3DRenderer.filters : null;
     }
@@ -408,16 +413,30 @@ class View3D extends Sprite {
 	 * The width of the viewport. When software rendering is used, this is limited by the
 	 * platform to 2048 pixels.
 	 */
+  public function setSizeWH(w:Float, h:Float):Void {
+	  #if flash
+			width=(w);
+			height=(h);
+	 #else
+	    setWidth(w);
+		setHeight(h);
+	  #end	
+ 
+    }
+
 /**
 	 * The width of the viewport. When software rendering is used, this is limited by the
 	 * platform to 2048 pixels.
 	 */
-
-    @:getter(width) function get_width():Float {
+#if flash
+    @:getter(width)  function get_width():Float {
         return _width;
     }
 
-    @:setter(width) function set_width(value:Float):Void {
+    @:setter(width)  function set_width(value:Float):Void {
+#else 
+	function setWidth(value:Float):Void {
+#end	
 // Backbuffer limitation in software mode. See comment in updateBackBuffer()
         if (_stage3DProxy != null && _stage3DProxy.usesSoftwareRendering && value > 2048)
             value = 2048;
@@ -430,28 +449,38 @@ class View3D extends Sprite {
 
         _hitField.width = value;
         _width = value;
-        _aspectRatio = _width / _height;
-        _camera.lens.aspectRatio = _aspectRatio;
-        _depthTextureInvalid = true;
+  
 
         _renderer.viewWidth = value;
 
         _scissorRect.width = value;
 
+		
+		
+		
+		
+		_aspectRatio = _width / _height;
+        _camera.lens.aspectRatio = _aspectRatio;
+        _depthTextureInvalid = true;
         _backBufferInvalid = true;
         _scissorRectDirty = true;
     }
-
+ 
 /**
 	 * The height of the viewport. When software rendering is used, this is limited by the
 	 * platform to 2048 pixels.
 	 */
-
+#if flash
     @:getter(height) function get_height():Float {
         return _height;
     }
 
-    @:setter(height) function set_height(value:Float):Void {
+    @:setter(height) 
+
+	function set_height(value:Float):Void {
+#else 
+	function setHeight(value:Float):Void {
+#end
 // Backbuffer limitation in software mode. See comment in updateBackBuffer()
         if (_stage3DProxy != null && _stage3DProxy.usesSoftwareRendering && value > 2048)
             value = 2048;
@@ -476,7 +505,7 @@ class View3D extends Sprite {
         _scissorRectDirty = true;
     }
 
-
+#if flash
     @:setter(x) function set_x(value:Float):Void {
         if (x == value)
             return;
@@ -505,7 +534,7 @@ class View3D extends Sprite {
         if (_stage3DProxy != null && !_shareContext)
             _stage3DProxy.visible = value;
     }
-
+#end
 /**
 	 * The amount of anti-aliasing to be used.
 	 */
@@ -831,7 +860,10 @@ class View3D extends Sprite {
 	 */
 
     private function onAddedToStage(event:Event):Void {
-        if (_addedToStage) return;
+        if (_addedToStage) {
+		 
+			return;
+		}
         _addedToStage = true;
         if (_stage3DProxy == null) {
             _stage3DProxy = Stage3DManager.getInstance(stage).getFreeStage3DProxy(_forceSoftware, _profile);
@@ -846,6 +878,7 @@ class View3D extends Sprite {
         if (_height == 0) height = stage.stageHeight
         else _rttBufferManager.viewHeight = Std.int(_height);
         if (_shareContext) _mouse3DManager.addViewLayer(this);
+		
     }
 
     private function onAdded(event:Event):Void {
@@ -865,7 +898,7 @@ class View3D extends Sprite {
 
 // dead ends:
 // dead ends:
-
+#if flash
     @:setter(z) function set_z(value:Float):Void {
     }
 
@@ -892,6 +925,6 @@ class View3D extends Sprite {
 
     @:setter(scaleY) function set_scaleY(value:Float):Void {
     }
-
+#end
 }
 

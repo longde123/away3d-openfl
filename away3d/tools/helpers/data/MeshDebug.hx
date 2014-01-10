@@ -119,11 +119,11 @@ class MeshDebug extends SegmentSet {
             try {
                 vectorTarget = ((type == 1)) ? subGeom.vertexNormalData : subGeom.vertexTangentData;
             }
-            catch (e) {
-                {
+            catch (e:Dynamic) {
+                 
                     ++i;
                     continue;
-                }
+                
 
             }
 

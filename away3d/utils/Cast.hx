@@ -237,9 +237,9 @@ class Cast {
         if (Std.is(data, String)) data = tryClass(data);
         if (Std.is(data, Class)) {
             try {
-                data = Type.createInstance(data, [])
+                data = Type.createInstance(data, []);
             }
-            catch (bitmapError) {
+            catch (bitmapError:Dynamic) {
                 data = Type.createInstance(data, [0, 0]);
             }
 
@@ -266,9 +266,9 @@ class Cast {
         if (Std.is(data, String)) data = tryClass(data);
         if (Std.is(data, Class)) {
             try {
-                data = Type.createInstance(data, [])
+                data = Type.createInstance(data, []);
             }
-            catch (materialError) {
+            catch (materialError:Dynamic) {
                 data = Type.createInstance(data, [0, 0]);
             }
 

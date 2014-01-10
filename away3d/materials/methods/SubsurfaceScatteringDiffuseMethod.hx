@@ -175,7 +175,7 @@ class SubsurfaceScatteringDiffuseMethod extends CompositeDiffuseMethod {
 /**
 	 * @inheritDoc
 	 */
-    override var vo:MethodVO, regCache:ShaderRegisterCache, targetReg:ShaderRegisterElement) : String {
+    override public function getFragmentPostLightingCode( vo:MethodVO, regCache:ShaderRegisterCache, targetReg:ShaderRegisterElement) : String {
     var code : String = super.getFragmentPostLightingCode(vo, regCache, targetReg);
     var temp : ShaderRegisterElement = regCache.getFreeFragmentVectorTemp();
     code += "mul " + temp + ".xyz, " + _lightColorReg + ".xyz, " + _targetReg + ".w\n" + "mul " + temp + ".xyz, " + temp + ".xyz, " + _colorReg + ".xyz\n" + "add " + targetReg + ".xyz, " + targetReg + ".xyz, " + temp + ".xyz\n";

@@ -6,7 +6,7 @@
 package away3d.animators.states;
 
 import away3d.core.base.Geometry;
-interface IVertexAnimationState implements IAnimationState {
+interface IVertexAnimationState extends IAnimationState {
     var currentGeometry(get_currentGeometry, never):Geometry;
     var nextGeometry(get_nextGeometry, never):Geometry;
     var blendWeight(get_blendWeight, never):Float;

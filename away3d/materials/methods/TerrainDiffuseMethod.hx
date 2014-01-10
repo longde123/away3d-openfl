@@ -54,7 +54,7 @@ class TerrainDiffuseMethod extends BasicDiffuseMethod {
 /**
 	 * @inheritDoc
 	 */
-    override var vo:MethodVO, regCache:ShaderRegisterCache, targetReg:ShaderRegisterElement) : String {
+    override public function  getFragmentPostLightingCode(  vo:MethodVO, regCache:ShaderRegisterCache, targetReg:ShaderRegisterElement) : String {
     var code : String = "";
     var albedo : ShaderRegisterElement;
     var scaleRegister : ShaderRegisterElement;

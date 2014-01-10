@@ -82,7 +82,7 @@ class ImageParser extends ParserBase {
             return PARSING_DONE;
         }
         if (Std.is(_data, BitmapData)) {
-            asset = new BitmapTexture( cast(_data, BitmapData) ;);
+            asset = new BitmapTexture( cast(_data, BitmapData)  );
             finalizeAsset(asset, _fileName);
             return PARSING_DONE;
         }

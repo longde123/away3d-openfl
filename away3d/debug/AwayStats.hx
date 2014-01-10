@@ -169,6 +169,7 @@ class AwayStats extends Sprite {
         _max_ram = 0;
         _tfaces = 0;
         _rfaces = 0;
+		_last_frame_timestamp = 0;
         _init();
     }
 

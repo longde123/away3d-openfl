@@ -12,6 +12,7 @@ import away3d.core.traverse.PartitionTraverser;
 import away3d.primitives.WireframeCube;
 import away3d.primitives.WireframePrimitiveBase;
 import flash.geom.Vector3D;
+import flash.Vector.Vector;
 
 class InvertedOctreeNode extends NodeBase {
 
@@ -47,7 +48,7 @@ class InvertedOctreeNode extends NodeBase {
         _parent = value;
     }
 
-    override public function isInFrustum(planes:Vector<Plane3D>, numPlanes:Int):Bool {
+    override public function isInFrustum(planes:Vector<Plane3D>, numPlanes:Int):Bool { 
         var i:Int = 0;
         while (i < numPlanes) {
             var plane:Plane3D = planes[i];

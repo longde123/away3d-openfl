@@ -119,7 +119,7 @@ class DXFParser extends ParserBase {
             _startedParsing = true;
             var re:RegExp = new RegExp(String.fromCharCode(13), "g");
             _textData = _textData.replace(re, "");
-            _textData = _textData.replace(new EReg("\\[\r\n]+\s*", "gm"), "");
+            _textData = ~/\\[\r\n]+\s*/gm.replace(_textData,'');
             var _charIndex:Int = 0;
             _stringLen = _textData.length;
             _oldIndex = 0;

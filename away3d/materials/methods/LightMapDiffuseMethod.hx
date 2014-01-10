@@ -26,7 +26,7 @@ class LightMapDiffuseMethod extends CompositeDiffuseMethod {
 	 * This can be used to add pre-calculated lighting or global illumination.
 	 */
     static public var ADD:String = "add";
-    private var _texture:Texture2DBase;
+    //private var _texture:Texture2DBase;
     private var _blendMode:String;
     private var _useSecondaryUV:Bool;
 /**
@@ -97,7 +97,7 @@ class LightMapDiffuseMethod extends CompositeDiffuseMethod {
 /**
 	 * @inheritDoc
 	 */
-    override var vo:MethodVO, regCache:ShaderRegisterCache, targetReg:ShaderRegisterElement) : String {
+    override public function getFragmentPostLightingCode(  vo:MethodVO, regCache:ShaderRegisterCache, targetReg:ShaderRegisterElement) : String {
     var code : String;
     var lightMapReg : ShaderRegisterElement = regCache.getFreeTextureReg();
     var temp : ShaderRegisterElement = regCache.getFreeFragmentVectorTemp();

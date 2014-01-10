@@ -7,6 +7,9 @@ package away3d.core.math;
 import flash.geom.Vector3D;
 import flash.Vector;
 import flash.geom.Matrix3D;
+#if (cpp || neko || js)
+using OpenFLStage3D;
+#end
 class Matrix3DUtils {
 
 /**

@@ -33,7 +33,7 @@ class DepthDiffuseMethod extends BasicDiffuseMethod {
 /**
 	 * @inheritDoc
 	 */
-    override var vo:MethodVO, regCache:ShaderRegisterCache, targetReg:ShaderRegisterElement) : String {
+    override  public function getFragmentPostLightingCode( vo:MethodVO, regCache:ShaderRegisterCache, targetReg:ShaderRegisterElement) : String {
     var code : String = "";
     var temp : ShaderRegisterElement;
     var decReg : ShaderRegisterElement;

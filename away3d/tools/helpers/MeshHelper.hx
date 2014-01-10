@@ -35,7 +35,7 @@ class MeshHelper {
         try {
             radius = Math.max((mesh.maxX - mesh.minX) * cast((mesh), Object3D).scaleX, (mesh.maxY - mesh.minY) * cast((mesh), Object3D).scaleY, (mesh.maxZ - mesh.minZ) * cast((mesh), Object3D).scaleZ);
         }
-        catch (e) {
+        catch (e:Dynamic) {
             Bounds.getMeshBounds(mesh);
             radius = Math.max((Bounds.maxX - Bounds.minX) * cast((mesh), Object3D).scaleX, (Bounds.maxY - Bounds.minY) * cast((mesh), Object3D).scaleY, (Bounds.maxZ - Bounds.minZ) * cast((mesh), Object3D).scaleZ);
         }
@@ -538,7 +538,7 @@ class MeshHelper {
                 normals = subGeom.vertexNormalData;
                 subGeom.autoDeriveVertexNormals = false;
             }
-            catch (e) {
+            catch (e:Dynamic) {
                 subGeom.autoDeriveVertexNormals = true;
                 normals = new Vector<Float>();
                 j = 0;
@@ -549,7 +549,7 @@ class MeshHelper {
                 tangents = subGeom.vertexTangentData;
                 subGeom.autoDeriveVertexTangents = false;
             }
-            catch (e) {
+            catch (e:Dynamic) {
                 subGeom.autoDeriveVertexTangents = true;
                 tangents = new Vector<Float>();
                 j = 0;

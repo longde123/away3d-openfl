@@ -13,7 +13,7 @@ class LightingMethodBase extends ShadingMethodBase {
 /**
 	 * A method that is exposed to wrappers in case the strength needs to be controlled
 	 */
-    private var _modulateMethod:Dynamic -> Dynamic -> Dynamic -> Dynamic -> Void;
+    private var _modulateMethod:BasicSpecularMethod;
 /**
 	 * Creates a new LightingMethodBase.
 	 */

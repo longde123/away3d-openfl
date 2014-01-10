@@ -32,7 +32,7 @@ class Bounds {
     static private var _maxY:Float;
     static private var _maxZ:Float;
     static private var _defaultPosition:Vector3D = new Vector3D(0.0, 0.0, 0.0);
-    static private var _containers:ObjectMap<ObjectContainer3D, Vector<Float>>;;
+    static private var _containers:ObjectMap<ObjectContainer3D, Vector<Float>>; 
 /**
 	 * Calculate the bounds of a Mesh object
 	 * @param mesh        Mesh. The Mesh to get the bounds from.

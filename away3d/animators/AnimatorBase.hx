@@ -72,9 +72,14 @@ class AnimatorBase extends NamedAssetBase implements IAsset {
     public var updatePosition:Bool;
 
     public function getAnimationState(node:AnimationNodeBase):AnimationStateBase {
-        var className:Class<Dynamic> = node.stateClass;
+      
 
-        return _animationStates[node] || = new ClassName(this, node);
+       if(_animationStates[node] !=null) return _animationStates[node] ;
+		
+		var className:Class<Dynamic> = node.stateClass;
+		_animationStates[node] = Type.createInstance(ClassName,[this, node]);
+		
+		 return _animationStates[node] ;
     }
 
     public function getAnimationStateByName(name:String):AnimationStateBase {
@@ -209,7 +214,8 @@ class AnimatorBase extends NamedAssetBase implements IAsset {
         _isPlaying = true;
         if (!_broadcaster.hasEventListener(Event.ENTER_FRAME)) _broadcaster.addEventListener(Event.ENTER_FRAME, onEnterFrame);
         if (!hasEventListener(AnimatorEvent.START)) return;
-        dispatchEvent(_startEvent || = new AnimatorEvent(AnimatorEvent.START, this));
+		if (_startEvent == null)_startEvent  = new AnimatorEvent(AnimatorEvent.START, this);
+        dispatchEvent(_startEvent);
     }
 
 /**

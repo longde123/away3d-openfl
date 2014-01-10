@@ -177,8 +177,7 @@ import flash.events.EventDispatcher;
 import flash.events.TimerEvent;
 import flash.net.URLRequest;
 import flash.utils.ByteArray;
-import flash.utils.Timer;
-import flash.utils.GetTimer;
+import flash.utils.Timer; 
 
 class ParserBase extends EventDispatcher {
     public var parsingFailure(get_parsingFailure, set_parsingFailure):Bool;

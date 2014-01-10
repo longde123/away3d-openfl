@@ -40,7 +40,7 @@ class JointPose {
 	 */
 
     public function toMatrix3D(target:Matrix3D = null):Matrix3D {
-        target || = new Matrix3D();
+        if(target==null)target  = new Matrix3D();
         orientation.toMatrix3D(target);
         target.appendTranslation(translation.x, translation.y, translation.z);
         return target;

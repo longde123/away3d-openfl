@@ -23,9 +23,10 @@ class CompositeSpecularMethod extends BasicSpecularMethod {
 	 * @param baseSpecularMethod The base specular method on which this method's shading is based.
 	 */
 
-    public function new(modulateMethod:Dynamic -> Void, baseSpecularMethod:BasicSpecularMethod = null) {
+    public function new(modulateMethod:BasicSpecularMethod, baseSpecularMethod:BasicSpecularMethod = null) {
         super();
-        _baseMethod = baseSpecularMethod || new BasicSpecularMethod();
+        _baseMethod = baseSpecularMethod ;
+		if(_baseMethod==null)_baseMethod= new BasicSpecularMethod();
         _baseMethod._modulateMethod = modulateMethod;
         _baseMethod.addEventListener(ShadingMethodEvent.SHADER_INVALIDATED, onShaderInvalidated);
     }
@@ -180,7 +181,7 @@ class CompositeSpecularMethod extends BasicSpecularMethod {
 /**
 	 * @inheritDoc
 	 */
-    override var vo:MethodVO, regCache:ShaderRegisterCache, targetReg:ShaderRegisterElement) : String {
+    override  public function  getFragmentPostLightingCode(  vo:MethodVO, regCache:ShaderRegisterCache, targetReg:ShaderRegisterElement) : String {
     return _baseMethod.getFragmentPostLightingCode(vo, regCache, targetReg);
     }
 

@@ -8,6 +8,7 @@ package away3d.materials.methods;
 import away3d.core.managers.Stage3DProxy;
 import away3d.events.ShadingMethodEvent;
 import away3d.materials.compilation.ShaderRegisterCache;
+import away3d.materials.compilation.ShaderRegisterData;
 import away3d.materials.compilation.ShaderRegisterElement;
 import away3d.textures.Texture2DBase;
 
@@ -188,7 +189,7 @@ class CompositeDiffuseMethod extends BasicDiffuseMethod {
 /**
 	 * @inheritDoc
 	 */
-    override var vo:MethodVO, regCache:ShaderRegisterCache, targetReg:ShaderRegisterElement) : String {
+    override public function  getFragmentPostLightingCode( vo:MethodVO, regCache:ShaderRegisterCache, targetReg:ShaderRegisterElement) : String {
     return _baseMethod.getFragmentPostLightingCode(vo, regCache, targetReg);
     }
 
@@ -210,7 +211,7 @@ class CompositeDiffuseMethod extends BasicDiffuseMethod {
 /**
 	 * @inheritDoc
 	 */
-    override private function set_sharedRegisters(value : ShaderRegisterData) : ShaderRegisterData {
+    override private function set_sharedRegisters(value : ShaderRegisterData) : ShaderRegisterData { 
     super.sharedRegisters = _baseMethod.sharedRegisters = value;
     return value;
     }

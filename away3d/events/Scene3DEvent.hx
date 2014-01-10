@@ -10,11 +10,11 @@ class Scene3DEvent extends Event {
     static public var PARTITION_CHANGED:String = "partitionChanged";
     public var objectContainer3D:ObjectContainer3D;
 //@:getter(target)
-
+#if flash
     public function get_target():Dynamic {
         return objectContainer3D;
     }
-
+#end
     public function new(type:String, objectContainer:ObjectContainer3D) {
         objectContainer3D = objectContainer;
         super(type);

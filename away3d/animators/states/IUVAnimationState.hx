@@ -7,7 +7,7 @@ package away3d.animators.states;
 
 
 import away3d.animators.data.UVAnimationFrame;
-interface IUVAnimationState implements IAnimationState {
+interface IUVAnimationState extends IAnimationState {
     var currentUVFrame(get_currentUVFrame, never):UVAnimationFrame;
     var nextUVFrame(get_nextUVFrame, never):UVAnimationFrame;
     var blendWeight(get_blendWeight, never):Float;

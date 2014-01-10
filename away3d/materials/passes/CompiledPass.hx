@@ -27,7 +27,9 @@ import flash.display3D.Context3D;
 import flash.display3D.Context3DProgramType;
 import flash.geom.Matrix;
 import flash.geom.Matrix3D;
-
+#if (cpp || neko || js)
+using OpenFLStage3D;
+#end
 class CompiledPass extends MaterialPassBase {
     public var enableLightFallOff(get_enableLightFallOff, set_enableLightFallOff):Bool;
     public var forceSeparateMVP(get_forceSeparateMVP, set_forceSeparateMVP):Bool;

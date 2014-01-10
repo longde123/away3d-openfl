@@ -153,7 +153,7 @@ class OutlinePass extends MaterialPassBase {
         var code:String;
 // offset
         code = "mul vt7, vt1, vc5.x\n" + "add vt7, vt7, vt0\n" + "mov vt7.w, vt0.w\n" + // project and scale to viewport
-        ;
+        
         "m44 op, vt7, vc0		\n";
         return code;
     }

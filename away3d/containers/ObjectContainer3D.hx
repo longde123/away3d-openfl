@@ -63,7 +63,9 @@ import away3d.library.assets.IAsset;
 import flash.events.Event;
 import flash.geom.Matrix3D;
 import flash.geom.Vector3D;
-
+#if (cpp || neko || js)
+using OpenFLStage3D;
+#end
 class ObjectContainer3D extends Object3D implements IAsset {
     public var ignoreTransform(get_ignoreTransform, set_ignoreTransform):Bool;
     public var implicitPartition(get_implicitPartition, set_implicitPartition):Partition3D;
@@ -129,7 +131,9 @@ class ObjectContainer3D extends Object3D implements IAsset {
         _scenePositionDirty = !value;
         if (!value) {
             _sceneTransform.identity();
-            _scenePosition.setTo(0, 0, 0);
+			_scenePosition.x = 0;
+			_scenePosition.y = 0;
+			_scenePosition.z = 0; 
         }
         return value;
     }

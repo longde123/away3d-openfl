@@ -133,14 +133,14 @@ class MouseEvent3D extends Event {
 /**
 	 * @inheritDoc
 	 */
-
+#if flash
     @:getter(bubbles) function get_bubbles():Bool {
         var doesBubble:Bool = super.bubbles && _allowedToPropagate;
         _allowedToPropagate = true;
 // Don't bubble if propagation has been stopped.
         return doesBubble;
     }
-
+#end
 /**
 	 * @inheritDoc
 	 */
@@ -167,7 +167,9 @@ class MouseEvent3D extends Event {
 
     override public function clone():Event {
         var result:MouseEvent3D = new MouseEvent3D(type);
+		#if flash
         if (isDefaultPrevented()) result.preventDefault();
+		#end
         result.screenX = screenX;
         result.screenY = screenY;
         result.view = view;

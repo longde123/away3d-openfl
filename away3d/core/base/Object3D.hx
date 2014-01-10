@@ -68,7 +68,9 @@ import flash.geom.Matrix3D;
 import flash.geom.Vector3D;
 import away3d.library.assets.NamedAssetBase;
 import away3d.events.Object3DEvent;
-
+#if (cpp || neko || js)
+using OpenFLStage3D;
+#end
 
 class Object3D extends NamedAssetBase {
     public var x(get_x, set_x):Float;

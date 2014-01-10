@@ -17,8 +17,7 @@ import flash.errors.Error;
 import away3d.animators.transitions.IAnimationTransition;
 import away3d.animators.states.IVertexAnimationState;
 import away3d.core.base.Geometry;
-import flash.Vector;
-import away3d.Arcane;
+import flash.Vector; 
 
 class VertexAnimator extends AnimatorBase implements IAnimator {
 

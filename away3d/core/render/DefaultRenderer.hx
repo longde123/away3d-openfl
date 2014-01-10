@@ -22,7 +22,9 @@ import flash.display3D.textures.TextureBase;
 import flash.geom.Matrix3D;
 import flash.geom.Rectangle;
 import flash.geom.Vector3D;
-
+#if (cpp || neko || js)
+using OpenFLStage3D;
+#end
 class DefaultRenderer extends RendererBase {
 
     static private var RTT_PASSES:Int = 1;

@@ -10,7 +10,7 @@ import away3d.animators.data.Skeleton;
 import flash.Vector;
 import away3d.animators.data.SkeletonPose;
 import away3d.animators.nodes.SkeletonNaryLERPNode;
-import away3d.Arcane;
+
 
 class SkeletonNaryLERPState extends AnimationStateBase implements ISkeletonAnimationState {
 

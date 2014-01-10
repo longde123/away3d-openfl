@@ -245,9 +245,8 @@ class Weld {
             }
             if (outIndex < 0) searchforNormal = false;
             foundNormalsCnt++;
-        }
-
-    }
+       
+ 
     if(outIndex < 0) {
 outIndex = outVertices.length / 3;
 if(sharedNormalIndex < 0) {

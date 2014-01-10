@@ -15,7 +15,7 @@ import away3d.materials.TextureMaterial;
 import away3d.core.base.SubMesh;
 import away3d.animators.data.SpriteSheetAnimationFrame;
 import flash.Vector;
-import away3d.Arcane;
+
 import away3d.animators.states.ISpriteSheetAnimationState;
 import away3d.animators.states.SpriteSheetAnimationState;
 import away3d.animators.transitions.IAnimationTransition;

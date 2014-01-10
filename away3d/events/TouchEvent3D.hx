@@ -91,12 +91,12 @@ class TouchEvent3D extends Event {
 /**
 	 * @inheritDoc
 	 */
-
+#if flash
     @:getter(bubbles) function get_bubbles():Bool {
 // Don't bubble if propagation has been stopped.
         return super.bubbles && _allowedToPropagate;
     }
-
+#end
 
 /**
 	 * @inheritDoc
@@ -124,7 +124,9 @@ class TouchEvent3D extends Event {
 
     override public function clone():Event {
         var result:TouchEvent3D = new TouchEvent3D(type);
+		#if flash
         if (isDefaultPrevented()) result.preventDefault();
+		#end
         result.screenX = screenX;
         result.screenY = screenY;
         result.view = view;

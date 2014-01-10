@@ -6,7 +6,7 @@ package away3d.animators.nodes;
 
 import flash.Vector;
 import flash.geom.Vector3D;
-import away3d.Arcane;
+
 
 class AnimationClipNodeBase extends AnimationNodeBase {
     public var looping(get_looping, set_looping):Bool;

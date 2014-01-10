@@ -25,7 +25,7 @@ import haxe.ds.ObjectMap;
 import flash.Vector;
 import away3d.animators.data.SkeletonPose;
 import away3d.animators.data.Skeleton;
-import away3d.Arcane;
+
 import away3d.core.base.CompactSubGeometry;
 
 class SkeletonAnimator extends AnimatorBase implements IAnimator {
@@ -39,7 +39,7 @@ class SkeletonAnimator extends AnimatorBase implements IAnimator {
     private var _globalPose:SkeletonPose;
     private var _globalPropertiesDirty:Bool;
     private var _numJoints:Int;
-    private var _animationStates:ObjectMap<SkinnedSubGeometry, SubGeomAnimationState>;;
+  //  private var _animationStates:ObjectMap<SkinnedSubGeometry, SubGeomAnimationState>; 
     private var _condensedMatrices:Vector<Float>;
     private var _skeleton:Skeleton;
     private var _forceCPU:Bool;
@@ -144,7 +144,7 @@ class SkeletonAnimator extends AnimatorBase implements IAnimator {
     public function clone():IAnimator {
 /* The cast to SkeletonAnimationSet should never fail, as _animationSet can only be set
 		 through the constructor, which will only accept a SkeletonAnimationSet. */
-        return new SkeletonAnimator( cast(_animationSet, SkeletonAnimationSet) ;, _skeleton, _forceCPU);
+        return new SkeletonAnimator( cast(_animationSet, SkeletonAnimationSet)  , _skeleton, _forceCPU);
     }
 
 /**
@@ -508,7 +508,8 @@ class SkeletonAnimator extends AnimatorBase implements IAnimator {
         if (globalPoses.length != len) globalPoses.length = len;
         var i:Int = 0;
         while (i < len) {
-            globalJointPose = globalPoses[i] || = new JointPose();
+			if(globalPoses[i] ==null)globalPoses[i] =new JointPose();
+            globalJointPose = globalPoses[i] ;
             joint = joints[i];
             parentIndex = joint.parentIndex;
             pose = jointPoses[i];

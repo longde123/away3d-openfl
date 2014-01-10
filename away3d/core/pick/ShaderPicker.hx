@@ -37,6 +37,9 @@ import away3d.core.managers.Stage3DProxy;
 import flash.display3D.Context3D;
 import flash.display3D.Program3D;
 import flash.display.BitmapData;
+#if (cpp || neko || js)
+using OpenFLStage3D;
+#end
 class ShaderPicker implements IPicker {
     public var onlyMouseEnabled(get_onlyMouseEnabled, set_onlyMouseEnabled):Bool;
 

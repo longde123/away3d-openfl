@@ -20,6 +20,7 @@ import away3d.core.base.CompactSubGeometry;
 import away3d.animators.VertexAnimationSet;
 import flash.utils.ByteArray;
 import flash.Vector;
+import haxe.ds.IntMap.IntMap;
 import haxe.ds.WeakMap;
 
 class MD2Parser extends ParserBase {
@@ -52,7 +53,7 @@ class MD2Parser extends ParserBase {
     private var _uvIndices:Vector<Float>;
     private var _indices:Vector<UInt>;
     private var _vertIndices:Vector<Float>;
-    private var _indexMap:IntMap<IntMap<Int>>;
+    private var _indexMap:IntMap<IntMap<Int>>;  
 // the current subgeom being built
     private var _animationSet:VertexAnimationSet;
     private var _firstSubGeom:CompactSubGeometry;
@@ -218,32 +219,45 @@ class MD2Parser extends ParserBase {
 	 */
 
     private function parseMaterialNames():Void {
-        var url:String;
-        var name:String;
-        var extIndex:Int;
-        var slashIndex:Int;
-        _materialNames = new Vector<String>();
-        _byteData.position = _offsetSkins;
-        var regExp:RegExp = new RegExp("[^a-zA-Z0-9\_/.]", "g");
-        var i:Int = 0;
-        while (i < _numSkins) {
-            name = _byteData.readUTFBytes(64);
-            name = name.replace(regExp, "");
-            extIndex = name.lastIndexOf(".");
-            if (_ignoreTexturePath) slashIndex = name.lastIndexOf("/");
-            if (name.toLowerCase().indexOf(".jpg") == -1 && name.toLowerCase().indexOf(".png") == -1) {
-                name = name.substring(slashIndex + 1, extIndex);
-                url = name + "." + _textureType;
-            }
+        	var url:String;
+		var name:String;
+		var extIndex:Int;
+		var slashIndex:Int = 0;
+		_materialNames = new Vector<String>();
+		_byteData.position = _offsetSkins;
 
-            else url = name;
-            _materialNames[i] = name;
-// only support 1 skin TODO: really?
-            if (dependencies.length == 0) addDependency(name, new URLRequest(url));
-            ++i;
-        }
-        if (_materialNames.length > 0) _mesh.material.name = _materialNames[0]
-        else materialFinal = true;
+		var regExp:EReg = ~/[^a-zA-Z0-9\\_\/./g;
+		for (i in 0..._numSkins)
+		{
+			name = _byteData.readUTFBytes(64);
+			name = regExp.replace(name, "");
+			extIndex = name.lastIndexOf(".");
+			if (_ignoreTexturePath)
+			{
+				slashIndex = name.lastIndexOf("/");
+			}
+			if (name.toLowerCase().indexOf(".jpg") == -1 && name.toLowerCase().indexOf(".png") == -1)
+			{
+				name = name.substring(slashIndex + 1, extIndex);
+				url = name + "." + _textureType;
+			}
+			else
+			{
+				url = name;
+			}
+
+			_materialNames[i] = name;
+			// only support 1 skin TODO: really?
+			if (dependencies.length == 0)
+			{
+				addDependency(name, new URLRequest(url));
+			}
+		}
+
+		if (_materialNames.length > 0)
+			_mesh.material.name = _materialNames[0];
+		else
+			materialFinal = true;
     }
 
 /**

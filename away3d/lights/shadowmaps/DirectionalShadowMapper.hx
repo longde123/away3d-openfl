@@ -12,7 +12,9 @@ import away3d.lights.DirectionalLight;
 import flash.display3D.textures.TextureBase;
 import flash.geom.Matrix3D;
 import flash.geom.Vector3D;
-
+#if (cpp || neko || js)
+using OpenFLStage3D;
+#end
 class DirectionalShadowMapper extends ShadowMapperBase {
     public var snap(get_snap, set_snap):Float;
     public var lightOffset(get_lightOffset, set_lightOffset):Float;

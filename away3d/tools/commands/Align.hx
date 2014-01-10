@@ -274,9 +274,6 @@ class MeshBound {
     public var maxY:Float;
     public var maxZ:Float;
 
-    static function __init__() {
-        import;
-        away3d.entities.Mesh;
-    }
+	public function new(){}
 }
 

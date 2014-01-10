@@ -26,7 +26,7 @@ import flash.display3D.textures.TextureBase;
 import flash.events.Event;
 import flash.events.EventDispatcher;
 import flash.geom.Rectangle;
-
+using OpenFLStage3D;
 class Stage3DProxy extends EventDispatcher {
     public var profile(get_profile, never):String;
     public var enableDepthAndStencil(get_enableDepthAndStencil, set_enableDepthAndStencil):Bool;
@@ -49,8 +49,9 @@ class Stage3DProxy extends EventDispatcher {
     public var bufferClear(get_bufferClear, set_bufferClear):Bool;
     public var mouse3DManager(get_mouse3DManager, set_mouse3DManager):Mouse3DManager;
     public var touch3DManager(get_touch3DManager, set_touch3DManager):Touch3DManager;
-
+	#if flash
     static private var _frameEventDriver:Shape = new Shape();
+	#end
     public var _context3D:Context3D;
     public var _stage3DIndex:Int;
     private var _usesSoftwareRendering:Bool;
@@ -84,9 +85,11 @@ class Stage3DProxy extends EventDispatcher {
         _viewportDirty = true;
         if (!hasEventListener(Stage3DEvent.VIEWPORT_UPDATED)) return;
         _viewportUpdated = new Stage3DEvent(Stage3DEvent.VIEWPORT_UPDATED);
-        dispatchEvent(_viewportUpdated);
+        dispatchEvent(_viewportUpdated); 
+		
     }
 
+	#if flash
     private function notifyEnterFrame():Void {
         if (!hasEventListener(Event.ENTER_FRAME)) return;
         if (_enterFrame == null) _enterFrame = new Event(Event.ENTER_FRAME);
@@ -98,7 +101,7 @@ class Stage3DProxy extends EventDispatcher {
         if (_exitFrame == null) _exitFrame = new Event(Event.EXIT_FRAME);
         dispatchEvent(_exitFrame);
     }
-
+	#end
 /**
 	 * Creates a Stage3DProxy object. This method should not be called directly. Creation of Stage3DProxy objects should
 	 * be handled by Stage3DManager.
@@ -120,10 +123,17 @@ class Stage3DProxy extends EventDispatcher {
         _enableDepthAndStencil = true;
 // whatever happens, be sure this has highest priority
         _stage3D.addEventListener(Event.CONTEXT3D_CREATE, onContext3DUpdate, false, 1000, false);
-        requestContext(forceSoftware, profile);
+      
         super();
+		this.forceSoftware = forceSoftware;
+		this._profile = profile;
+		start();
     }
 
+	private var forceSoftware:Bool ; 
+	public function start():Void {
+		  requestContext(forceSoftware, _profile); 
+	}
     public function get_profile():String {
         return _profile;
     }
@@ -226,11 +236,14 @@ class Stage3DProxy extends EventDispatcher {
 	 * @param priority The priority level of the event listener. The priority is designated by a signed 32-bit integer. The higher the number, the higher the priority. All listeners with priority n are processed before listeners of priority n-1. If two or more listeners share the same priority, they are processed in the order in which they were added. The default priority is 0.
 	 * @param useWeakReference Determines whether the reference to the listener is strong or weak. A strong reference (the default) prevents your listener from being garbage-collected. A weak reference does not.
 	 */
-
+	#if flash
     override public function addEventListener(type:String, listener:Dynamic -> Void, useCapture:Bool = false, priority:Int = 0, useWeakReference:Bool = false):Void {
         super.addEventListener(type, listener, useCapture, priority, useWeakReference);
+	
         if ((type == Event.ENTER_FRAME || type == Event.EXIT_FRAME) && !_frameEventDriver.hasEventListener(Event.ENTER_FRAME)) _frameEventDriver.addEventListener(Event.ENTER_FRAME, onEnterFrame, useCapture, priority, useWeakReference);
+		
     }
+
 
 /**
 	 * Removes a listener from the EventDispatcher object. Special case for enterframe and exitframe events - will switch Stage3DProxy out of automatic render mode.
@@ -244,8 +257,11 @@ class Stage3DProxy extends EventDispatcher {
     override public function removeEventListener(type:String, listener:Dynamic -> Void, useCapture:Bool = false):Void {
         super.removeEventListener(type, listener, useCapture);
 // Remove the main rendering listener if no EnterFrame listeners remain
+	 
         if (!hasEventListener(Event.ENTER_FRAME) && !hasEventListener(Event.EXIT_FRAME) && _frameEventDriver.hasEventListener(Event.ENTER_FRAME)) _frameEventDriver.removeEventListener(Event.ENTER_FRAME, onEnterFrame, useCapture);
-    }
+    	 
+	}
+		#end
 
     public function get_scissorRect():Rectangle {
         return _scissorRect;
@@ -463,15 +479,23 @@ class Stage3DProxy extends EventDispatcher {
 	 */
 
     private function onContext3DUpdate(event:Event):Void {
+		  
         if (_stage3D.context3D != null) {
             var hadContext:Bool = (_context3D != null);
             _context3D = _stage3D.context3D;
             _context3D.enableErrorChecking = Debug.active;
+			#if flash
             _usesSoftwareRendering = (_context3D.driverInfo.indexOf("Software") == 0);
+			#end
 // Only configure back buffer if width and height have been set,
 // which they may not have been if View3D.render() has yet to be
 // invoked for the first time.
-            if (_backBufferWidth != 0 && _backBufferHeight != 0) _context3D.configureBackBuffer(_backBufferWidth, _backBufferHeight, _antiAlias, _enableDepthAndStencil);
+
+            if (_backBufferWidth != 0 && _backBufferHeight != 0) {
+				_context3D.configureBackBuffer(_backBufferWidth, _backBufferHeight, _antiAlias, _enableDepthAndStencil);
+			
+			}
+				      
             dispatchEvent(new Stage3DEvent((hadContext) ? Stage3DEvent.CONTEXT3D_RECREATED : Stage3DEvent.CONTEXT3D_CREATED));
         }
 
@@ -492,10 +516,11 @@ class Stage3DProxy extends EventDispatcher {
         _profile = profile;
 // ugly stuff for backward compatibility
         var renderMode:Context3DRenderMode = (forceSoftware) ? Context3DRenderMode.SOFTWARE : Context3DRenderMode.AUTO;
-        if (profile == "baseline") _stage3D.requestContext3D(Std.string(renderMode));
+		_stage3D.requestAGLSLContext3D(Std.string(renderMode));  
 
 
         _contextRequested = true;
+		
     }
 
 /**
@@ -507,11 +532,15 @@ class Stage3DProxy extends EventDispatcher {
         if (_context3D == null) return;
         clear();
 //notify the enterframe listeners
+#if flash
         notifyEnterFrame();
+	#end
 // Call the present() to render the frame
         present();
 //notify the exitframe listeners
+#if flash
         notifyExitFrame();
+#end
     }
 
     public function recoverFromDisposal():Bool {

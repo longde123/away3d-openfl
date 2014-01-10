@@ -6,6 +6,7 @@
 package away3d.animators;
 
 import away3d.animators.data.VertexAnimationMode;
+import flash.Vector.Vector;
 
 import away3d.core.managers.Stage3DProxy;
 import away3d.materials.passes.MaterialPassBase;
@@ -72,7 +73,7 @@ class VertexAnimationSet extends AnimationSetBase implements IAnimationSet {
 	 */
 
     public function getAGALVertexCode(pass:MaterialPassBase, sourceRegisters:Vector<String>, targetRegisters:Vector<String>, profile:String):String {
-        if (_blendMode == VertexAnimationMode.ABSOLUTE) return getAbsoluteAGALCode(pass, sourceRegisters, targetRegisters)
+        if (_blendMode == VertexAnimationMode.ABSOLUTE) return getAbsoluteAGALCode(pass, sourceRegisters, targetRegisters); 
         else return getAdditiveAGALCode(pass, sourceRegisters, targetRegisters);
     }
 

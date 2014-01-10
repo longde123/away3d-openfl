@@ -22,7 +22,7 @@ class AnimationSetBase extends NamedAssetBase implements IAsset {
     private var _usesCPU:Bool;
     private var _animations:Vector<AnimationNodeBase>;
     private var _animationNames:Vector<String>;
-    private var _animationDictionary:WeakMap<String, AnimationNodeBase>;;
+    private var _animationDictionary:WeakMap<String, AnimationNodeBase>;
 
     public function new() {
         _animations = new Vector<AnimationNodeBase>();

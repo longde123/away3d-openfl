@@ -298,13 +298,8 @@ class MeshDebugData {
     public var displayTangents:Bool;
     public var addChilded:Bool;
 
-    static function __init__() {
-        import;
-        away3d.containers.Scene3D;
-        import;
-        away3d.entities.Mesh;
-        import;
-        away3d.tools.helpers.data.MeshDebug;
+    public function new() {
+        
     }
 }
 

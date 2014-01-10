@@ -7,7 +7,9 @@ import flash.Vector;
 import flash.geom.Matrix3D;
 import flash.geom.Orientation3D;
 import flash.geom.Vector3D;
-
+#if (cpp || neko || js)
+using OpenFLStage3D;
+#end
 class Quaternion {
     public var magnitude(get_magnitude, never):Float;
 
@@ -299,7 +301,14 @@ class Quaternion {
 	 */
 
     public function fromMatrix(matrix:Matrix3D):Void {
-        var v:Vector3D = matrix.decompose(Orientation3D.QUATERNION)[1];
+		var tmp:Vector<Vector3D> ;
+		#if (cpp || neko || js)
+			tmp= matrix.decompose();
+		#end
+		#if flash
+			tmp = matrix.decompose(Orientation3D.QUATERNION);
+		#end
+        var v:Vector3D = tmp[1];
         x = v.x;
         y = v.y;
         z = v.z;

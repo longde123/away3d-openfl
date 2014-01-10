@@ -200,7 +200,7 @@ class SimpleShadowMapMethodBase extends ShadowMapMethodBase {
     override public function activate(vo:MethodVO, stage3DProxy:Stage3DProxy):Void {
         var fragmentData:Vector<Float> = vo.fragmentData;
         var index:Int = vo.fragmentConstantsIndex;
-        if (_usePoint) fragmentData[index + 4] = -Math.pow(1 / (( cast(_castingLight, PointLight) catch(e) null).fallOff * _epsilon), 2)
+        if (_usePoint) fragmentData[index + 4] = -Math.pow(1 / (cast(_castingLight, PointLight).fallOff * _epsilon), 2)
         else vo.vertexData[vo.vertexConstantsIndex + 3] = - 1 / (cast((_shadowMapper), DirectionalShadowMapper).depth * _epsilon);
         fragmentData[index + 5] = 1 - _alpha;
         if(_usePoint) {
