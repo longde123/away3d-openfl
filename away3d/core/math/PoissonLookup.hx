@@ -44,7 +44,7 @@ class PoissonLookup {
     }
 
     static public function getDistribution(n:Int):Vector<Float> {
-        if (_distributions==null) initDistributions();
+        if (_distributions == null) initDistributions();
         if (n < 2 || n > 32) return null;
         return _distributions[n - 1];
     }

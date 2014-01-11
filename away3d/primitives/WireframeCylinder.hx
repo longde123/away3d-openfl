@@ -61,8 +61,8 @@ class WireframeCylinder extends WireframePrimitiveBase {
                 revolutionAngle = i * revolutionAngleDelta;
                 x = radius * Math.cos(revolutionAngle);
                 y = radius * Math.sin(revolutionAngle);
-                var vertex:Vector3D;
-                if (previousV) {
+                var vertex:Vector3D = null;
+                if (previousV != null) {
                     vertex = new Vector3D(x, -z, y);
                     updateOrAddSegment(nextVertexIndex++, vertex, previousV);
                     previousV = vertex;

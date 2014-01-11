@@ -80,7 +80,7 @@ class ViewVolume extends NodeBase {
 
     override public function acceptTraverser(traverser:PartitionTraverser):Void {
         if (traverser.enterNode(this)) {
-            if (_debugPrimitive!=null) traverser.applyRenderable(_debugPrimitive);
+            if (_debugPrimitive != null) traverser.applyRenderable(_debugPrimitive);
             if (!_active) return;
             var entryPoint:Vector3D = traverser.entryPoint;
             var cell:ViewCell = getCellContaining(entryPoint);
@@ -92,7 +92,7 @@ class ViewVolume extends NodeBase {
                 ++i;
             }
             var visibleDynamics:Vector<InvertedOctreeNode> = cell.visibleDynamics;
-            if (visibleDynamics!=null) {
+            if (visibleDynamics != null) {
                 numVisibles = visibleDynamics.length;
                 i = 0;
                 while (i < numVisibles) {
@@ -123,7 +123,7 @@ class ViewVolume extends NodeBase {
     public function removeVisibleStatic(entity:Entity, indexX:Int = 0, indexY:Int = 0, indexZ:Int = 0):Void {
         var index:Int = getCellIndex(indexX, indexY, indexZ);
         var statics:Vector<EntityNode> = _cells[index].visibleStatics;
-        if (statics==null) return;
+        if (statics == null) return;
         index = statics.indexOf(entity.getEntityPartitionNode());
         if (index >= 0) statics.splice(index, 1);
         updateNumEntities(_numEntities - 1);
@@ -132,7 +132,7 @@ class ViewVolume extends NodeBase {
     public function removeVisibleDynamicCell(cell:InvertedOctreeNode, indexX:Int = 0, indexY:Int = 0, indexZ:Int = 0):Void {
         var index:Int = getCellIndex(indexX, indexY, indexZ);
         var dynamics:Vector<InvertedOctreeNode> = _cells[index].visibleDynamics;
-        if (dynamics==null) return;
+        if (dynamics == null) return;
         index = dynamics.indexOf(cell);
         if (index >= 0) dynamics.splice(index, 1);
         updateNumEntities(_numEntities - 1);
@@ -268,7 +268,7 @@ class ViewVolume extends NodeBase {
     public function addVisibleRegion(minBounds:Vector3D, maxBounds:Vector3D, scene:Scene3D, dynamicGrid:DynamicGrid = null, indexX:Int = 0, indexY:Int = 0, indexZ:Int = 0):Void {
         var cell:ViewCell = _cells[getCellIndex(indexX, indexY, indexZ)];
         addStaticsForRegion(scene, minBounds, maxBounds, cell);
-        if (dynamicGrid!=null) addDynamicsForRegion(dynamicGrid, minBounds, maxBounds, cell);
+        if (dynamicGrid != null) addDynamicsForRegion(dynamicGrid, minBounds, maxBounds, cell);
     }
 
 /**
@@ -304,9 +304,9 @@ class ViewVolume extends NodeBase {
         var numAdded:Int = 0;
         _entityWorldBounds = new Vector<Float>();
         object = iterator.next();
-        while (object!=null) {
+        while (object != null) {
             var entity:Entity = cast(object, Entity) ;
-            if (entity!=null && staticIntersects(entity, minBounds, maxBounds)) {
+            if (entity != null && staticIntersects(entity, minBounds, maxBounds)) {
                 var node:EntityNode = entity.getEntityPartitionNode();
                 if (visibleStatics.indexOf(node) == -1) {
                     visibleStatics.push(node);
@@ -366,6 +366,7 @@ class ViewCell {
 
     public var visibleStatics:Vector<EntityNode>;
     public var visibleDynamics:Vector<InvertedOctreeNode>;
-    public function new(){}
+
+    public function new() {}
 }
 

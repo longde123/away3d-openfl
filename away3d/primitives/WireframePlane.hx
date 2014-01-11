@@ -123,9 +123,9 @@ class WireframePlane extends WireframePrimitiveBase {
         var v1:Vector3D = new Vector3D();
         var hw:Float = _width * .5;
         var hh:Float = _height * .5;
-        var index:Int;
-        var ws:Int;
-        var hs:Int;
+        var index:Int = 0;
+        var ws:Int = 0;
+        var hs:Int = 0;
         if (_orientation == ORIENTATION_XY) {
             v0.y = hh;
             v0.z = 0;

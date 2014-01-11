@@ -19,6 +19,7 @@ class StereoRenderMethodBase {
 
     public function getFragmentCode():String {
         throw new AbstractMethodError("Concrete implementation of StereoRenderMethodBase must be used and extend getFragmentCode().");
+        return "";
     }
 
     public function invalidateTextureSize():Void {

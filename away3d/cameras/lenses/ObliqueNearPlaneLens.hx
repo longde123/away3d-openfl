@@ -17,6 +17,7 @@ class ObliqueNearPlaneLens extends LensBase {
     public function new(baseLens:LensBase, plane:Plane3D) {
         this.baseLens = baseLens;
         this.plane = plane;
+        super();
     }
 
     override public function get_frustumCorners():Vector<Float> {
@@ -61,9 +62,9 @@ class ObliqueNearPlaneLens extends LensBase {
     }
 
     public function set_baseLens(value:LensBase):LensBase {
-        if (_baseLens) _baseLens.removeEventListener(LensEvent.MATRIX_CHANGED, onLensMatrixChanged);
+        if (_baseLens != null) _baseLens.removeEventListener(LensEvent.MATRIX_CHANGED, onLensMatrixChanged);
         _baseLens = value;
-        if (_baseLens) _baseLens.addEventListener(LensEvent.MATRIX_CHANGED, onLensMatrixChanged);
+        if (_baseLens != null) _baseLens.addEventListener(LensEvent.MATRIX_CHANGED, onLensMatrixChanged);
         invalidateMatrix();
         return value;
     }

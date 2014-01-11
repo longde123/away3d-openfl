@@ -167,7 +167,7 @@ class MouseEvent3D extends Event {
 
     override public function clone():Event {
         var result:MouseEvent3D = new MouseEvent3D(type);
-		#if flash
+#if flash
         if (isDefaultPrevented()) result.preventDefault();
 		#end
         result.screenX = screenX;

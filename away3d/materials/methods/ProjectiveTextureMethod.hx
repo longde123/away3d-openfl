@@ -6,6 +6,7 @@
 package away3d.materials.methods;
 
 
+import flash.display.BlendMode;
 import flash.errors.Error;
 import flash.Vector;
 import away3d.cameras.Camera3D;
@@ -17,16 +18,16 @@ import away3d.materials.compilation.ShaderRegisterElement;
 import flash.geom.Matrix3D;
 
 class ProjectiveTextureMethod extends EffectMethodBase {
-    public var mode(get_mode, set_mode):String;
+    public var mode(get_mode, set_mode):BlendMode;
     public var projector(get_projector, set_projector):TextureProjector;
 
-    static public var MULTIPLY:String = "multiply";
-    static public var ADD:String = "add";
-    static public var MIX:String = "mix";
+    static public var MULTIPLY:BlendMode = BlendMode.MULTIPLY;
+    static public var ADD:BlendMode = BlendMode.ADD;
+    static public var MIX:BlendMode = BlendMode.DIFFERENCE;
     private var _projector:TextureProjector;
     private var _uvVarying:ShaderRegisterElement;
     private var _projMatrix:Matrix3D;
-    private var _mode:String;
+    private var _mode:BlendMode;
 /**
 	 * Creates a new ProjectiveTextureMethod object.
 	 *
@@ -36,7 +37,7 @@ class ProjectiveTextureMethod extends EffectMethodBase {
 	 * @see away3d.entities.TextureProjector
 	 */
 
-    public function new(projector:TextureProjector, mode:String = "multiply") {
+    public function new(projector:TextureProjector, mode:BlendMode) {
         _projMatrix = new Matrix3D();
         super();
         _projector = projector;
@@ -72,11 +73,11 @@ class ProjectiveTextureMethod extends EffectMethodBase {
 	 * ProjectiveTextureMethod.MIX provides normal alpha blending. To prevent clamping, the texture's alpha should be transparent!
 	 */
 
-    public function get_mode():String {
+    public function get_mode():BlendMode {
         return _mode;
     }
 
-    public function set_mode(value:String):String {
+    public function set_mode(value:BlendMode):BlendMode {
         if (_mode == value) return value;
         _mode = value;
         invalidateShaderProgram();

@@ -5,7 +5,6 @@
  */
 package away3d.loaders.parsers;
 
-import flash.utils.RegExp;
 import flash.Vector;
 import flash.geom.Vector3D;
 import flash.net.URLRequest;
@@ -31,7 +30,6 @@ import away3d.textures.Texture2DBase;
 import haxe.ds.StringMap;
 
 
-
 using StringTools;
 
 /**
@@ -39,8 +37,7 @@ using StringTools;
  *
  * unsupported tags: "numsurf","crease","texrep","refs lines of","url","data" and "numvert lines of":
  */
-class AC3DParser extends ParserBase
-{
+class AC3DParser extends ParserBase {
     private var LIMIT:Int = 65535;
     private var CR:String = String.fromCharCode(10);
 
@@ -73,8 +70,7 @@ class AC3DParser extends ParserBase
 	 * @param extra The holder for extra contextual data that the parser might need.
 	 */
 
-    public function new()
-    {
+    public function new() {
         super(ParserDataFormat.PLAIN_TEXT);
 
         _containersList = [];
@@ -87,8 +83,8 @@ class AC3DParser extends ParserBase
 	 * @param extension The file extension of a potential file to be parsed.
 	 * @return Whether or not the given file type is supported.
 	 */
-    public static function supportsType(extension:String):Bool
-    {
+
+    public static function supportsType(extension:String):Bool {
         extension = extension.toLowerCase();
         return extension == "ac";
     }
@@ -98,20 +94,18 @@ class AC3DParser extends ParserBase
 	 * @param data The data block to potentially be parsed.
 	 * @return Whether or not the given data is supported.
 	 */
-    public static function supportsData(data:Dynamic):Bool
-    {
+
+    public static function supportsData(data:Dynamic):Bool {
         var ba:ByteArray;
         var str:String;
 
         ba = ParserUtil.toByteArray(data);
-        if (ba != null)
-        {
+        if (ba != null) {
             ba.position = 0;
             str = ba.readUTFBytes(4);
         }
-        else
-        {
-            str = Std.is(data,String) ? cast(data,String).substr(0, 4) : null;
+        else {
+            str = Std.is(data, String) ? cast(data, String).substr(0, 4) : null;
         }
 
         if (str == 'AC3D')
@@ -123,37 +117,34 @@ class AC3DParser extends ParserBase
 /**
 	 * @inheritDoc
 	 */
-    override public function resolveDependency(resourceDependency:ResourceDependency):Void
-    {
+
+    override public function resolveDependency(resourceDependency:ResourceDependency):Void {
         var mesh:Mesh = null;
         var asset:Texture2DBase = null;
 
-        if (resourceDependency.assets.length == 1)
-        {
-            asset = cast(resourceDependency.assets[0],Texture2DBase);
+        if (resourceDependency.assets.length == 1) {
+            asset = cast(resourceDependency.assets[0], Texture2DBase);
             mesh = retrieveMeshFromID(resourceDependency.id);
         }
         if (mesh != null && asset != null)
         if (materialMode < 2)
-            cast(mesh.material,TextureMaterial).texture = asset;
+            cast(mesh.material, TextureMaterial).texture = asset;
         else
-            cast(mesh.material,TextureMultiPassMaterial).texture = asset;
+            cast(mesh.material, TextureMultiPassMaterial).texture = asset;
     }
 
-    override public function resolveDependencyFailure(resourceDependency:ResourceDependency):Void
-    {
+    override public function resolveDependencyFailure(resourceDependency:ResourceDependency):Void {
 //handled with default material
     }
 
 /**
 	 * @inheritDoc
 	 */
-    override private function proceedParsing():Bool
-    {
+
+    override private function proceedParsing():Bool {
         var line:String;
 
-        if (!_startedParsing)
-        {
+        if (!_startedParsing) {
             _groupCount = 0;
             _activeContainer = null;
 
@@ -183,8 +174,7 @@ class AC3DParser extends ParserBase
         var nextObject:Int;
         var nextSurface:Int;
 
-        while (_charIndex < _stringLen && hasTime())
-        {
+        while (_charIndex < _stringLen && hasTime()) {
 
             _charIndex = _textData.indexOf(CR, _oldIndex);
 
@@ -204,7 +194,7 @@ class AC3DParser extends ParserBase
             {
                 case "MATERIAL":
                     generateMaterial(line);
-                case "numsurf","crease","texrep","refs lines of","url","data","numvert lines of","SURF": //0x30
+                case "numsurf", "crease", "texrep", "refs lines of", "url", "data", "numvert lines of", "SURF": //0x30
 
                 case "kids": //howmany children in the upcomming object. Probably need it later on, to couple with container/group generation
                     _kidsCount = Std.parseInt(_trunk[1]);
@@ -214,20 +204,17 @@ class AC3DParser extends ParserBase
 
                 case "OBJECT":
 
-                    if (_activeMesh != null)
-                    {
+                    if (_activeMesh != null) {
                         buildMeshGeometry(_activeMesh);
                         _tmpos.x = _tmpos.y = _tmpos.z = 0;
                         _activeMesh = null;
                     }
 
-                    if (_trunk[1] == "world")
-                    {
+                    if (_trunk[1] == "world") {
                         _lastType = "world";
 
                     }
-                    else if (_trunk[1] == "group")
-                    {
+                    else if (_trunk[1] == "group") {
                         cont = new ObjectContainer3D();
                         if (_activeContainer != null)
                             _activeContainer.addChild(cont);
@@ -240,29 +227,25 @@ class AC3DParser extends ParserBase
                         _lastType = "group";
 
                     }
-                    else
-                    {
+                    else {
 //validate if it's a definition that we can use
                         nextObject = _textData.indexOf("OBJECT", _oldIndex);
                         nextSurface = _textData.indexOf("numsurf", _oldIndex);
 
-                        if (nextSurface == -1 || nextSurface > _stringLen)
-                        {
+                        if (nextSurface == -1 || nextSurface > _stringLen) {
 //we're done here, we do not need the following stuff anyway
                             _charIndex = _oldIndex = _stringLen;
                             break;
 
                         }
-                        else if (nextObject < nextSurface)
-                        {
+                        else if (nextObject < nextSurface) {
 //some floating vertex/line lets skip this part
                             _charIndex = _oldIndex = nextObject - 1;
                             break;
                         }
                     }
 
-                    if (_trunk[1] == "poly")
-                    {
+                    if (_trunk[1] == "poly") {
                         var geometry:Geometry = new Geometry();
                         _activeMesh = new Mesh(geometry, null);
                         if (_vertices != null)
@@ -278,12 +261,10 @@ class AC3DParser extends ParserBase
 
                 case "name":
                     nameid = line.substring(6, line.length - 1);
-                    if (_lastType == "poly")
-                    {
+                    if (_lastType == "poly") {
                         _activeMesh.name = nameid;
                     }
-                    else
-                    {
+                    else {
                         _activeContainer.name = nameid;
                     }
 
@@ -293,17 +274,14 @@ class AC3DParser extends ParserBase
 
                 case "refs":
                     refscount = Std.parseInt(_trunk[1]);
-                    if (refscount == 4)
-                    {
+                    if (refscount == 4) {
                         _isQuad = true;
                         _quadCount = 0;
                     }
-                    else if (refscount < 3 || refscount > 4)
-                    {
+                    else if (refscount < 3 || refscount > 4) {
                         continue;
                     }
-                    else
-                    {
+                    else {
                         _isQuad = false;
                     }
                     _parsesV = false;
@@ -327,15 +305,13 @@ class AC3DParser extends ParserBase
 					the default centre of the object will be 0, 0, 0.
 					*/
 
-                    if (_lastType == "group")
-                    {
+                    if (_lastType == "group") {
                         _tmpcontainerpos.x = Std.parseFloat(_trunk[1]);
                         _tmpcontainerpos.y = Std.parseFloat(_trunk[2]);
                         _tmpcontainerpos.z = Std.parseFloat(_trunk[3]);
 
                     }
-                    else
-                    {
+                    else {
                         _tmpos.x = Std.parseFloat(_trunk[1]);
                         _tmpos.y = Std.parseFloat(_trunk[2]);
                         _tmpos.z = Std.parseFloat(_trunk[3]);
@@ -359,19 +335,15 @@ class AC3DParser extends ParserBase
                     if (_trunk[0] == "")
                         break;
 
-                    if (_parsesV)
-                    {
+                    if (_parsesV) {
                         _vertices.push(new Vertex(-(Std.parseFloat(_trunk[0])), Std.parseFloat(_trunk[1]), Std.parseFloat(_trunk[2])));
 
                     }
-                    else
-                    {
+                    else {
 
-                        if (_isQuad)
-                        {
+                        if (_isQuad) {
                             _quadCount++;
-                            if (_quadCount == 4)
-                            {
+                            if (_quadCount == 4) {
                                 _uvs.push(_uvs[_uvs.length - 2]);
                                 _uvs.push(_uvs[_uvs.length - 1]);
                                 _uvs.push(Std.parseInt(_trunk[0]));
@@ -380,15 +352,13 @@ class AC3DParser extends ParserBase
                                 _uvs.push(_uvs[_uvs.length - 9]);
 
                             }
-                            else
-                            {
+                            else {
                                 _uvs.push(Std.parseInt(_trunk[0]));
                                 _uvs.push(new UV(Std.parseFloat(_trunk[1]), 1 - Std.parseFloat(_trunk[2])));
                             }
 
                         }
-                        else
-                        {
+                        else {
                             _uvs.push(Std.parseInt(_trunk[0]));
                             _uvs.push(new UV(Std.parseFloat(_trunk[1]), 1 - Std.parseFloat(_trunk[2])));
                         }
@@ -397,8 +367,7 @@ class AC3DParser extends ParserBase
 
         }
 
-        if (_charIndex >= _stringLen)
-        {
+        if (_charIndex >= _stringLen) {
 
             if (_activeMesh != null)
                 buildMeshGeometry(_activeMesh);
@@ -412,23 +381,20 @@ class AC3DParser extends ParserBase
         return ParserBase.MORE_TO_PARSE;
     }
 
-    private function checkGroup(mesh:Mesh):Void
-    {
+    private function checkGroup(mesh:Mesh):Void {
         if (_groupCount > 0)
             _groupCount--;
 
         if (_activeContainer != null)
             _activeContainer.addChild(_activeMesh);
 
-        if (_activeContainer != null && _groupCount == 0)
-        {
+        if (_activeContainer != null && _groupCount == 0) {
             _activeContainer = null;
             _tmpcontainerpos.x = _tmpcontainerpos.y = _tmpcontainerpos.z = 0;
         }
     }
 
-    private function buildMeshGeometry(mesh:Mesh):Void
-    {
+    private function buildMeshGeometry(mesh:Mesh):Void {
         var v0:Vertex;
         var v1:Vertex;
         var v2:Vertex;
@@ -447,10 +413,8 @@ class AC3DParser extends ParserBase
         var ref:String;
 
         var i:Int = 0;
-        while (i < _uvs.length)
-        {
-            if (indices.length + 3 > LIMIT)
-            {
+        while (i < _uvs.length) {
+            if (indices.length + 3 > LIMIT) {
                 vertices = new Vector<Float>();
                 indices = new Vector<UInt>();
                 uvs = new Vector<Float>();
@@ -471,13 +435,11 @@ class AC3DParser extends ParserBase
 
 //face order other than away
             ref = v1.toString() + uv1.toString();
-            if (dic.exists(ref))
-            {
+            if (dic.exists(ref)) {
                 indices.push(dic.get(ref));
             }
-            else
-            {
-                dic.set(ref,Std.int(vertices.length / 3));
+            else {
+                dic.set(ref, Std.int(vertices.length / 3));
                 indices.push(dic.get(ref));
                 vertices.push(v1.x);
                 vertices.push(v1.y);
@@ -487,13 +449,11 @@ class AC3DParser extends ParserBase
             }
 
             ref = v0.toString() + uv0.toString();
-            if (dic.exists(ref))
-            {
+            if (dic.exists(ref)) {
                 indices.push(dic.get(ref));
             }
-            else
-            {
-                dic.set(ref,Std.int(vertices.length / 3));
+            else {
+                dic.set(ref, Std.int(vertices.length / 3));
                 indices.push(dic.get(ref));
                 vertices.push(v0.x);
                 vertices.push(v0.y);
@@ -503,13 +463,11 @@ class AC3DParser extends ParserBase
             }
 
             ref = v2.toString() + uv2.toString();
-            if (dic.exists(ref))
-            {
+            if (dic.exists(ref)) {
                 indices.push(dic.get(ref));
             }
-            else
-            {
-                dic.set(ref,Std.int(vertices.length / 3));
+            else {
+                dic.set(ref, Std.int(vertices.length / 3));
                 indices.push(dic.get(ref));
                 vertices.push(v2.x);
                 vertices.push(v2.y);
@@ -525,8 +483,7 @@ class AC3DParser extends ParserBase
         var geom:Geometry = mesh.geometry;
 
         i = 0;
-        while (i < subGeomsData.length)
-        {
+        while (i < subGeomsData.length) {
             sub_geom = new CompactSubGeometry();
             sub_geom.fromVectors(subGeomsData[i], subGeomsData[i + 2], null, null);
             sub_geom.updateIndexData(subGeomsData[i + 1]);
@@ -549,8 +506,7 @@ class AC3DParser extends ParserBase
         dic = null;
     }
 
-    private function retrieveMeshFromID(id:String):Mesh
-    {
+    private function retrieveMeshFromID(id:String):Mesh {
         if (_meshList[Std.parseInt(id)] != null)
             return _meshList[Std.parseInt(id)];
 
@@ -587,13 +543,11 @@ class AC3DParser extends ParserBase
 	 *
 	 */
 
-    private function generateMaterial(materialString:String):Void
-    {
+    private function generateMaterial(materialString:String):Void {
         _materialList.push(parseMaterialLine(materialString));
     }
 
-    private function parseMaterialLine(materialString:String):MaterialBase
-    {
+    private function parseMaterialLine(materialString:String):MaterialBase {
         var trunk:Array<String> = materialString.split(" ");
 
 
@@ -605,16 +559,13 @@ class AC3DParser extends ParserBase
         var alpha:Float = 0;
 
         var i:Int = 0;
-        while (i < trunk.length)
-        {
-            if (trunk[i] == "")
-            {
+        while (i < trunk.length) {
+            if (trunk[i] == "") {
                 i++;
                 continue;
             }
 
-            if (trunk[i].indexOf("\"") != -1 || trunk[i].indexOf("\'") != -1)
-            {
+            if (trunk[i].indexOf("\"") != -1 || trunk[i].indexOf("\'") != -1) {
                 name = trunk[i].substring(1, trunk[i].length - 1);
                 i++;
                 continue;
@@ -646,41 +597,37 @@ class AC3DParser extends ParserBase
 
         var colorMaterial:MaterialBase;
 
-        if (materialMode < 2)
-        {
+        if (materialMode < 2) {
             colorMaterial = new ColorMaterial(0xFFFFFF);
-            cast(colorMaterial,ColorMaterial).name = name;
-            cast(colorMaterial,ColorMaterial).color = color;
-            cast(colorMaterial,ColorMaterial).ambient = ambient;
-            cast(colorMaterial,ColorMaterial).specular = specular;
-            cast(colorMaterial,ColorMaterial).gloss = gloss;
-            cast(colorMaterial,ColorMaterial).alpha = alpha;
+            cast(colorMaterial, ColorMaterial).name = name;
+            cast(colorMaterial, ColorMaterial).color = color;
+            cast(colorMaterial, ColorMaterial).ambient = ambient;
+            cast(colorMaterial, ColorMaterial).specular = specular;
+            cast(colorMaterial, ColorMaterial).gloss = gloss;
+            cast(colorMaterial, ColorMaterial).alpha = alpha;
         }
-        else
-        {
+        else {
             colorMaterial = new ColorMultiPassMaterial(0xFFFFFF);
-            cast(colorMaterial,ColorMultiPassMaterial).name = name;
-            cast(colorMaterial,ColorMultiPassMaterial).color = color;
-            cast(colorMaterial,ColorMultiPassMaterial).ambient = ambient;
-            cast(colorMaterial,ColorMultiPassMaterial).specular = specular;
-            cast(colorMaterial,ColorMultiPassMaterial).gloss = gloss;
+            cast(colorMaterial, ColorMultiPassMaterial).name = name;
+            cast(colorMaterial, ColorMultiPassMaterial).color = color;
+            cast(colorMaterial, ColorMultiPassMaterial).ambient = ambient;
+            cast(colorMaterial, ColorMultiPassMaterial).specular = specular;
+            cast(colorMaterial, ColorMultiPassMaterial).gloss = gloss;
 //cast(colorMaterial,ColorMultiPassMaterial).alpha=alpha;
         }
         return colorMaterial;
     }
 
-    private function cleanUP():Void
-    {
+    private function cleanUP():Void {
         _materialList = null;
         cleanUpBuffers();
     }
 
-    private function cleanUpBuffers():Void
-    {
+    private function cleanUpBuffers():Void {
         for (i in 0..._vertices.length)
             _vertices[i] = null;
 
-        for (i  in 0..._uvs.length)
+        for (i in 0..._uvs.length)
             _uvs[i] = null;
 
         _vertices = null;

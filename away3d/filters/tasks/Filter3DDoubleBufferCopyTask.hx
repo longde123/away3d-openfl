@@ -26,7 +26,7 @@ class Filter3DDoubleBufferCopyTask extends Filter3DTaskBase {
 
     override private function updateTextures(stage:Stage3DProxy):Void {
         super.updateTextures(stage);
-        if (_secondaryInputTexture!=null) _secondaryInputTexture.dispose();
+        if (_secondaryInputTexture != null) _secondaryInputTexture.dispose();
         _secondaryInputTexture = stage.context3D.createTexture(_textureWidth >> _textureScale, _textureHeight >> _textureScale, Context3DTextureFormat.BGRA, true);
         var dummy:BitmapData = new BitmapData(_textureWidth >> _textureScale, _textureHeight >> _textureScale, false, 0);
         _mainInputTexture.uploadFromBitmapData(dummy);

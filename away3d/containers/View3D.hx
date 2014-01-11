@@ -1,7 +1,6 @@
 package away3d.containers;
 
 import flash.Lib;
-import flash.errors.Error;
 import away3d.core.managers.Touch3DManager;
 import away3d.events.Scene3DEvent;
 import flash.display.Sprite;
@@ -12,11 +11,9 @@ import flash.events.ContextMenuEvent;
 import flash.events.Event;
 import flash.geom.Point;
 import flash.geom.Rectangle;
-import flash.geom.Transform;
 import flash.geom.Vector3D;
 import flash.ui.ContextMenu;
 import flash.ui.ContextMenuItem;
-import away3d.Away3D;
 
 import away3d.cameras.Camera3D;
 import away3d.core.managers.Mouse3DManager;
@@ -115,7 +112,7 @@ class View3D extends Sprite {
     }
 
     private function initRightClickMenu():Void {
-			#if flash
+#if flash
         _menu0 = new ContextMenuItem("Away3D.com	v" + Away3D.MAJOR_VERSION + "." + Away3D.MINOR_VERSION + "." + Away3D.REVISION, true, true, true);
         _menu1 = new ContextMenuItem("View Source", true, true, true);
         _menu0.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, visitWebsite);
@@ -126,7 +123,7 @@ class View3D extends Sprite {
     }
 
     private function updateRightClickMenu():Void {
-		#if flash
+#if flash
         if (_rightClickMenuEnabled) _ViewContextMenu.customItems = (_sourceURL != null) ? [_menu0, _menu1] : [_menu0]
         else _ViewContextMenu.customItems = [];
 
@@ -273,6 +270,7 @@ class View3D extends Sprite {
         return value;
     }
 #end
+
     public function get_filters3d():Array<Dynamic> {
         return (_filter3DRenderer != null) ? _filter3DRenderer.filters : null;
     }
@@ -413,15 +411,16 @@ class View3D extends Sprite {
 	 * The width of the viewport. When software rendering is used, this is limited by the
 	 * platform to 2048 pixels.
 	 */
-  public function setSizeWH(w:Float, h:Float):Void {
-	  #if flash
+
+    public function setSizeWH(w:Float, h:Float):Void {
+#if flash
 			width=(w);
 			height=(h);
 	 #else
-	    setWidth(w);
-		setHeight(h);
-	  #end	
- 
+        setWidth(w);
+        setHeight(h);
+#end
+
     }
 
 /**
@@ -434,9 +433,10 @@ class View3D extends Sprite {
     }
 
     @:setter(width)  function set_width(value:Float):Void {
-#else 
-	function setWidth(value:Float):Void {
-#end	
+#else
+
+    function setWidth(value:Float):Void {
+#end
 // Backbuffer limitation in software mode. See comment in updateBackBuffer()
         if (_stage3DProxy != null && _stage3DProxy.usesSoftwareRendering && value > 2048)
             value = 2048;
@@ -449,23 +449,20 @@ class View3D extends Sprite {
 
         _hitField.width = value;
         _width = value;
-  
+
 
         _renderer.viewWidth = value;
 
         _scissorRect.width = value;
 
-		
-		
-		
-		
-		_aspectRatio = _width / _height;
+
+        _aspectRatio = _width / _height;
         _camera.lens.aspectRatio = _aspectRatio;
         _depthTextureInvalid = true;
         _backBufferInvalid = true;
         _scissorRectDirty = true;
     }
- 
+
 /**
 	 * The height of the viewport. When software rendering is used, this is limited by the
 	 * platform to 2048 pixels.
@@ -478,8 +475,9 @@ class View3D extends Sprite {
     @:setter(height) 
 
 	function set_height(value:Float):Void {
-#else 
-	function setHeight(value:Float):Void {
+#else
+
+    function setHeight(value:Float):Void {
 #end
 // Backbuffer limitation in software mode. See comment in updateBackBuffer()
         if (_stage3DProxy != null && _stage3DProxy.usesSoftwareRendering && value > 2048)
@@ -861,9 +859,9 @@ class View3D extends Sprite {
 
     private function onAddedToStage(event:Event):Void {
         if (_addedToStage) {
-		 
-			return;
-		}
+
+            return;
+        }
         _addedToStage = true;
         if (_stage3DProxy == null) {
             _stage3DProxy = Stage3DManager.getInstance(stage).getFreeStage3DProxy(_forceSoftware, _profile);
@@ -878,7 +876,7 @@ class View3D extends Sprite {
         if (_height == 0) height = stage.stageHeight
         else _rttBufferManager.viewHeight = Std.int(_height);
         if (_shareContext) _mouse3DManager.addViewLayer(this);
-		
+
     }
 
     private function onAdded(event:Event):Void {

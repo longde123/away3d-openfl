@@ -12,7 +12,7 @@ class InterleavedStereoRenderMethod extends StereoRenderMethodBase {
 
     public function new() {
         super();
-        _shaderData = new Vector<Float>([1, 1, 1, 1]);
+        _shaderData = Vector.ofArray([1., 1, 1, 1]);
     }
 
     override public function activate(stage3DProxy:Stage3DProxy):Void {

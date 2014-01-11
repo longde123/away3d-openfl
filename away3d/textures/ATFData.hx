@@ -50,7 +50,7 @@ class ATFData {
                 throw new Error("Invalid ATF type");
         }
         this.width = Std.int(Math.pow(2, data.readUnsignedByte()));
-        this.height =  Std.int(Math.pow(2, data.readUnsignedByte()));
+        this.height = Std.int(Math.pow(2, data.readUnsignedByte()));
         this.numTextures = data.readUnsignedByte();
         this.data = data;
     }

@@ -154,7 +154,7 @@ class OutlinePass extends MaterialPassBase {
         var code:String;
 // offset
         code = "mul vt7, vt1, vc5.x\n" + "add vt7, vt7, vt0\n" + "mov vt7.w, vt0.w\n" + // project and scale to viewport
-        
+
         "m44 op, vt7, vc0		\n";
         return code;
     }
@@ -194,7 +194,7 @@ class OutlinePass extends MaterialPassBase {
 	 */
 
     override public function render(renderable:IRenderable, stage3DProxy:Stage3DProxy, camera:Camera3D, viewProjection:Matrix3D):Void {
-        var mesh:Mesh;
+        var mesh:Mesh = null;
         var dedicatedRenderable:IRenderable;
         var context:Context3D = stage3DProxy._context3D;
         var matrix3D:Matrix3D = Matrix3DUtils.CALCULATION_MATRIX;
@@ -203,6 +203,7 @@ class OutlinePass extends MaterialPassBase {
         if (_dedicatedMeshes) {
             if (!_outlineMeshes.exists(renderable))
                 _outlineMeshes.set(renderable, createDedicatedMesh(cast(renderable, SubMesh).subGeometry));
+            mesh = _outlineMeshes.get(renderable);
             dedicatedRenderable = mesh.subMeshes[0];
             context.setProgramConstantsFromMatrix(Context3DProgramType.VERTEX, 0, matrix3D, true);
             dedicatedRenderable.activateVertexBuffer(0, stage3DProxy);
@@ -226,8 +227,7 @@ class OutlinePass extends MaterialPassBase {
 	 * @param source The ISubGeometry object for which to generate a dedicated mesh.
 	 */
 
-    private function createDedicatedMesh(source:ISubGeometry):Mesh
-    {
+    private function createDedicatedMesh(source:ISubGeometry):Mesh {
         var mesh:Mesh = new Mesh(new Geometry(), null);
         var dest:SubGeometry = new SubGeometry();
         var indexLookUp:StringMap<Int> = new StringMap<Int>();
@@ -245,20 +245,17 @@ class OutlinePass extends MaterialPassBase {
         var stride:Int = source.vertexStride;
         var offset:Int = source.vertexOffset;
 
-        for (i in 0...len)
-        {
+        for (i in 0...len) {
             index = offset + srcIndices[i] * stride;
             x = srcVertices[index];
             y = srcVertices[index + 1];
             z = srcVertices[index + 2];
             key = x + "/" + y + "/" + z;
 
-            if (indexLookUp.exists(key))
-            {
+            if (indexLookUp.exists(key)) {
                 index = indexLookUp.get(key) - 1;
             }
-            else
-            {
+            else {
                 index = Std.int(vertexCount / 3);
                 indexLookUp.set(key, index + 1);
                 dstVertices[vertexCount++] = x;

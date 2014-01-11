@@ -16,7 +16,6 @@ package away3d.core.managers;
 import flash.errors.Error;
 import away3d.debug.Debug;
 import away3d.events.Stage3DEvent;
-import flash.display.Shape;
 import flash.display.Stage3D;
 import flash.display3D.Context3D;
 import flash.display3D.Context3DClearMask;
@@ -49,7 +48,7 @@ class Stage3DProxy extends EventDispatcher {
     public var bufferClear(get_bufferClear, set_bufferClear):Bool;
     public var mouse3DManager(get_mouse3DManager, set_mouse3DManager):Mouse3DManager;
     public var touch3DManager(get_touch3DManager, set_touch3DManager):Touch3DManager;
-	#if flash
+#if flash
     static private var _frameEventDriver:Shape = new Shape();
 	#end
     public var _context3D:Context3D;
@@ -85,11 +84,11 @@ class Stage3DProxy extends EventDispatcher {
         _viewportDirty = true;
         if (!hasEventListener(Stage3DEvent.VIEWPORT_UPDATED)) return;
         _viewportUpdated = new Stage3DEvent(Stage3DEvent.VIEWPORT_UPDATED);
-        dispatchEvent(_viewportUpdated); 
-		
+        dispatchEvent(_viewportUpdated);
+
     }
 
-	#if flash
+#if flash
     private function notifyEnterFrame():Void {
         if (!hasEventListener(Event.ENTER_FRAME)) return;
         if (_enterFrame == null) _enterFrame = new Event(Event.ENTER_FRAME);
@@ -123,17 +122,19 @@ class Stage3DProxy extends EventDispatcher {
         _enableDepthAndStencil = true;
 // whatever happens, be sure this has highest priority
         _stage3D.addEventListener(Event.CONTEXT3D_CREATE, onContext3DUpdate, false, 1000, false);
-      
+
         super();
-		this.forceSoftware = forceSoftware;
-		this._profile = profile;
-		start();
+        this.forceSoftware = forceSoftware;
+        this._profile = profile;
+        start();
     }
 
-	private var forceSoftware:Bool ; 
-	public function start():Void {
-		  requestContext(forceSoftware, _profile); 
-	}
+    private var forceSoftware:Bool ;
+
+    public function start():Void {
+        requestContext(forceSoftware, _profile);
+    }
+
     public function get_profile():String {
         return _profile;
     }
@@ -236,7 +237,7 @@ class Stage3DProxy extends EventDispatcher {
 	 * @param priority The priority level of the event listener. The priority is designated by a signed 32-bit integer. The higher the number, the higher the priority. All listeners with priority n are processed before listeners of priority n-1. If two or more listeners share the same priority, they are processed in the order in which they were added. The default priority is 0.
 	 * @param useWeakReference Determines whether the reference to the listener is strong or weak. A strong reference (the default) prevents your listener from being garbage-collected. A weak reference does not.
 	 */
-	#if flash
+#if flash
     override public function addEventListener(type:String, listener:Dynamic -> Void, useCapture:Bool = false, priority:Int = 0, useWeakReference:Bool = false):Void {
         super.addEventListener(type, listener, useCapture, priority, useWeakReference);
 	
@@ -479,12 +480,12 @@ class Stage3DProxy extends EventDispatcher {
 	 */
 
     private function onContext3DUpdate(event:Event):Void {
-		  
+
         if (_stage3D.context3D != null) {
             var hadContext:Bool = (_context3D != null);
             _context3D = _stage3D.context3D;
             _context3D.enableErrorChecking = Debug.active;
-			#if flash
+#if flash
             _usesSoftwareRendering = (_context3D.driverInfo.indexOf("Software") == 0);
 			#end
 // Only configure back buffer if width and height have been set,
@@ -492,10 +493,10 @@ class Stage3DProxy extends EventDispatcher {
 // invoked for the first time.
 
             if (_backBufferWidth != 0 && _backBufferHeight != 0) {
-				_context3D.configureBackBuffer(_backBufferWidth, _backBufferHeight, _antiAlias, _enableDepthAndStencil);
-			
-			}
-				      
+                _context3D.configureBackBuffer(_backBufferWidth, _backBufferHeight, _antiAlias, _enableDepthAndStencil);
+
+            }
+
             dispatchEvent(new Stage3DEvent((hadContext) ? Stage3DEvent.CONTEXT3D_RECREATED : Stage3DEvent.CONTEXT3D_CREATED));
         }
 
@@ -516,11 +517,11 @@ class Stage3DProxy extends EventDispatcher {
         _profile = profile;
 // ugly stuff for backward compatibility
         var renderMode:Context3DRenderMode = (forceSoftware) ? Context3DRenderMode.SOFTWARE : Context3DRenderMode.AUTO;
-		_stage3D.requestAGLSLContext3D(Std.string(renderMode));  
+        _stage3D.requestAGLSLContext3D(Std.string(renderMode));
 
 
         _contextRequested = true;
-		
+
     }
 
 /**

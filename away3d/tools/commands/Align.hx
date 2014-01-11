@@ -274,6 +274,6 @@ class MeshBound {
     public var maxY:Float;
     public var maxZ:Float;
 
-	public function new(){}
+    public function new() {}
 }
 

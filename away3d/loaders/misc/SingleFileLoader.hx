@@ -171,18 +171,15 @@ import flash.net.URLRequest;
 class SingleFileLoader extends EventDispatcher {
     private static var _parsers:Vector<Class<ParserBase>> = Vector.convert(Vector.ofArray([ImageParser]));
 
-    public static function enableParser(parser:Class<ParserBase>):Void
-    {
+    public static function enableParser(parser:Class<ParserBase>):Void {
         if (_parsers.indexOf(parser) < 0)
             _parsers.push(parser);
     }
 
 
-    public static function enableParsers(parsers:Array<Class<ParserBase>>):Void
-    {
+    public static function enableParsers(parsers:Array<Class<ParserBase>>):Void {
         var pc:Class<ParserBase>;
-        for (pc in parsers)
-        {
+        for (pc in parsers) {
             enableParser(pc);
         }
     }
@@ -210,24 +207,21 @@ class SingleFileLoader extends EventDispatcher {
 /**
 	 * Creates a new SingleFileLoader object.
 	 */
-    public function new(materialMode:Int = 0)
-    {
+
+    public function new(materialMode:Int = 0) {
         super();
         _materialMode = materialMode;
     }
 
-    private function get_url():String
-    {
+    private function get_url():String {
         return _req != null ? _req.url : '';
     }
 
-    private function get_data():Dynamic
-    {
+    private function get_data():Dynamic {
         return _data;
     }
 
-    private function get_loadAsRawData():Bool
-    {
+    private function get_loadAsRawData():Bool {
         return _loadAsRawData;
     }
 
@@ -237,8 +231,8 @@ class SingleFileLoader extends EventDispatcher {
 	 * @param urlRequest The URLRequest object containing the URL of the object to be loaded.
 	 * @param parser An optional parser object that will translate the loaded data into a usable resource. If not provided, AssetLoader will attempt to auto-detect the file type.
 	 */
-    public function load(urlRequest:URLRequest, parser:ParserBase = null, loadAsRawData:Bool = false):Void
-    {
+
+    public function load(urlRequest:URLRequest, parser:ParserBase = null, loadAsRawData:Bool = false):Void {
         var urlLoader:URLLoader;
         var dataFormat:URLLoaderDataFormat = URLLoaderDataFormat.BINARY;
 
@@ -246,21 +240,18 @@ class SingleFileLoader extends EventDispatcher {
         _req = urlRequest;
         decomposeFilename(_req.url);
 
-        if (_loadAsRawData)
-        {
+        if (_loadAsRawData) {
 // Always use binary for raw data loading
             dataFormat = URLLoaderDataFormat.BINARY;
         }
-        else
-        {
+        else {
             if (parser != null)
                 _parser = parser;
 
             if (_parser == null)
                 _parser = getParserFromSuffix();
 
-            if (_parser != null)
-            {
+            if (_parser != null) {
                 switch (_parser.dataFormat)
                 {
                     case ParserDataFormat.BINARY:
@@ -270,8 +261,7 @@ class SingleFileLoader extends EventDispatcher {
                 }
 
             }
-            else
-            {
+            else {
 // Always use BINARY for unknown file formats. The thorough
 // file type check will determine format after load, and if
 // binary, a text load will have broken the file data.
@@ -292,10 +282,10 @@ class SingleFileLoader extends EventDispatcher {
 	 * @param uri The identifier (url or id) of the object to be loaded, mainly used for resource management.
 	 * @param parser An optional parser object that will translate the data into a usable resource. If not provided, AssetLoader will attempt to auto-detect the file type.
 	 */
-    public function parseData(data:Dynamic, parser:ParserBase = null, req:URLRequest = null):Void
-    {
-        if (Std.is(data,Class))
-            data = Type.createInstance(data,[]);
+
+    public function parseData(data:Dynamic, parser:ParserBase = null, req:URLRequest = null):Void {
+        if (Std.is(data, Class))
+            data = Type.createInstance(data, []);
 
         if (parser != null)
             _parser = parser;
@@ -306,20 +296,16 @@ class SingleFileLoader extends EventDispatcher {
     }
 
 
-    private function get_parser():ParserBase
-    {
+    private function get_parser():ParserBase {
         return _parser;
     }
 
 
-    private function get_dependencies():Vector<ResourceDependency>
-    {
-        if (_parser != null)
-        {
+    private function get_dependencies():Vector<ResourceDependency> {
+        if (_parser != null) {
             return _parser.dependencies;
         }
-        else
-        {
+        else {
             return new Vector<ResourceDependency>();
         }
     }
@@ -328,8 +314,8 @@ class SingleFileLoader extends EventDispatcher {
 	 * Splits a url string into base and extension.
 	 * @param url The url to be decomposed.
 	 */
-    private function decomposeFilename(url:String):Void
-    {
+
+    private function decomposeFilename(url:String):Void {
 
 // Get rid of query string if any and extract suffix
         var base:String = (url.indexOf('?') > 0) ? url.split('?')[0] : url;
@@ -342,17 +328,15 @@ class SingleFileLoader extends EventDispatcher {
 	 * Guesses the parser to be used based on the file extension.
 	 * @return An instance of the guessed parser.
 	 */
-    private function getParserFromSuffix():ParserBase
-    {
+
+    private function getParserFromSuffix():ParserBase {
         var len:Int = _parsers.length;
 
 // go in reverse order to allow application override of default parser added in a3d proper
         var i:Int = len - 1;
-        while (i >= 0)
-        {
-            if (untyped _parsers[i].supportsType(_fileExtension))
-            {
-                return Type.createInstance(_parsers[i],[]);
+        while (i >= 0) {
+            if (untyped _parsers[i].supportsType(_fileExtension)) {
+                return Type.createInstance(_parsers[i], []);
             }
             i--;
         }
@@ -366,17 +350,15 @@ class SingleFileLoader extends EventDispatcher {
 	 * @param uri The url or id of the object to be parsed.
 	 * @return An instance of the guessed parser.
 	 */
-    private function getParserFromData(data:Dynamic):ParserBase
-    {
+
+    private function getParserFromData(data:Dynamic):ParserBase {
         var len:Int = _parsers.length;
 
 // go in reverse order to allow application override of default parser added in a3d proper
         var i:Int = len - 1;
-        while (i >= 0)
-        {
-            if (untyped _parsers[i].supportsData(data))
-            {
-                return Type.createInstance(_parsers[i],[]);
+        while (i >= 0) {
+            if (untyped _parsers[i].supportsData(data)) {
+                return Type.createInstance(_parsers[i], []);
             }
             i--;
         }
@@ -387,8 +369,8 @@ class SingleFileLoader extends EventDispatcher {
 /**
 	 * Cleanups
 	 */
-    private function removeListeners(urlLoader:URLLoader):Void
-    {
+
+    private function removeListeners(urlLoader:URLLoader):Void {
         urlLoader.removeEventListener(Event.COMPLETE, handleUrlLoaderComplete);
         urlLoader.removeEventListener(IOErrorEvent.IO_ERROR, handleUrlLoaderError);
     }
@@ -396,9 +378,9 @@ class SingleFileLoader extends EventDispatcher {
 /**
 	 * Called when loading of a file has failed
 	 */
-    private function handleUrlLoaderError(event:IOErrorEvent):Void
-    {
-        var urlLoader:URLLoader =cast(event.currentTarget,URLLoader);
+
+    private function handleUrlLoaderError(event:IOErrorEvent):Void {
+        var urlLoader:URLLoader = cast(event.currentTarget, URLLoader);
         removeListeners(urlLoader);
 
         if (hasEventListener(LoaderEvent.LOAD_ERROR))
@@ -408,20 +390,18 @@ class SingleFileLoader extends EventDispatcher {
 /**
 	 * Called when loading of a file is complete
 	 */
-    private function handleUrlLoaderComplete(event:Event):Void
-    {
-        var urlLoader:URLLoader = cast(event.currentTarget,URLLoader);
+
+    private function handleUrlLoaderComplete(event:Event):Void {
+        var urlLoader:URLLoader = cast(event.currentTarget, URLLoader);
         removeListeners(urlLoader);
 
         _data = urlLoader.data;
 
-        if (_loadAsRawData)
-        {
+        if (_loadAsRawData) {
 // No need to parse this data, which should be returned as is
             dispatchEvent(new LoaderEvent(LoaderEvent.DEPENDENCY_COMPLETE));
         }
-        else
-        {
+        else {
             parse(_data);
         }
     }
@@ -430,17 +410,15 @@ class SingleFileLoader extends EventDispatcher {
 	 * Initiates parsing of the loaded data.
 	 * @param data The data to be parsed.
 	 */
-    private function parse(data:Dynamic):Void
-    {
+
+    private function parse(data:Dynamic):Void {
 // If no parser has been defined, try to find one by letting
 // all plugged in parsers inspect the actual data.
-        if (_parser == null)
-        {
+        if (_parser == null) {
             _parser = getParserFromData(data);
         }
 
-        if (_parser != null)
-        {
+        if (_parser != null) {
             _parser.addEventListener(ParserEvent.READY_FOR_DEPENDENCIES, onReadyForDependencies);
             _parser.addEventListener(ParserEvent.PARSE_ERROR, onParseError);
             _parser.addEventListener(ParserEvent.PARSE_COMPLETE, onParseComplete);
@@ -464,46 +442,39 @@ class SingleFileLoader extends EventDispatcher {
             _parser.materialMode = _materialMode;
             _parser.parseAsync(data);
         }
-        else
-        {
+        else {
             var msg:String = "No parser defined. To enable all parsers for auto-detection, use Parsers.enableAllBundled()";
-            if (hasEventListener(LoaderEvent.LOAD_ERROR))
-            {
+            if (hasEventListener(LoaderEvent.LOAD_ERROR)) {
                 this.dispatchEvent(new LoaderEvent(LoaderEvent.LOAD_ERROR, "", true, msg));
             }
-            else
-            {
+            else {
                 throw new Error(msg);
             }
         }
     }
 
-    private function onParseError(event:ParserEvent):Void
-    {
+    private function onParseError(event:ParserEvent):Void {
         if (hasEventListener(ParserEvent.PARSE_ERROR))
             dispatchEvent(event.clone());
     }
 
-    private function onReadyForDependencies(event:ParserEvent):Void
-    {
+    private function onReadyForDependencies(event:ParserEvent):Void {
         dispatchEvent(event.clone());
     }
 
-    private function onAssetComplete(event:AssetEvent):Void
-    {
+    private function onAssetComplete(event:AssetEvent):Void {
         this.dispatchEvent(event.clone());
     }
 
-    private function onTextureSizeError(event:AssetEvent):Void
-    {
+    private function onTextureSizeError(event:AssetEvent):Void {
         this.dispatchEvent(event.clone());
     }
 
 /**
 	 * Called when parsing is complete.
 	 */
-    private function onParseComplete(event:ParserEvent):Void
-    {
+
+    private function onParseComplete(event:ParserEvent):Void {
         this.dispatchEvent(new LoaderEvent(LoaderEvent.DEPENDENCY_COMPLETE, this.url)); //dispatch in front of removing listeners to allow any remaining asset events to propagate
 
         _parser.removeEventListener(ParserEvent.READY_FOR_DEPENDENCIES, onReadyForDependencies);

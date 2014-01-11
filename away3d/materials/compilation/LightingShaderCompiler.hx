@@ -173,7 +173,7 @@ class LightingShaderCompiler extends ShaderCompiler {
 	 */
 
     override private function compileLightingCode():Void {
-        if (_methodSetup._shadowMethod!=null) compileShadowCode();
+        if (_methodSetup._shadowMethod != null) compileShadowCode();
         _methodSetup._diffuseMethod.shadowRegister = _shadowRegister;
         _sharedRegisters.shadedTarget = _registerCache.getFreeFragmentVectorTemp();
         _registerCache.addFragmentTempUsages(_sharedRegisters.shadedTarget, 1);
@@ -205,7 +205,7 @@ class LightingShaderCompiler extends ShaderCompiler {
             if (_methodSetup._specularMethodVO.needsNormals) _registerCache.removeFragmentTempUsage(_sharedRegisters.normalFragment);
             if (_methodSetup._specularMethodVO.needsView) _registerCache.removeFragmentTempUsage(_sharedRegisters.viewDirFragment);
         }
-        if (_methodSetup._shadowMethod!=null) _registerCache.removeFragmentTempUsage(_shadowRegister);
+        if (_methodSetup._shadowMethod != null) _registerCache.removeFragmentTempUsage(_shadowRegister);
     }
 
 /**
@@ -213,7 +213,7 @@ class LightingShaderCompiler extends ShaderCompiler {
 	 */
 
     private function compileShadowCode():Void {
-        if (_sharedRegisters.normalFragment!=null) _shadowRegister = _sharedRegisters.normalFragment
+        if (_sharedRegisters.normalFragment != null) _shadowRegister = _sharedRegisters.normalFragment
         else _shadowRegister = _registerCache.getFreeFragmentVectorTemp();
         _registerCache.addFragmentTempUsages(_shadowRegister, 1);
         _vertexCode += _methodSetup._shadowMethod.getVertexCode(_methodSetup._shadowMethodVO, _registerCache);
@@ -228,7 +228,7 @@ class LightingShaderCompiler extends ShaderCompiler {
 // init these first so we're sure they're in sequence
         var i:Int = 0;
         var len:Int;
-        if (_dirLightVertexConstants!=null) {
+        if (_dirLightVertexConstants != null) {
             len = _dirLightVertexConstants.length;
             i = 0;
             while (i < len) {
@@ -268,8 +268,8 @@ class LightingShaderCompiler extends ShaderCompiler {
         var diffuseColorReg:ShaderRegisterElement;
         var specularColorReg:ShaderRegisterElement;
         var lightDirReg:ShaderRegisterElement;
-        var vertexRegIndex:Int;
-        var fragmentRegIndex:Int;
+        var vertexRegIndex:Int = 0;
+        var fragmentRegIndex:Int = 0;
         var addSpec:Bool = _usingSpecularMethod && usesLightsForSpecular();
         var addDiff:Bool = usesLightsForDiffuse();
         if (!(addSpec || addDiff)) return;
@@ -304,8 +304,8 @@ class LightingShaderCompiler extends ShaderCompiler {
         var specularColorReg:ShaderRegisterElement;
         var lightPosReg:ShaderRegisterElement;
         var lightDirReg:ShaderRegisterElement;
-        var vertexRegIndex:Int;
-        var fragmentRegIndex:Int;
+        var vertexRegIndex:Int = 0;
+        var fragmentRegIndex:Int = 0;
         var addSpec:Bool = _usingSpecularMethod && usesLightsForSpecular();
         var addDiff:Bool = usesLightsForDiffuse();
         if (!(addSpec || addDiff)) return;

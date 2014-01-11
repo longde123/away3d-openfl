@@ -10,9 +10,9 @@ package away3d.core.managers;
 import flash.errors.Error;
 import flash.Vector;
 import flash.display.Stage;
-import haxe.ds.ObjectMap; 
+import haxe.ds.ObjectMap;
 using OpenFLStage3D;
- 
+
 class Stage3DManager {
     public var hasFreeStage3DProxy(get_hasFreeStage3DProxy, never):Bool;
     public var numProxySlotsFree(get_numProxySlotsFree, never):Int;
@@ -28,16 +28,17 @@ class Stage3DManager {
 	 * @param stage The Stage object that contains the Stage3D objects to be managed.
 	 * @private
 	 */
-	private var stage3DsLength:Int;
+    private var stage3DsLength:Int;
+
     public function new(stage:Stage, Stage3DManagerSingletonEnforcer:Stage3DManagerSingletonEnforcer) {
         if (Stage3DManagerSingletonEnforcer == null) throw new Error("This class is a multiton and cannot be instantiated manually. Use Stage3DManager.getInstance instead.");
         _stage = stage;
-		stage3DsLength = 1;
-		#if flash
+        stage3DsLength = 1;
+#if flash
 			stage3DsLength = _stage.stage3Ds.length;
-		#end 
+		#end
         if (_stageProxies == null) _stageProxies = new Vector<Stage3DProxy>(stage3DsLength, true);
-	 
+
     }
 
 /**
@@ -67,14 +68,14 @@ class Stage3DManager {
 	 */
 
     public function getStage3DProxy(index:Int, forceSoftware:Bool = false, profile:String = "baseline"):Stage3DProxy {
-		//why
-		 
+//why
+
         if (_stageProxies[index] == null) {
             _numStageProxies++;
             _stageProxies[index] = new Stage3DProxy(index, _stage.getStage3D(index), this, forceSoftware, profile);
-			 
+
         }
-		
+
         return _stageProxies[index];
     }
 
@@ -107,8 +108,8 @@ class Stage3DManager {
                 return _stageProxies[i];
             }
             ++i;
-			
-        } 
+
+        }
         throw new Error("Too many Stage3D instances used!");
         return null;
     }

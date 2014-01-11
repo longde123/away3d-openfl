@@ -119,8 +119,8 @@ class MaterialBase extends NamedAssetBase implements IAsset {
 // Default to considering pre-multiplied textures while blending
         alphaPremultiplied = true;
         _uniqueId = MATERIAL_ID_COUNT++;
-		
-		_numPasses = 0;
+
+        _numPasses = 0;
         super();
     }
 

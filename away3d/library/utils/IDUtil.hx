@@ -1,8 +1,7 @@
 package away3d.library.utils;
 
 
-class IDUtil
-{
+class IDUtil {
 /**
 	 *  @private
 	 *  Char codes for 0123456789ABCDEF
@@ -27,11 +26,10 @@ class IDUtil
 	  *  @playerversion AIR 1.1
 	  *  @productversion Flex 3
 	  */
-    public static function createUID():String
-    {
+
+    public static function createUID():String {
         var uid:Array<Int> = new Array<Int>();
-        for (i in 0...36)
-        {
+        for (i in 0...36) {
             uid[i] = 0;
         }
 
@@ -40,17 +38,14 @@ class IDUtil
         var i:Int;
         var j:Int;
 
-        for (i in 0...8)
-        {
+        for (i in 0...8) {
             uid[index++] = ALPHA_CHAR_CODES[Math.floor(Math.random() * 16)];
         }
 
-        for (i in 0...3)
-        {
+        for (i in 0...3) {
             uid[index++] = 45; // charCode for "-"
 
-            for (j in 0...4)
-            {
+            for (j in 0...4) {
                 uid[index++] = ALPHA_CHAR_CODES[Math.floor(Math.random() * 16)];
             }
         }
@@ -68,19 +63,16 @@ class IDUtil
 // before taking the low digits.
         var timeString:String = ("0000000" + StringTools.hex(Std.int(time))).substr(-8);
 
-        for (i in 0...8)
-        {
+        for (i in 0...8) {
             uid[index++] = timeString.charCodeAt(i);
         }
 
-        for (i in 0...4)
-        {
+        for (i in 0...4) {
             uid[index++] = ALPHA_CHAR_CODES[Math.floor(Math.random() * 16)];
         }
 
         var b:StringBuf = new StringBuf();
-        for (i in 0...uid.length)
-        {
+        for (i in 0...uid.length) {
             b.addChar(uid[i]);
         }
 
@@ -92,21 +84,21 @@ class IDUtil
 	 * Returns the decimal representation of a hex digit.
 	 * @private
 	 */
-    private static function getDigit(hex:String):UInt
-    {
+
+    private static function getDigit(hex:String):UInt {
         switch (hex)
         {
-            case "A","a":
+            case "A", "a":
                 return 10;
-            case "B","b":
+            case "B", "b":
                 return 11;
-            case "C","c":
+            case "C", "c":
                 return 12;
-            case "D","d":
+            case "D", "d":
                 return 13;
-            case "E","e":
+            case "E", "e":
                 return 14;
-            case "F","f":
+            case "F", "f":
                 return 15;
             default:
                 return Std.parseInt(hex);

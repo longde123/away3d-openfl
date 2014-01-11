@@ -99,7 +99,7 @@ class ResourceDependency {
 	 */
 
     public function resolve():Void {
-        if (_parentParser!=null) _parentParser.resolveDependency(this);
+        if (_parentParser != null) _parentParser.resolveDependency(this);
     }
 
 /**
@@ -107,7 +107,7 @@ class ResourceDependency {
 	 */
 
     public function resolveFailure():Void {
-        if (_parentParser!=null) _parentParser.resolveDependencyFailure(this);
+        if (_parentParser != null) _parentParser.resolveDependencyFailure(this);
     }
 
 /**
@@ -115,7 +115,7 @@ class ResourceDependency {
 	 */
 
     public function resolveName(asset:IAsset):String {
-        if (_parentParser!=null) return _parentParser.resolveDependencyName(this, asset);
+        if (_parentParser != null) return _parentParser.resolveDependencyName(this, asset);
         return asset.name;
     }
 

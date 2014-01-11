@@ -26,7 +26,7 @@ class CompositeSpecularMethod extends BasicSpecularMethod {
     public function new(modulateMethod:Dynamic, baseSpecularMethod:BasicSpecularMethod = null) {
         super();
         _baseMethod = baseSpecularMethod ;
-		if(_baseMethod==null)_baseMethod= new BasicSpecularMethod();
+        if (_baseMethod == null)_baseMethod = new BasicSpecularMethod();
         _baseMethod._modulateMethod = modulateMethod;
         _baseMethod.addEventListener(ShadingMethodEvent.SHADER_INVALIDATED, onShaderInvalidated);
     }
@@ -56,7 +56,7 @@ class CompositeSpecularMethod extends BasicSpecularMethod {
     }
 
     public function set_baseMethod(value:BasicSpecularMethod):BasicSpecularMethod {
-        if (_baseMethod == value) return;
+        if (_baseMethod == value) return value;
         _baseMethod.removeEventListener(ShadingMethodEvent.SHADER_INVALIDATED, onShaderInvalidated);
         _baseMethod = value;
         _baseMethod.addEventListener(ShadingMethodEvent.SHADER_INVALIDATED, onShaderInvalidated, false, 0, true);
@@ -181,40 +181,45 @@ class CompositeSpecularMethod extends BasicSpecularMethod {
 /**
 	 * @inheritDoc
 	 */
-    override  public function  getFragmentPostLightingCode(  vo:MethodVO, regCache:ShaderRegisterCache, targetReg:ShaderRegisterElement) : String {
-    return _baseMethod.getFragmentPostLightingCode(vo, regCache, targetReg);
+
+    override public function getFragmentPostLightingCode(vo:MethodVO, regCache:ShaderRegisterCache, targetReg:ShaderRegisterElement):String {
+        return _baseMethod.getFragmentPostLightingCode(vo, regCache, targetReg);
     }
 
 /**
 	 * @inheritDoc
 	 */
-    override private function reset() : Void {
-    _baseMethod.reset();
+
+    override public function reset():Void {
+        _baseMethod.reset();
     }
 
 /**
 	 * @inheritDoc
 	 */
-    override public function cleanCompilationData() : Void {
-    super.cleanCompilationData();
-    _baseMethod.cleanCompilationData();
+
+    override public function cleanCompilationData():Void {
+        super.cleanCompilationData();
+        _baseMethod.cleanCompilationData();
     }
 
 /**
 	 * @inheritDoc
 	 */
-    override private function set_shadowRegister(value : ShaderRegisterElement) : ShaderRegisterElement {
-    super.shadowRegister = value;
-    _baseMethod.shadowRegister = value;
-    return value;
+
+    override private function set_shadowRegister(value:ShaderRegisterElement):ShaderRegisterElement {
+        super.shadowRegister = value;
+        _baseMethod.shadowRegister = value;
+        return value;
     }
 
 /**
 	 * Called when the base method's shader code is invalidated.
 	 */
-    private function onShaderInvalidated(event : ShadingMethodEvent) : Void {
-    invalidateShaderProgram();
+
+    private function onShaderInvalidated(event:ShadingMethodEvent):Void {
+        invalidateShaderProgram();
     }
 
-    }
+}
 

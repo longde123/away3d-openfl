@@ -60,15 +60,15 @@ class DynamicGrid {
 
     private function createLevel(numCellsX:Int, numCellsY:Int, numCellsZ:Int, cellWidth:Float, cellHeight:Float, cellDepth:Float):Vector<InvertedOctreeNode> {
         var nodes:Vector<InvertedOctreeNode> = new Vector<InvertedOctreeNode>(numCellsX * numCellsY * numCellsZ);
-        var parents:Vector<InvertedOctreeNode>;
+        var parents:Vector<InvertedOctreeNode> = null;
         var node:InvertedOctreeNode;
-        var i:Int;
+        var i:Int = 0;
         var minX:Float;
         var minY:Float;
         var minZ:Float;
-        var numParentsX:Int;
-        var numParentsY:Int;
-        var numParentsZ:Int;
+        var numParentsX:Int = 0;
+        var numParentsY:Int = 0;
+        var numParentsZ:Int = 0;
         if (numCellsX != 1 || numCellsY != 1 || numCellsZ != 1) {
             numParentsX = Math.ceil(numCellsX / 2);
             numParentsY = Math.ceil(numCellsY / 2);
@@ -85,7 +85,7 @@ class DynamicGrid {
                 var x:Int = 0;
                 while (x < numCellsX) {
                     node = new InvertedOctreeNode(new Vector3D(minX, minY, minZ), new Vector3D(minX + cellWidth, minY + cellHeight, minZ + cellDepth));
-                    if (parents!=null) {
+                    if (parents != null) {
                         var index:Int = (x >> 1) + ((y >> 1) + (z >> 1) * numParentsY) * numParentsX;
                         node.setParent(parents[index]);
                     }
@@ -180,7 +180,7 @@ class DynamicGrid {
         else if (maxIndexZ >= _numCellsZ) maxIndexZ = _numCellsZ - 1;
         if (minIndexZ < 0) minIndexZ = 0
         else if (minIndexZ >= _numCellsZ) minIndexZ = _numCellsZ - 1;
-        var i:Int;
+        var i:Int = 0;
         var z:Int = minIndexZ;
         while (z <= maxIndexZ) {
             var y:Int = minIndexY;

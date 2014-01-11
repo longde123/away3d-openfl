@@ -172,7 +172,7 @@ class LensBase extends EventDispatcher {
 
         if (_aspectRatio == value || (value * 0) != 0) return value;
         _aspectRatio = value;
-		 
+
         invalidateMatrix();
         return value;
     }

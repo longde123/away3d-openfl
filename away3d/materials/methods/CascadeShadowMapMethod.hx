@@ -37,7 +37,7 @@ class CascadeShadowMapMethod extends ShadowMapMethodBase {
         _baseMethod = shadowMethodBase;
         if (!(Std.is(_castingLight, DirectionalLight))) throw new Error("CascadeShadowMapMethod is only compatible with DirectionalLight");
         _cascadeShadowMapper = cast(_castingLight.shadowMapper, CascadeShadowMapper);
-        if (_cascadeShadowMapper==null) throw new Error("CascadeShadowMapMethod requires a light that has a CascadeShadowMapper instance assigned to shadowMapper.");
+        if (_cascadeShadowMapper == null) throw new Error("CascadeShadowMapMethod requires a light that has a CascadeShadowMapper instance assigned to shadowMapper.");
         _cascadeShadowMapper.addEventListener(Event.CHANGE, onCascadeChange, false, 0, true);
         _baseMethod.addEventListener(ShadingMethodEvent.SHADER_INVALIDATED, onShaderInvalidated, false, 0, true);
     }
@@ -160,7 +160,7 @@ class CascadeShadowMapMethod extends ShadowMapMethodBase {
         var decReg:ShaderRegisterElement = regCache.getFreeFragmentConstant();
         var dataReg:ShaderRegisterElement = regCache.getFreeFragmentConstant();
         var planeDistanceReg:ShaderRegisterElement = regCache.getFreeFragmentConstant();
-        var planeDistances:Vector<String> =  Vector.ofArray([planeDistanceReg + ".x", planeDistanceReg + ".y", planeDistanceReg + ".z", planeDistanceReg + ".w"]);
+        var planeDistances:Vector<String> = Vector.ofArray([planeDistanceReg + ".x", planeDistanceReg + ".y", planeDistanceReg + ".z", planeDistanceReg + ".w"]);
         var code:String;
         vo.fragmentConstantsIndex = decReg.index * 4;
         vo.texturesIndex = depthMapRegister.index;

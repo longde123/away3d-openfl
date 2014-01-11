@@ -113,7 +113,7 @@ class DepthOfFieldFilter3D extends Filter3DBase {
     }
 
     override public function update(stage:Stage3DProxy, camera:Camera3D):Void {
-        if (_focusTarget!=null) updateFocus(camera);
+        if (_focusTarget != null) updateFocus(camera);
     }
 
     private function updateFocus(camera:Camera3D):Void {

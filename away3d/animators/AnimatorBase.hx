@@ -74,12 +74,12 @@ class AnimatorBase extends NamedAssetBase implements IAsset {
     public var updatePosition:Bool;
 
     public function getAnimationState(node:AnimationNodeBase):AnimationStateBase {
-      
-	var className:Class<IAnimationState> = node.stateClass;
 
-		if (!_animationStates.exists(node))
-			_animationStates.set(node,cast(Type.createInstance(className, [this, node]),AnimationStateBase));
-		return _animationStates.get(node);
+        var className:Class<IAnimationState> = node.stateClass;
+
+        if (!_animationStates.exists(node))
+            _animationStates.set(node, cast(Type.createInstance(className, [this, node]), AnimationStateBase));
+        return _animationStates.get(node);
     }
 
     public function getAnimationStateByName(name:String):AnimationStateBase {
@@ -215,7 +215,7 @@ class AnimatorBase extends NamedAssetBase implements IAsset {
         _isPlaying = true;
         if (!_broadcaster.hasEventListener(Event.ENTER_FRAME)) _broadcaster.addEventListener(Event.ENTER_FRAME, onEnterFrame);
         if (!hasEventListener(AnimatorEvent.START)) return;
-		if (_startEvent == null)_startEvent  = new AnimatorEvent(AnimatorEvent.START, this);
+        if (_startEvent == null)_startEvent = new AnimatorEvent(AnimatorEvent.START, this);
         dispatchEvent(_startEvent);
     }
 
@@ -232,8 +232,8 @@ class AnimatorBase extends NamedAssetBase implements IAsset {
         _isPlaying = false;
         if (_broadcaster.hasEventListener(Event.ENTER_FRAME)) _broadcaster.removeEventListener(Event.ENTER_FRAME, onEnterFrame);
         if (!hasEventListener(AnimatorEvent.STOP)) return;
-        if(_stopEvent==null)_startEvent=(_stopEvent = new AnimatorEvent(AnimatorEvent.STOP, this));
-        dispatchEvent(_stopEvent );
+        if (_stopEvent == null)_startEvent = (_stopEvent = new AnimatorEvent(AnimatorEvent.STOP, this));
+        dispatchEvent(_stopEvent);
     }
 
 /**
@@ -315,9 +315,9 @@ class AnimatorBase extends NamedAssetBase implements IAsset {
 	 */
 
     public function dispatchCycleEvent():Void {
-        if (hasEventListener(AnimatorEvent.CYCLE_COMPLETE)){
-          if(_cycleEvent==null)(_cycleEvent = new AnimatorEvent(AnimatorEvent.CYCLE_COMPLETE, this));
-            dispatchEvent(_cycleEvent  );
+        if (hasEventListener(AnimatorEvent.CYCLE_COMPLETE)) {
+            if (_cycleEvent == null)(_cycleEvent = new AnimatorEvent(AnimatorEvent.CYCLE_COMPLETE, this));
+            dispatchEvent(_cycleEvent);
         }
     }
 

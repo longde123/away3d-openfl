@@ -204,8 +204,8 @@ class PlanarReflectionTexture extends RenderTexture {
         if (height > 2048) height = 2048;
         _viewWidth = width * _scale;
         _viewHeight = height * _scale;
-        var textureWidth:Float = TextureUtils.getBestPowerOf2(_viewWidth);
-        var textureHeight:Float = TextureUtils.getBestPowerOf2(_viewHeight);
+        var textureWidth:Int = TextureUtils.getBestPowerOf2(Std.int(_viewWidth));
+        var textureHeight:Int = TextureUtils.getBestPowerOf2(Std.int(_viewHeight));
         setSize(textureWidth, textureHeight);
         var textureRatioX:Float = _viewWidth / textureWidth;
         var textureRatioY:Float = _viewHeight / textureHeight;

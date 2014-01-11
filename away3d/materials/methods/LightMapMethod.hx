@@ -6,6 +6,7 @@
 package away3d.materials.methods;
 
 
+import flash.display.BlendMode;
 import flash.errors.Error;
 import away3d.core.managers.Stage3DProxy;
 import away3d.materials.compilation.ShaderRegisterCache;
@@ -13,19 +14,19 @@ import away3d.materials.compilation.ShaderRegisterElement;
 import away3d.textures.Texture2DBase;
 
 class LightMapMethod extends EffectMethodBase {
-    public var blendMode(get_blendMode, set_blendMode):String;
+    public var blendMode(get_blendMode, set_blendMode):BlendMode;
     public var texture(get_texture, set_texture):Texture2DBase;
 
 /**
 	 * Indicates the light map should be multiplied with the calculated shading result.
 	 */
-    static public var MULTIPLY:String = "multiply";
+    static public var MULTIPLY:BlendMode = BlendMode.MULTIPLY;
 /**
 	 * Indicates the light map should be added into the calculated shading result.
 	 */
-    static public var ADD:String = "add";
+    static public var ADD:BlendMode = BlendMode.ADD;
     private var _texture:Texture2DBase;
-    private var _blendMode:String;
+    private var _blendMode:BlendMode;
     private var _useSecondaryUV:Bool;
 /**
 	 * Creates a new LightMapMethod object.
@@ -34,7 +35,7 @@ class LightMapMethod extends EffectMethodBase {
 	 * @param useSecondaryUV Indicates whether the secondary UV set should be used to map the light map.
 	 */
 
-    public function new(texture:Texture2DBase, blendMode:String = "multiply", useSecondaryUV:Bool = false) {
+    public function new(texture:Texture2DBase, blendMode:BlendMode, useSecondaryUV:Bool = false) {
         super();
         _useSecondaryUV = useSecondaryUV;
         _texture = texture;
@@ -57,11 +58,11 @@ class LightMapMethod extends EffectMethodBase {
 	 * @see LightMapMethod.MULTIPLY
 	 */
 
-    public function get_blendMode():String {
+    public function get_blendMode():BlendMode {
         return _blendMode;
     }
 
-    public function set_blendMode(value:String):String {
+    public function set_blendMode(value:BlendMode):BlendMode {
         if (value != ADD && value != MULTIPLY) throw new Error("Unknown blendmode!");
         if (_blendMode == value) return value;
         _blendMode = value;

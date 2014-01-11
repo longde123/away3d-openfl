@@ -52,8 +52,7 @@ class ConflictStrategyBase {
 	 * the conflict resolution by applying the new names and dispatching the correct events.
 	 */
 
-    private function updateNames(ns:String, nonConflictingName:String, oldAsset:IAsset, newAsset:IAsset, assetsDictionary:StringMap<IAsset>, precedence:String):Void
-    {
+    private function updateNames(ns:String, nonConflictingName:String, oldAsset:IAsset, newAsset:IAsset, assetsDictionary:StringMap<IAsset>, precedence:String):Void {
         var loser_prev_name:String;
         var winner:IAsset, loser:IAsset;
 
@@ -62,8 +61,8 @@ class ConflictStrategyBase {
 
         loser_prev_name = loser.name;
 
-        assetsDictionary.set(winner.name,winner);
-        assetsDictionary.set(nonConflictingName,loser);
+        assetsDictionary.set(winner.name, winner);
+        assetsDictionary.set(nonConflictingName, loser);
         loser.resetAssetPath(nonConflictingName, ns, false);
 
         loser.dispatchEvent(new AssetEvent(AssetEvent.ASSET_CONFLICT_RESOLVED, loser, loser_prev_name));

@@ -199,7 +199,7 @@ class Cast {
 
             if (_colorNames.exists(data))
                 return _colorNames.get(data);
-            if ((( cast(data, String) ).length == 6) && isHex(data)) return parseInt("0x" + data);
+            if ((( cast(data, String) ).length == 6) && isHex(data)) return Std.parseInt("0x" + data);
         }
         return 0xFFFFFF;
     }
@@ -246,13 +246,13 @@ class Cast {
         }
         if (Std.is(data, BitmapData)) return data;
         if (Std.is(data, Bitmap)) {
-            if (( cast(data, Bitmap)  ).hasOwnProperty("bitmapData")) // if (data is BitmapAsset)
-            return ( cast(data, Bitmap) ).bitmapData;
+            if (cast(data, Bitmap).bitmapData != null) // if (data is BitmapAsset)
+                return ( cast(data, Bitmap) ).bitmapData;
         }
         if (Std.is(data, DisplayObject)) {
             var ds:DisplayObject = cast(data, DisplayObject) ;
-            var bmd : BitmapData = new BitmapData(ds.width, ds.height, true, 0x00FFFFFF);
-            var mat : Matrix = ds.transform.matrix.clone();
+            var bmd:BitmapData = new BitmapData(Std.int(ds.width), Std.int(ds.height), true, 0x00FFFF);
+            var mat:Matrix = ds.transform.matrix.clone();
             mat.tx = 0;
             mat.ty = 0;
             bmd.draw(ds, mat, ds.transform.colorTransform, ds.blendMode, bmd.rect, true);

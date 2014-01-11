@@ -44,21 +44,21 @@ class CapsuleGeometry extends PrimitiveBase {
         var data:Vector<Float>;
         var indices:Vector<UInt>;
         var i:Int = 0;
-        var j:Int;
-        var triIndex:Int;
+        var j:Int = 0;
+        var triIndex:Int = 0;
         var numVerts:Int = (_segmentsH + 1) * (_segmentsW + 1);
         var stride:Int = target.vertexStride;
         var skip:Int = stride - 9;
         var index:Int = 0;
-        var startIndex:Int;
-        var comp1:Float;
-        var comp2:Float;
-        var t1:Float;
-        var t2:Float;
+        var startIndex:Int = 0;
+        var comp1:Float = 0;
+        var comp2:Float = 0;
+        var t1:Float = 0;
+        var t2:Float = 0;
         if (numVerts == target.numVertices) {
             data = target.vertexData;
-			if( target.indexData ==null) target.indexData= new Vector<UInt>((_segmentsH - 1) * _segmentsW * 6, true);
             indices = target.indexData ;
+            if (indices == null) indices = new Vector<UInt>((_segmentsH - 1) * _segmentsW * 6, true);
         }
 
         else {
@@ -173,7 +173,7 @@ class CapsuleGeometry extends PrimitiveBase {
         var stride:Int = target.UVStride;
         var UVlen:Int = (_segmentsH + 1) * (_segmentsW + 1) * stride;
         var skip:Int = stride - 2;
-        if (target.UVData!=null && UVlen == target.UVData.length) data = target.UVData
+        if (target.UVData != null && UVlen == target.UVData.length) data = target.UVData
         else {
             data = new Vector<Float>(UVlen, true);
             invalidateGeometry();

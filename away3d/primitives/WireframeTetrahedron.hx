@@ -82,26 +82,26 @@ class WireframeTetrahedron extends WireframePrimitiveBase {
 	 */
 
     override private function buildGeometry():Void {
-        var bv0:Vector3D;
-        var bv1:Vector3D;
-        var bv2:Vector3D;
-        var bv3:Vector3D;
-        var top:Vector3D;
+        var bv0:Vector3D = null;
+        var bv1:Vector3D = null;
+        var bv2:Vector3D = null;
+        var bv3:Vector3D = null;
+        var top:Vector3D = null;
         var hw:Float = _width * 0.5;
         switch(_orientation) {
-            case ORIENTATION_XY:
+            case WireframeTetrahedron.ORIENTATION_XY:
                 bv0 = new Vector3D(-hw, hw, 0);
                 bv1 = new Vector3D(hw, hw, 0);
                 bv2 = new Vector3D(hw, -hw, 0);
                 bv3 = new Vector3D(-hw, -hw, 0);
                 top = new Vector3D(0, 0, _height);
-            case ORIENTATION_XZ:
+            case WireframeTetrahedron.ORIENTATION_XZ:
                 bv0 = new Vector3D(-hw, 0, hw);
                 bv1 = new Vector3D(hw, 0, hw);
                 bv2 = new Vector3D(hw, 0, -hw);
                 bv3 = new Vector3D(-hw, 0, -hw);
                 top = new Vector3D(0, _height, 0);
-            case ORIENTATION_YZ:
+            case WireframeTetrahedron.ORIENTATION_YZ:
                 bv0 = new Vector3D(0, -hw, hw);
                 bv1 = new Vector3D(0, hw, hw);
                 bv2 = new Vector3D(0, hw, -hw);

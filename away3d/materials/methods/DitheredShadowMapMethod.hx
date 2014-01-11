@@ -34,7 +34,7 @@ class DitheredShadowMapMethod extends SimpleShadowMapMethodBase {
         _depthMapSize = _castingLight.shadowMapper.depthMapSize;
         this.numSamples = numSamples;
         ++_grainUsages;
-        if (_grainTexture==null) initGrainTexture();
+        if (_grainTexture == null) initGrainTexture();
     }
 
 /**
@@ -241,7 +241,7 @@ class DitheredShadowMapMethod extends SimpleShadowMapMethodBase {
 	 * @inheritDoc
 	 */
 
-    override private function activateForCascade(vo:MethodVO, stage3DProxy:Stage3DProxy):Void {
+    override public function activateForCascade(vo:MethodVO, stage3DProxy:Stage3DProxy):Void {
         var data:Vector<Float> = vo.fragmentData;
         var index:Int = vo.secondaryFragmentConstantsIndex;
         data[index] = 1 / _numSamples;
@@ -255,7 +255,7 @@ class DitheredShadowMapMethod extends SimpleShadowMapMethodBase {
 	 * @inheritDoc
 	 */
 
-    override private function getCascadeFragmentCode(vo:MethodVO, regCache:ShaderRegisterCache, decodeRegister:ShaderRegisterElement, depthTexture:ShaderRegisterElement, depthProjection:ShaderRegisterElement, targetRegister:ShaderRegisterElement):String {
+    override public function getCascadeFragmentCode(vo:MethodVO, regCache:ShaderRegisterCache, decodeRegister:ShaderRegisterElement, depthTexture:ShaderRegisterElement, depthProjection:ShaderRegisterElement, targetRegister:ShaderRegisterElement):String {
         _depthMapCoordReg = depthProjection;
         var dataReg:ShaderRegisterElement = regCache.getFreeFragmentConstant();
         vo.secondaryFragmentConstantsIndex = dataReg.index * 4;

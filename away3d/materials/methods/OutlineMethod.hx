@@ -85,7 +85,7 @@ class OutlineMethod extends EffectMethodBase {
 	 * @inheritDoc
 	 */
 
-    override private function reset():Void {
+    override public function reset():Void {
         super.reset();
     }
 

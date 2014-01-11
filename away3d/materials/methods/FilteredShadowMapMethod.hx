@@ -80,7 +80,7 @@ class FilteredShadowMapMethod extends SimpleShadowMapMethodBase {
 	 * @inheritDoc
 	 */
 
-    override private function activateForCascade(vo:MethodVO, stage3DProxy:Stage3DProxy):Void {
+    override public function activateForCascade(vo:MethodVO, stage3DProxy:Stage3DProxy):Void {
         var size:Int = _castingLight.shadowMapper.depthMapSize;
         var index:Int = vo.secondaryFragmentConstantsIndex;
         var data:Vector<Float> = vo.fragmentData;
@@ -92,7 +92,7 @@ class FilteredShadowMapMethod extends SimpleShadowMapMethodBase {
 	 * @inheritDoc
 	 */
 
-    override private function getCascadeFragmentCode(vo:MethodVO, regCache:ShaderRegisterCache, decodeRegister:ShaderRegisterElement, depthTexture:ShaderRegisterElement, depthProjection:ShaderRegisterElement, targetRegister:ShaderRegisterElement):String {
+    override public function getCascadeFragmentCode(vo:MethodVO, regCache:ShaderRegisterCache, decodeRegister:ShaderRegisterElement, depthTexture:ShaderRegisterElement, depthProjection:ShaderRegisterElement, targetRegister:ShaderRegisterElement):String {
         var code:String;
         var dataReg:ShaderRegisterElement = regCache.getFreeFragmentConstant();
         vo.secondaryFragmentConstantsIndex = dataReg.index * 4;

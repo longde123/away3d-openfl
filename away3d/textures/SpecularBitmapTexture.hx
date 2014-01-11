@@ -19,9 +19,9 @@ class SpecularBitmapTexture extends BitmapTexture {
 
     public function new(specularMap:BitmapData = null, glossMap:BitmapData = null) {
         var bmd:BitmapData;
-        if (specularMap) bmd = specularMap
+        if (specularMap != null) bmd = specularMap
         else bmd = glossMap;
-        bmd = (bmd) ? new BitmapData(bmd.width, bmd.height, false, 0xffffff) : new BitmapData(1, 1, false, 0xffffff);
+        bmd = (bmd != null) ? new BitmapData(bmd.width, bmd.height, false, 0xffffff) : new BitmapData(1, 1, false, 0xffffff);
         super(bmd);
         this.specularMap = specularMap;
         this.glossMap = glossMap;
@@ -52,12 +52,12 @@ class SpecularBitmapTexture extends BitmapTexture {
     private function testSize():Void {
         var w:Float;
         var h:Float;
-        if (_specularMap) {
+        if (_specularMap != null) {
             w = _specularMap.width;
             h = _specularMap.height;
         }
 
-        else if (_glossMap) {
+        else if (_glossMap != null) {
             w = _glossMap.width;
             h = _glossMap.height;
         }
@@ -78,8 +78,8 @@ class SpecularBitmapTexture extends BitmapTexture {
         var rect:Rectangle = _specularMap.rect;
         var origin:Point = new Point();
         bitmapData.fillRect(rect, 0xffffff);
-        if (_glossMap) bitmapData.copyChannel(_glossMap, rect, origin, BitmapDataChannel.GREEN, BitmapDataChannel.GREEN);
-        if (_specularMap) bitmapData.copyChannel(_specularMap, rect, origin, BitmapDataChannel.RED, BitmapDataChannel.RED);
+        if (_glossMap != null) bitmapData.copyChannel(_glossMap, rect, origin, BitmapDataChannel.GREEN, BitmapDataChannel.GREEN);
+        if (_specularMap != null) bitmapData.copyChannel(_specularMap, rect, origin, BitmapDataChannel.RED, BitmapDataChannel.RED);
         super.uploadContent(texture);
     }
 

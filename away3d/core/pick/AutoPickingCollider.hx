@@ -45,7 +45,7 @@ class AutoPickingCollider implements IPickingCollider {
 	 */
 
     public function testSubMeshCollision(subMesh:SubMesh, pickingCollisionVO:PickingCollisionVO, shortestCollisionDistance:Float):Bool {
-        _activePickingCollider =   _as3PickingCollider;
+        _activePickingCollider = _as3PickingCollider;
         return _activePickingCollider.testSubMeshCollision(subMesh, pickingCollisionVO, shortestCollisionDistance);
     }
 

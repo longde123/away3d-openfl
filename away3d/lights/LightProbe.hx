@@ -70,7 +70,7 @@ class LightProbe extends LightBase {
 	 * @inheritDoc
 	 */
 
-    override private function getObjectProjectionMatrix(renderable:IRenderable, target:Matrix3D = null):Matrix3D {
+    override public function getObjectProjectionMatrix(renderable:IRenderable, target:Matrix3D = null):Matrix3D {
 // TODO: not used
 
         throw new Error("Object projection matrices are not supported for LightProbe objects!");

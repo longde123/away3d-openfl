@@ -28,6 +28,7 @@ class SimpleShadowMapMethodBase extends ShadowMapMethodBase {
 
     public function new(castingLight:LightBase) {
         _usePoint = Std.is(castingLight, PointLight);
+        _depthMapCoordReg = null;
         super(castingLight);
     }
 
@@ -176,7 +177,7 @@ class SimpleShadowMapMethodBase extends ShadowMapMethodBase {
 	 */
 
     override public function setRenderState(vo:MethodVO, renderable:IRenderable, stage3DProxy:Stage3DProxy, camera:Camera3D):Void {
-        if (_usePoint==null) cast((_shadowMapper), DirectionalShadowMapper).depthProjection.copyRawDataTo(vo.vertexData, vo.vertexConstantsIndex + 4, true);
+        if (!_usePoint) cast((_shadowMapper), DirectionalShadowMapper).depthProjection.copyRawDataTo(vo.vertexData, vo.vertexConstantsIndex + 4, true);
     }
 
 /**
@@ -203,16 +204,16 @@ class SimpleShadowMapMethodBase extends ShadowMapMethodBase {
         var fragmentData:Vector<Float> = vo.fragmentData;
         var index:Int = vo.fragmentConstantsIndex;
         if (_usePoint) fragmentData[index + 4] = -Math.pow(1 / (cast(_castingLight, PointLight).fallOff * _epsilon), 2)
-        else vo.vertexData[vo.vertexConstantsIndex + 3] = - 1 / (cast((_shadowMapper), DirectionalShadowMapper).depth * _epsilon);
+        else vo.vertexData[vo.vertexConstantsIndex + 3] = -1 / (cast((_shadowMapper), DirectionalShadowMapper).depth * _epsilon);
         fragmentData[index + 5] = 1 - _alpha;
-        if(_usePoint) {
-        var pos : Vector3D = _castingLight.scenePosition;
-        fragmentData[index + 8] = pos.x;
-        fragmentData[index + 9] = pos.y;
-        fragmentData[index + 10] = pos.z;
+        if (_usePoint) {
+            var pos:Vector3D = _castingLight.scenePosition;
+            fragmentData[index + 8] = pos.x;
+            fragmentData[index + 9] = pos.y;
+            fragmentData[index + 10] = pos.z;
 // used to decompress distance
-        var f : Float = cast((_castingLight), PointLight)._fallOff;
-        fragmentData[index + 11] = 1 / (2 * f * f);
+            var f:Float = cast((_castingLight), PointLight)._fallOff;
+            fragmentData[index + 11] = 1 / (2 * f * f);
         }
         stage3DProxy._context3D.setTextureAt(vo.texturesIndex, _castingLight.shadowMapper.depthMap.getTextureForStage3D(stage3DProxy));
     }

@@ -36,7 +36,7 @@ class Bounds {
     static private var _maxY:Float;
     static private var _maxZ:Float;
     static private var _defaultPosition:Vector3D = new Vector3D(0.0, 0.0, 0.0);
-    static private var _containers:ObjectMap<ObjectContainer3D, Vector<Float>>; 
+    static private var _containers:ObjectMap<ObjectContainer3D, Vector<Float>>;
 /**
 	 * Calculate the bounds of a Mesh object
 	 * @param mesh        Mesh. The Mesh to get the bounds from.
@@ -107,7 +107,7 @@ class Bounds {
 
     static public function getCenter(outCenter:Vector3D = null):Vector3D {
         var center:Vector3D = outCenter;
-        if(center==null)center= new Vector3D();
+        if (center == null)center = new Vector3D();
         center.x = _minX + (_maxX - _minX) * .5;
         center.y = _minY + (_maxY - _minY) * .5;
         center.z = _minZ + (_maxZ - _minZ) * .5;
@@ -186,10 +186,10 @@ class Bounds {
         return _maxZ - _minZ;
     }
 
-    static private function reset():Void {
+    static public function reset():Void {
         _containers = new ObjectMap<ObjectContainer3D, Vector<Float>>();
         _minX = _minY = _minZ = MathConsts.Infinity;
-        _maxX = _maxY = _maxZ = - MathConsts.Infinity;
+        _maxX = _maxY = _maxZ = -MathConsts.Infinity;
         _defaultPosition.x = 0.0;
         _defaultPosition.y = 0.0;
         _defaultPosition.z = 0.0;
@@ -204,13 +204,13 @@ class Bounds {
         var child:ObjectContainer3D;
         var isEntity:Entity = cast(obj, Entity);
         var containerTransform:Matrix3D = new Matrix3D();
-        if (isEntity!=null && parentTransform!=null) {
+        if (isEntity != null && parentTransform != null) {
             parseObjectBounds(obj, parentTransform);
             containerTransform = obj.transform.clone();
-            if (parentTransform!=null) containerTransform.append(parentTransform);
+            if (parentTransform != null) containerTransform.append(parentTransform);
         }
 
-        else if (isEntity!=null && parentTransform==null) {
+        else if (isEntity != null && parentTransform == null) {
             var mat:Matrix3D = obj.transform.clone();
             mat.invert();
             parseObjectBounds(obj, mat);
@@ -222,8 +222,8 @@ class Bounds {
             ++i;
         }
         var parentBounds:Vector<Float> = _containers.get(obj.parent);
-        if (isEntity==null && parentTransform!=null) parseObjectBounds(obj, parentTransform, true);
-        if (parentBounds!=null) {
+        if (isEntity == null && parentTransform != null) parseObjectBounds(obj, parentTransform, true);
+        if (parentBounds != null) {
             parentBounds[0] = Math.min(parentBounds[0], containerBounds[0]);
             parentBounds[1] = Math.min(parentBounds[1], containerBounds[1]);
             parentBounds[2] = Math.min(parentBounds[2], containerBounds[2]);
@@ -253,17 +253,17 @@ class Bounds {
         var corners:Vector<Float>;
         var mat:Matrix3D = oC.transform.clone();
         var cB:Vector<Float> = _containers.get(oC);
-        if (e!=null) {
+        if (e != null) {
             if (isInfinite(e.minX) || isInfinite(e.minY) || isInfinite(e.minZ) || isInfinite(e.maxX) || isInfinite(e.maxY) || isInfinite(e.maxZ)) {
                 return;
             }
             corners = getBoundsCorners(e.minX, e.minY, e.minZ, e.maxX, e.maxY, e.maxZ);
-            if (parentTransform!=null) mat.append(parentTransform);
+            if (parentTransform != null) mat.append(parentTransform);
         }
 
         else {
             corners = getBoundsCorners(cB[0], cB[1], cB[2], cB[3], cB[4], cB[5]);
-            if (parentTransform!=null) mat.prepend(parentTransform);
+            if (parentTransform != null) mat.prepend(parentTransform);
         }
 
         if (resetBounds) {

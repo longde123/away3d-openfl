@@ -16,7 +16,7 @@ class SubGeometryBase {
     public var autoDeriveVertexNormals(get_autoDeriveVertexNormals, set_autoDeriveVertexNormals):Bool;
     public var useFaceWeights(get_useFaceWeights, set_useFaceWeights):Bool;
     public var numTriangles(get_numTriangles, never):Int;
-    public var indexData(get_indexData, set_indexData):Vector<UInt>;
+    public var indexData(get_indexData, never):Vector<UInt>;
     public var autoDeriveVertexTangents(get_autoDeriveVertexTangents, set_autoDeriveVertexTangents):Bool;
     public var faceNormals(get_faceNormals, never):Vector<Float>;
     public var UVStride(get_UVStride, never):Int;
@@ -441,10 +441,7 @@ class SubGeometryBase {
         return _indices;
     }
 
-    public function set_indexData(v:Vector<UInt>):Vector<UInt>{
-        _indices=v;
-        return _indices;
-    }
+
 /**
 	 * Updates the face indices of the SubGeometry.
 	 * @param indices The face indices to upload.

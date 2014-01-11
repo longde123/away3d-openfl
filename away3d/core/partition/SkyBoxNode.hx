@@ -33,7 +33,7 @@ class SkyBoxNode extends EntityNode {
     }
 
     override public function isInFrustum(planes:Vector<Plane3D>, numPlanes:Int):Bool {
-  
+
         return true;
     }
 

@@ -31,7 +31,8 @@ class StereoRenderer {
         _program3DInvalid = true;
         _leftTextureInvalid = true;
         _rightTextureInvalid = true;
-        _method = renderMethod || new InterleavedStereoRenderMethod();
+        _method = renderMethod;
+        if (_method == null)_method = new InterleavedStereoRenderMethod();
     }
 
     public function get_renderMethod():StereoRenderMethodBase {
@@ -46,7 +47,7 @@ class StereoRenderer {
 
     public function getLeftInputTexture(stage3DProxy:Stage3DProxy):Texture {
         if (_leftTextureInvalid) {
-            if (!_rttManager) setupRTTManager(stage3DProxy);
+            if (_rttManager == null) setupRTTManager(stage3DProxy);
             _leftTexture = stage3DProxy.context3D.createTexture(_rttManager.textureWidth, _rttManager.textureHeight, Context3DTextureFormat.BGRA, true);
             _leftTextureInvalid = false;
         }
@@ -55,7 +56,7 @@ class StereoRenderer {
 
     public function getRightInputTexture(stage3DProxy:Stage3DProxy):Texture {
         if (_rightTextureInvalid) {
-            if (!_rttManager) setupRTTManager(stage3DProxy);
+            if (_rttManager == null) setupRTTManager(stage3DProxy);
             _rightTexture = stage3DProxy.context3D.createTexture(_rttManager.textureWidth, _rttManager.textureHeight, Context3DTextureFormat.BGRA, true);
             _rightTextureInvalid = false;
         }
@@ -66,7 +67,7 @@ class StereoRenderer {
         var vertexBuffer:VertexBuffer3D;
         var indexBuffer:IndexBuffer3D;
         var context:Context3D;
-        if (!_rttManager) setupRTTManager(stage3DProxy);
+        if (_rttManager == null) setupRTTManager(stage3DProxy);
         stage3DProxy.scissorRect = null;
         stage3DProxy.setRenderTarget(null);
         context = stage3DProxy.context3D;
@@ -100,7 +101,7 @@ class StereoRenderer {
             var fragmentCode:String;
             vertexCode = "mov op, va0\n" + "mov v0, va0\n" + "mov v1, va1\n";
             fragmentCode = _method.getFragmentCode();
-            if (_program3D) _program3D.dispose();
+            if (_program3D != null) _program3D.dispose();
 
             _program3D = stage3DProxy.context3D.createProgram();
             _program3D.upload(AGLSLShaderUtils.createShader(Context3DProgramType.VERTEX, vertexCode), AGLSLShaderUtils.createShader(Context3DProgramType.FRAGMENT, fragmentCode));

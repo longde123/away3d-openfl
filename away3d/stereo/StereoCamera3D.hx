@@ -1,6 +1,7 @@
 package away3d.stereo;
 
 
+import away3d.core.math.MathConsts;
 import away3d.cameras.Camera3D;
 import away3d.cameras.lenses.LensBase;
 import flash.geom.Matrix3D;
@@ -91,7 +92,7 @@ class StereoCamera3D extends Camera3D {
     }
 
     private function updateFocusPoint():Void {
-        if (_focus == Infinity) _focusInfinity = true
+        if (_focus == MathConsts.Infinity) _focusInfinity = true
         else {
             _focusPoint.x = 0;
             _focusPoint.y = 0;

@@ -82,7 +82,7 @@ class ImageParser extends ParserBase {
             return ParserBase.PARSING_DONE;
         }
         if (Std.is(_data, BitmapData)) {
-            asset = new BitmapTexture( cast(_data, BitmapData)  );
+            asset = new BitmapTexture( cast(_data, BitmapData) );
             finalizeAsset(asset, _fileName);
             return ParserBase.PARSING_DONE;
         }
@@ -127,7 +127,7 @@ class ImageParser extends ParserBase {
             while (i < 8) {
                 j = 0;
                 while (j < 8) {
-                    if ((j & 1) ^ (i & 1)==1) bmp.setPixel(i, j, 0xFFFFFF);
+                    if ((j & 1) ^ (i & 1) == 1) bmp.setPixel(i, j, 0xFFFFFF);
                     j++;
                 }
                 i++;

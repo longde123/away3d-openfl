@@ -30,7 +30,7 @@ class SkyBoxPass extends MaterialPassBase {
         super();
         mipmap = false;
         _numUsedTextures = 1;
-        var tmp: Array<Float>=[0, 0, 0, 0, 1, 1, 1, 1];
+        var tmp:Array<Float >= [0, 0, 0, 0, 1, 1, 1, 1];
         _vertexData = Vector.ofArray(tmp);
     }
 

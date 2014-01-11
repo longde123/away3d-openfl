@@ -39,7 +39,7 @@ class SkeletonAnimator extends AnimatorBase implements IAnimator {
     private var _globalPose:SkeletonPose;
     private var _globalPropertiesDirty:Bool;
     private var _numJoints:Int;
-    private var _skeletonAnimationStates:ObjectMap<SkinnedSubGeometry,SubGeomAnimationState>;
+    private var _skeletonAnimationStates:ObjectMap<SkinnedSubGeometry, SubGeomAnimationState>;
     private var _condensedMatrices:Vector<Float>;
     private var _skeleton:Skeleton;
     private var _forceCPU:Bool;
@@ -111,14 +111,14 @@ class SkeletonAnimator extends AnimatorBase implements IAnimator {
 
     public function new(animationSet:SkeletonAnimationSet, skeleton:Skeleton, forceCPU:Bool = false) {
         _globalPose = new SkeletonPose();
-        _skeletonAnimationStates = new ObjectMap<SkinnedSubGeometry,SubGeomAnimationState>();
+        _skeletonAnimationStates = new ObjectMap<SkinnedSubGeometry, SubGeomAnimationState>();
         super(animationSet);
         _skeleton = skeleton;
         _forceCPU = forceCPU;
         _jointsPerVertex = animationSet.jointsPerVertex;
         _numJoints = _skeleton.numJoints;
         _globalMatrices = new Vector<Float>(_numJoints * 12, true);
-        var j:Int;
+        var j:Int = 0;
         var i:Int = 0;
         while (i < _numJoints) {
             _globalMatrices[j++] = 1;
@@ -144,7 +144,7 @@ class SkeletonAnimator extends AnimatorBase implements IAnimator {
     public function clone():IAnimator {
 /* The cast to SkeletonAnimationSet should never fail, as _animationSet can only be set
 		 through the constructor, which will only accept a SkeletonAnimationSet. */
-        return new SkeletonAnimator( cast(_animationSet, SkeletonAnimationSet)  , _skeleton, _forceCPU);
+        return new SkeletonAnimator( cast(_animationSet, SkeletonAnimationSet), _skeleton, _forceCPU);
     }
 
 /**
@@ -155,11 +155,11 @@ class SkeletonAnimator extends AnimatorBase implements IAnimator {
 	 * @param offset An option offset time (in milliseconds) that resets the state's internal clock to the absolute time of the animator plus the offset value. Required for non-looping animation states.
 	 */
 
-    public function play(name:String, transition:IAnimationTransition = null, offset:Int = null):Void {
+    public function play(name:String, ?transition:IAnimationTransition = null, ?offset:Int = null):Void {
         if (_activeAnimationName == name) return;
         _activeAnimationName = name;
         if (!_animationSet.hasAnimation(name)) throw new Error("Animation root node " + name + " not found!");
-        if (transition!=null && _activeNode!=null) {
+        if (transition != null && _activeNode != null) {
 //setup the transition
             _activeNode = transition.getAnimationNode(this, _activeNode, _animationSet.getAnimation(name), _absoluteTime);
             _activeNode.addEventListener(AnimationStateEvent.TRANSITION_COMPLETE, onTransitionComplete);
@@ -257,7 +257,7 @@ class SkeletonAnimator extends AnimatorBase implements IAnimator {
 //get global pose
         localToGlobalPose(_activeSkeletonState.getSkeletonPose(_skeleton), _globalPose, _skeleton);
 // convert pose to matrix
-        var mtxOffset:Int;
+        var mtxOffset:Int = 0;
         var globalPoses:Vector<JointPose> = _globalPose.jointPoses;
         var raw:Vector<Float>;
         var ox:Float;
@@ -369,9 +369,9 @@ class SkeletonAnimator extends AnimatorBase implements IAnimator {
         var targetData:Vector<Float> = state.animatedVertexData;
         var jointIndices:Vector<Float> = subGeom.jointIndexData;
         var jointWeights:Vector<Float> = subGeom.jointWeightsData;
-        var index:Int;
-        var j:Int;
-        var k:Int;
+        var index:Int = 0;
+        var j:Int = 0;
+        var k:Int = 0;
         var vx:Float;
         var vy:Float;
         var vz:Float;
@@ -428,7 +428,7 @@ class SkeletonAnimator extends AnimatorBase implements IAnimator {
                 weight = jointWeights[j];
                 if (weight > 0) {
 // implicit /3*12 (/3 because indices are multiplied by 3 for gpu matrix access, *12 because it's the matrix size)
-                    var mtxOffset:Int =Std.int(jointIndices[j++]) << 2;
+                    var mtxOffset:Int = Std.int(jointIndices[j++]) << 2;
                     m11 = _globalMatrices[mtxOffset];
                     m12 = _globalMatrices[(mtxOffset + 1)];
                     m13 = _globalMatrices[(mtxOffset + 2)];
@@ -454,7 +454,7 @@ class SkeletonAnimator extends AnimatorBase implements IAnimator {
                 }
 
                 else {
-                    j +=Std.int(_jointsPerVertex - k);
+                    j += Std.int(_jointsPerVertex - k);
                     k = _jointsPerVertex;
                 }
 
@@ -469,7 +469,7 @@ class SkeletonAnimator extends AnimatorBase implements IAnimator {
             targetData[(index + 6)] = tx;
             targetData[(index + 7)] = ty;
             targetData[(index + 8)] = tz;
-            index =Std.int(index + 13);
+            index = Std.int(index + 13);
         }
 
     }
@@ -509,7 +509,7 @@ class SkeletonAnimator extends AnimatorBase implements IAnimator {
         if (globalPoses.length != len) globalPoses.length = len;
         var i:Int = 0;
         while (i < len) {
-			if(globalPoses[i] ==null)globalPoses[i] =new JointPose();
+            if (globalPoses[i] == null)globalPoses[i] = new JointPose();
             globalJointPose = globalPoses[i] ;
             joint = joints[i];
             parentIndex = joint.parentIndex;

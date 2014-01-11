@@ -18,7 +18,7 @@ class BitmapTextureCache {
     private var _usages:WeakMap<BitmapTexture, Int>;
 
     public function new(singletonEnforcer:SingletonEnforcer) {
-        if (!singletonEnforcer) throw new Error("Cannot instantiate a singleton class. Use static getInstance instead.");
+        if (singletonEnforcer == null) throw new Error("Cannot instantiate a singleton class. Use static getInstance instead.");
         _textures = new WeakMap<BitmapData, BitmapTexture>();
         _usages = new WeakMap<BitmapTexture, Int>();
 
@@ -30,19 +30,19 @@ class BitmapTextureCache {
     }
 
     public function getTexture(bitmapData:BitmapData):BitmapTexture {
-        var texture:BitmapTexture;
+        var texture:BitmapTexture = null;
 
         if (!_textures.exists(bitmapData)) {
             texture = new BitmapTexture(bitmapData);
             _textures.set(bitmapData, texture);
             _usages.set(texture, 0);
         }
-        _usages.set(texture, usages.get(texture) + 1);
+        _usages.set(texture, _usages.get(texture) + 1);
         return _textures.get(bitmapData);
     }
 
     public function freeTexture(texture:BitmapTexture):Void {
-        _usages.set(texture, usages.get(texture) - 1);
+        _usages.set(texture, _usages.get(texture) - 1);
         if (_usages.get(texture) == 0) {
             _textures.set(cast((texture), BitmapTexture).bitmapData, null);
             texture.dispose();
@@ -52,6 +52,6 @@ class BitmapTextureCache {
 }
 
 class SingletonEnforcer {
-
+    public function new() {}
 }
 

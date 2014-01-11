@@ -69,13 +69,13 @@ class Skeleton extends NamedAssetBase implements IAsset {
 // b) it is assumed that it will be called only during load, and not during main loop
 // c) maintaining a dictionary (for safety) would dictate an interface to access SkeletonJoints,
 //    rather than direct array access.  this would be sub-optimal.
-        var jointIndex:Int;
-        for ( joint in joints) {
-        if(joint.name == jointName) return jointIndex;
-        jointIndex++;
+        var jointIndex:Int = 0;
+        for (joint in joints) {
+            if (joint.name == jointName) return jointIndex;
+            jointIndex++;
         }
 
-        return - 1;
+        return -1;
     }
 
 /**

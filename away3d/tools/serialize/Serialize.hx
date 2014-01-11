@@ -13,7 +13,7 @@ import away3d.core.base.SkinnedSubGeometry;
 import away3d.core.base.SubMesh;
 import away3d.entities.Mesh;
 import away3d.materials.MaterialBase;
-import away3d.materials.lightpickers.StaticLightPicker; 
+import away3d.materials.lightpickers.StaticLightPicker;
 
 class Serialize {
 
@@ -31,19 +31,19 @@ class Serialize {
     }
 
     static public function serializeObjectContainer(objectContainer3D:ObjectContainer3D, serializer:SerializerBase):Void {
-        if (Std.is(objectContainer3D, Mesh)) serializeMesh(cast(objectContainer3D, Mesh)  , serializer)
+        if (Std.is(objectContainer3D, Mesh)) serializeMesh(cast(objectContainer3D, Mesh), serializer)
         else serializeObjectContainerInternal(objectContainer3D, serializer, true);
     }
 
     static public function serializeMesh(mesh:Mesh, serializer:SerializerBase):Void {
-        serializeObjectContainerInternal(cast(mesh, ObjectContainer3D)  , serializer, false);
+        serializeObjectContainerInternal(cast(mesh, ObjectContainer3D), serializer, false);
         serializer.writeBoolean("castsShadows", mesh.castsShadows);
-        if(mesh.animator) serializeAnimationState(mesh.animator, serializer);
-        if(mesh.material) serializeMaterial(mesh.material, serializer);
-        if(mesh.subMeshes.length) {
-        for( subMesh in mesh.subMeshes)serializeSubMesh(subMesh, serializer);
+        if (mesh.animator) serializeAnimationState(mesh.animator, serializer);
+        if (mesh.material) serializeMaterial(mesh.material, serializer);
+        if (mesh.subMeshes.length) {
+            for (subMesh in mesh.subMeshes)serializeSubMesh(subMesh, serializer);
         }
-        serializeChildren( cast(mesh, ObjectContainer3D) , serializer);
+        serializeChildren(cast(mesh, ObjectContainer3D), serializer);
         serializer.endObject();
     }
 

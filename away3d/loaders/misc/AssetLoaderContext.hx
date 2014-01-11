@@ -2,7 +2,6 @@ package away3d.loaders.misc;
 
 
 import haxe.ds.StringMap;
-import haxe.ds.IntMap;
 class AssetLoaderContext {
     public var includeDependencies(get_includeDependencies, set_includeDependencies):Bool;
     public var materialMode(get_materialMode, set_materialMode):Int;
@@ -31,9 +30,9 @@ class AssetLoaderContext {
     public function new(includeDependencies:Bool = true, dependencyBaseUrl:String = null) {
         _includeDependencies = includeDependencies;
         _dependencyBaseUrl = dependencyBaseUrl ;
-        if(_dependencyBaseUrl==null)_dependencyBaseUrl="";
-        _embeddedDataByUrl =new StringMap<Dynamic>();
-        _remappedUrls =new StringMap<String>();
+        if (_dependencyBaseUrl == null)_dependencyBaseUrl = "";
+        _embeddedDataByUrl = new StringMap<Dynamic>();
+        _remappedUrls = new StringMap<String>();
         _materialMode = UNDEFINED;
     }
 

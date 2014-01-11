@@ -66,7 +66,7 @@ class SkeletonClipNode extends AnimationClipNodeBase {
         var p1:Vector3D;
         var p2:Vector3D;
         var delta:Vector3D;
-        while (i-- >0) {
+        while (i-- > 0) {
             _totalDuration += _durations[i];
             p1 = _frames[i].jointPoses[0].translation;
             p2 = _frames[i + 1].jointPoses[0].translation;

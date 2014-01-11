@@ -131,7 +131,7 @@ class Merge {
         merge(receiver, _disposeSources);
     }
 
-    private function reset():Void {
+    public function reset():Void {
         _toDispose = new Vector<Mesh>();
         _geomVOs = new Vector<GeometryVO>();
     }

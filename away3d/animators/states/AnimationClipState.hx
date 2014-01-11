@@ -151,8 +151,8 @@ class AnimationClipState extends AnimationStateBase {
     }
 
     private function notifyPlaybackComplete():Void {
-		if (_animationStatePlaybackComplete == null) _animationStatePlaybackComplete = new AnimationStateEvent(AnimationStateEvent.PLAYBACK_COMPLETE, _animator, this, _animationClipNode);
-        _animationClipNode.dispatchEvent(_animationStatePlaybackComplete );
+        if (_animationStatePlaybackComplete == null) _animationStatePlaybackComplete = new AnimationStateEvent(AnimationStateEvent.PLAYBACK_COMPLETE, _animator, this, _animationClipNode);
+        _animationClipNode.dispatchEvent(_animationStatePlaybackComplete);
     }
 
 }

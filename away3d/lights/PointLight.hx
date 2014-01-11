@@ -108,7 +108,7 @@ class PointLight extends LightBase {
 	 * @inheritDoc
 	 */
 
-    override private function getObjectProjectionMatrix(renderable:IRenderable, target:Matrix3D = null):Matrix3D {
+    override public function getObjectProjectionMatrix(renderable:IRenderable, target:Matrix3D = null):Matrix3D {
         var raw:Vector<Float> = Matrix3DUtils.RAW_DATA_CONTAINER;
         var bounds:BoundingVolumeBase = renderable.sourceEntity.bounds;
         var m:Matrix3D = new Matrix3D();

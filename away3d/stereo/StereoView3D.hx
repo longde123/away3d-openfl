@@ -37,7 +37,7 @@ class StereoView3D extends View3D {
     }
 
     override public function set_camera(value:Camera3D):Camera3D {
-        if (value == _stereoCam) return;
+        if (value == _stereoCam) return value;
         if (Std.is(value, StereoCamera3D)) _stereoCam = cast((value), StereoCamera3D)
         else throw new Error("StereoView3D must be used with StereoCamera3D");
         return value;
@@ -86,7 +86,7 @@ class StereoView3D extends View3D {
 // update picking
         if (doMouse) _mouse3DManager.updateCollider(this);
         if (_requireDepthRender) renderDepthPrepass(_entityCollector);
-        if (_filter3DRenderer && _stage3DProxy._context3D) {
+        if (_filter3DRenderer != null && _stage3DProxy._context3D != null) {
             _renderer.render(_entityCollector, _filter3DRenderer.getMainInputTexture(_stage3DProxy), _rttBufferManager.renderToTextureRect);
             _filter3DRenderer.render(_stage3DProxy, camera, _depthRender);
             if (!_shareContext) _stage3DProxy._context3D.present();

@@ -126,7 +126,7 @@ class SoftShadowMapMethod extends SimpleShadowMapMethodBase {
 	 * @inheritDoc
 	 */
 
-    override private function activateForCascade(vo:MethodVO, stage3DProxy:Stage3DProxy):Void {
+    override public function activateForCascade(vo:MethodVO, stage3DProxy:Stage3DProxy):Void {
         super.activate(vo, stage3DProxy);
         var texRange:Float = _range / _castingLight.shadowMapper.depthMapSize;
         var data:Vector<Float> = vo.fragmentData;
@@ -150,7 +150,7 @@ class SoftShadowMapMethod extends SimpleShadowMapMethodBase {
 	 * @inheritDoc
 	 */
 
-    override private function getCascadeFragmentCode(vo:MethodVO, regCache:ShaderRegisterCache, decodeRegister:ShaderRegisterElement, depthTexture:ShaderRegisterElement, depthProjection:ShaderRegisterElement, targetRegister:ShaderRegisterElement):String {
+    override public function getCascadeFragmentCode(vo:MethodVO, regCache:ShaderRegisterCache, decodeRegister:ShaderRegisterElement, depthTexture:ShaderRegisterElement, depthProjection:ShaderRegisterElement, targetRegister:ShaderRegisterElement):String {
         _depthMapCoordReg = depthProjection;
         var dataReg:ShaderRegisterElement = regCache.getFreeFragmentConstant();
         vo.secondaryFragmentConstantsIndex = dataReg.index * 4;
@@ -167,9 +167,9 @@ class SoftShadowMapMethod extends SimpleShadowMapMethodBase {
 	 */
 
     private function getSampleCode(regCache:ShaderRegisterCache, depthTexture:ShaderRegisterElement, decodeRegister:ShaderRegisterElement, targetRegister:ShaderRegisterElement, dataReg:ShaderRegisterElement):String {
-        var uvReg:ShaderRegisterElement;
-        var code:String;
-        var offsets:Vector<String> =  Vector.ofArray([dataReg + ".zw"]);
+        var uvReg:ShaderRegisterElement = null;
+        var code:String = "";
+        var offsets:Vector<String> = Vector.ofArray([dataReg + ".zw"]);
         uvReg = regCache.getFreeFragmentVectorTemp();
         regCache.addFragmentTempUsages(uvReg, 1);
         var temp:ShaderRegisterElement = regCache.getFreeFragmentVectorTemp();

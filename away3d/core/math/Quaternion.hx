@@ -5,7 +5,6 @@ package away3d.core.math;
 
 import flash.Vector;
 import flash.geom.Matrix3D;
-import flash.geom.Orientation3D;
 import flash.geom.Vector3D;
 #if (cpp || neko || js)
 using OpenFLStage3D;
@@ -301,11 +300,11 @@ class Quaternion {
 	 */
 
     public function fromMatrix(matrix:Matrix3D):Void {
-		var tmp:Vector<Vector3D> ;
-		#if (cpp || neko || js)
+        var tmp:Vector<Vector3D> ;
+#if (cpp || neko || js)
 			tmp= matrix.decompose();
 		#end
-		#if flash
+#if flash
 			tmp = matrix.decompose(Orientation3D.QUATERNION);
 		#end
         var v:Vector3D = tmp[1];

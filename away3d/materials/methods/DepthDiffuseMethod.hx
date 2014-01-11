@@ -41,7 +41,7 @@ class DepthDiffuseMethod extends BasicDiffuseMethod {
         var decReg:ShaderRegisterElement;
         if (!_useTexture) throw new Error("DepthDiffuseMethod requires texture!");
         if (vo.numLights > 0) {
-            if (_shadowRegister!=null) code += "mul " + _totalLightColorReg + ".xyz, " + _totalLightColorReg + ".xyz, " + _shadowRegister + ".w\n";
+            if (_shadowRegister != null) code += "mul " + _totalLightColorReg + ".xyz, " + _totalLightColorReg + ".xyz, " + _shadowRegister + ".w\n";
             code += "add " + targetReg + ".xyz, " + _totalLightColorReg + ".xyz, " + targetReg + ".xyz\n" + "sat " + targetReg + ".xyz, " + targetReg + ".xyz\n";
             regCache.removeFragmentTempUsage(_totalLightColorReg);
         }

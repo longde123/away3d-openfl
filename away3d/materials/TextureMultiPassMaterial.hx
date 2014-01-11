@@ -70,7 +70,7 @@ class TextureMultiPassMaterial extends MultiPassMaterialBase {
 
     override private function updateScreenPasses():Void {
         super.updateScreenPasses();
-        if (_effectsPass!=null) _effectsPass.animateUVs = _animateUVs;
+        if (_effectsPass != null) _effectsPass.animateUVs = _animateUVs;
     }
 
 }

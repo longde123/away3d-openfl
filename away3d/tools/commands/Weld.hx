@@ -245,84 +245,83 @@ class Weld {
             }
             if (outIndex < 0) searchforNormal = false;
             foundNormalsCnt++;
-       
- 
-    if(outIndex < 0) {
-outIndex = outVertices.length / 3;
-if(sharedNormalIndex < 0) {
-sharedNormalIndex = outIndex;
-maxNormalIdx = outIndex;
-}
-oldTargetNormals[outIndex] = targetNormal;
-sharedPointNormals[outIndex] = new Vector<Vector3D>();
-sharedPointNormals[outIndex][0] = targetNormal;
-usedVertices.set(searchStringFinal, outIndex);
-sharedNormalIndices[outIndex] = sharedNormalIndex;
-outVertices[outIndex * 3 + 0] = px;
-outVertices[outIndex * 3 + 1] = py;
-outVertices[outIndex * 3 + 2] = pz;
-outNormals[outIndex * 3 + 0] = targetNormal.x;
-outNormals[outIndex * 3 + 1] = targetNormal.y;
-outNormals[outIndex * 3 + 2] = targetNormal.z;
-outUvs[outIndex * 2 + 0] = u;
-outUvs[outIndex * 2 + 1] = v;
-}
-    outIndices[numOutIndices++] = outIndex;
-    i++;
-}
+
+
+            if (outIndex < 0) {
+                outIndex = outVertices.length / 3;
+                if (sharedNormalIndex < 0) {
+                    sharedNormalIndex = outIndex;
+                    maxNormalIdx = outIndex;
+                }
+                oldTargetNormals[outIndex] = targetNormal;
+                sharedPointNormals[outIndex] = new Vector<Vector3D>();
+                sharedPointNormals[outIndex][0] = targetNormal;
+                usedVertices.set(searchStringFinal, outIndex);
+                sharedNormalIndices[outIndex] = sharedNormalIndex;
+                outVertices[outIndex * 3 + 0] = px;
+                outVertices[outIndex * 3 + 1] = py;
+                outVertices[outIndex * 3 + 2] = pz;
+                outNormals[outIndex * 3 + 0] = targetNormal.x;
+                outNormals[outIndex * 3 + 1] = targetNormal.y;
+                outNormals[outIndex * 3 + 2] = targetNormal.z;
+                outUvs[outIndex * 2 + 0] = u;
+                outUvs[outIndex * 2 + 1] = v;
+            }
+            outIndices[numOutIndices++] = outIndex;
+            i++;
+        }
 // calculated (and apply) the shared Normals:
-if(_normalThreshold > 0 && _smoothNormals) {
-var sharedPointsfinalDic : Dictionary = new Dictionary();
+        if (_normalThreshold > 0 && _smoothNormals) {
+            var sharedPointsfinalDic:Dictionary = new Dictionary();
 //stores all Normal-vectors that have already been calculated
-var sharedPointsfinalVectors : Vector<Vector3D> = new Vector<Vector3D>();
-var foundVector : Int;
-var curIdx : Int;
-inLen = outVertices.length / 3;
-i = 0;
-while(i < inLen) {
-outnormal = new Vector3D();
-foundVector = -1;
-curIdx = sharedNormalIndices[i];
+            var sharedPointsfinalVectors:Vector<Vector3D> = new Vector<Vector3D>();
+            var foundVector:Int;
+            var curIdx:Int;
+            inLen = outVertices.length / 3;
+            i = 0;
+            while (i < inLen) {
+                outnormal = new Vector3D();
+                foundVector = -1;
+                curIdx = sharedNormalIndices[i];
 // the curIdx could point to list-position, thats pointing to another shared-Normal again,
 //so we need to make shure, we follow the redirection until we get a normal-index smaller than maxNormalIdx
-while(curIdx > maxNormalIdx)curIdx = sharedNormalIndices[curIdx];
-if(sharedPointsfinalDic[curIdx.toString()] != null) {
-foundVector = sharedPointsfinalDic[curIdx.toString()];
-outnormal = sharedPointsfinalVectors[foundVector];
-}
-if(foundVector < 0) {
-sharedNormalsDic = new StringMap<Int>();
-foundNormalsCnt = 0;
-sn = 0;
-while(sn < sharedPointNormals[curIdx].length) {
-if (sharedNormalsDic.exists(sharedPointNormals[curIdx][sn].toString()))
-{
-sn++;
-continue;
-}
-foundNormalsCnt++;
-sharedNormalsDic.set(sharedPointNormals[curIdx][sn].toString(), 1);
-outnormal.x += sharedPointNormals[curIdx][sn].x;
-outnormal.y += sharedPointNormals[curIdx][sn].y;
-outnormal.z += sharedPointNormals[curIdx][sn].z;
-sn++;
-}
-outnormal.x /= foundNormalsCnt;
-outnormal.y /= foundNormalsCnt;
-outnormal.z /= foundNormalsCnt;
-sharedPointsfinalDic[curIdx.toString()] = sharedPointsfinalVectors.length;
-sharedPointsfinalVectors[sharedPointsfinalVectors.length] = outnormal;
-}
-outNormals[i * 3] = outnormal.x;
-outNormals[i * 3 + 1] = outnormal.y;
-outNormals[i * 3 + 2] = outnormal.z;
-i++;
-}
-}
-outSubGeom.fromVectors(outVertices, outUvs, outNormals, null);
-outSubGeom.updateIndexData(outIndices);
-return int(oldVerticleCount - outSubGeom.numVertices);
-}
+                while (curIdx > maxNormalIdx)curIdx = sharedNormalIndices[curIdx];
+                if (sharedPointsfinalDic[curIdx.toString()] != null) {
+                    foundVector = sharedPointsfinalDic[curIdx.toString()];
+                    outnormal = sharedPointsfinalVectors[foundVector];
+                }
+                if (foundVector < 0) {
+                    sharedNormalsDic = new StringMap<Int>();
+                    foundNormalsCnt = 0;
+                    sn = 0;
+                    while (sn < sharedPointNormals[curIdx].length) {
+                        if (sharedNormalsDic.exists(sharedPointNormals[curIdx][sn].toString())) {
+                            sn++;
+                            continue;
+                        }
+                        foundNormalsCnt++;
+                        sharedNormalsDic.set(sharedPointNormals[curIdx][sn].toString(), 1);
+                        outnormal.x += sharedPointNormals[curIdx][sn].x;
+                        outnormal.y += sharedPointNormals[curIdx][sn].y;
+                        outnormal.z += sharedPointNormals[curIdx][sn].z;
+                        sn++;
+                    }
+                    outnormal.x /= foundNormalsCnt;
+                    outnormal.y /= foundNormalsCnt;
+                    outnormal.z /= foundNormalsCnt;
+                    sharedPointsfinalDic[curIdx.toString()] = sharedPointsfinalVectors.length;
+                    sharedPointsfinalVectors[sharedPointsfinalVectors.length] = outnormal;
+                }
+                outNormals[i * 3] = outnormal.x;
+                outNormals[i * 3 + 1] = outnormal.y;
+                outNormals[i * 3 + 2] = outnormal.z;
+                i++;
+            }
+        }
+        outSubGeom.fromVectors(outVertices, outUvs, outNormals, null);
+        outSubGeom.updateIndexData(outIndices);
+        return int(oldVerticleCount - outSubGeom.numVertices);
+    }
 
 }
 

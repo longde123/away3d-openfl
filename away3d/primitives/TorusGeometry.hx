@@ -81,8 +81,9 @@ class TorusGeometry extends PrimitiveBase {
 // need to initialize raw arrays or can be reused?
         if (_numVertices == target.numVertices) {
             _rawVertexData = target.vertexData;
-			if(target.indexData ==null)target.indexData=new Vector<UInt>(numTriangles * 3, true);
+
             _rawIndices = target.indexData ;
+            if (_rawIndices == null)_rawIndices = new Vector<UInt>(numTriangles * 3, true);
         }
 
         else {
@@ -127,7 +128,7 @@ class TorusGeometry extends PrimitiveBase {
                     n1 = -nz;
                     n2 = ny;
                     t1 = 0;
-                    t2 = ((length>0) ? nx / length : x / _radius);
+                    t2 = ((length > 0) ? nx / length : x / _radius);
                     comp1 = -z;
                     comp2 = y;
                 }
@@ -135,18 +136,18 @@ class TorusGeometry extends PrimitiveBase {
                 else {
                     n1 = ny;
                     n2 = nz;
-                    t1 = ((length>0) ? nx / length : x / _radius);
+                    t1 = ((length > 0) ? nx / length : x / _radius);
                     t2 = 0;
                     comp1 = y;
                     comp2 = z;
                 }
 
                 if (i == _segmentsR) {
-                    addVertex(x, _rawVertexData[startIndex + 1], _rawVertexData[startIndex + 2], nx, n1, n2, -((length>0) ? ny / length : y / _radius), t1, t2);
+                    addVertex(x, _rawVertexData[startIndex + 1], _rawVertexData[startIndex + 2], nx, n1, n2, -((length > 0) ? ny / length : y / _radius), t1, t2);
                 }
 
                 else {
-                    addVertex(x, comp1, comp2, nx, n1, n2, -((length>0) ? ny / length : y / _radius), t1, t2);
+                    addVertex(x, comp1, comp2, nx, n1, n2, -((length > 0) ? ny / length : y / _radius), t1, t2);
                 }
 
 // close triangle
@@ -185,7 +186,7 @@ class TorusGeometry extends PrimitiveBase {
 // evaluate num uvs
         var numUvs:Int = _numVertices * stride;
 // need to initialize raw array or can be reused?
-        if (target.UVData!=null && numUvs == target.UVData.length) data = target.UVData
+        if (target.UVData != null && numUvs == target.UVData.length) data = target.UVData
         else {
             data = new Vector<Float>(numUvs, true);
             invalidateGeometry();

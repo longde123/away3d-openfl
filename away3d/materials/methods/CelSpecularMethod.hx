@@ -87,7 +87,7 @@ class CelSpecularMethod extends CompositeSpecularMethod {
 	 */
 
     private function clampSpecular(methodVO:MethodVO, target:ShaderRegisterElement, regCache:ShaderRegisterCache, sharedRegisters:ShaderRegisterData):String {
-        
+
         return "sub " + target + ".y, " + target + ".w, " + _dataReg + ".y\n" + // x - cutoff
 
         "div " + target + ".y, " + target + ".y, " + _dataReg + ".x\n" + // (x - cutoff)/epsilon

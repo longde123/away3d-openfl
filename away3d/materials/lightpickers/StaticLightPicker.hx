@@ -42,7 +42,7 @@ class StaticLightPicker extends LightPickerBase {
         var numCastingDirectionalLights:Int = 0;
         var numLightProbes:Int = 0;
         var light:LightBase;
-        if (_lights!=null) clearListeners();
+        if (_lights != null) clearListeners();
         _lights = value;
         _allPickedLights = Vector.ofArray(cast value);
         _pointLights = new Vector<PointLight>();
@@ -104,8 +104,8 @@ class StaticLightPicker extends LightPickerBase {
 // TODO: Assign to special caster collections, just append it to the lights in SinglePass
 // But keep seperated in multipass
         var light:LightBase = cast((event.target), LightBase);
-        if (Std.is(light, PointLight)) updatePointCasting(cast(light, PointLight) )
-        else if(Std.is(light, DirectionalLight)) updateDirectionalCasting( cast(light, DirectionalLight) );
+        if (Std.is(light, PointLight)) updatePointCasting(cast(light, PointLight))
+        else if (Std.is(light, DirectionalLight)) updateDirectionalCasting(cast(light, DirectionalLight));
         dispatchEvent(new Event(Event.CHANGE));
     }
 
@@ -117,14 +117,14 @@ class StaticLightPicker extends LightPickerBase {
         if (light.castsShadows) {
             --_numDirectionalLights;
             ++_numCastingDirectionalLights;
-            _directionalLights.splice(_directionalLights.indexOf(cast(light, DirectionalLight)  ), 1);
+            _directionalLights.splice(_directionalLights.indexOf(cast(light, DirectionalLight)), 1);
             _castingDirectionalLights.push(light);
         }
 
         else {
             ++_numDirectionalLights;
             --_numCastingDirectionalLights;
-            _castingDirectionalLights.splice(_castingDirectionalLights.indexOf(cast(light, DirectionalLight)  ), 1);
+            _castingDirectionalLights.splice(_castingDirectionalLights.indexOf(cast(light, DirectionalLight)), 1);
             _directionalLights.push(light);
         }
 
@@ -138,14 +138,14 @@ class StaticLightPicker extends LightPickerBase {
         if (light.castsShadows) {
             --_numPointLights;
             ++_numCastingPointLights;
-            _pointLights.splice(_pointLights.indexOf(cast(light, PointLight)  ), 1);
+            _pointLights.splice(_pointLights.indexOf(cast(light, PointLight)), 1);
             _castingPointLights.push(light);
         }
 
         else {
             ++_numPointLights;
             --_numCastingPointLights;
-            _castingPointLights.splice(_castingPointLights.indexOf(cast(light, PointLight) ), 1);
+            _castingPointLights.splice(_castingPointLights.indexOf(cast(light, PointLight)), 1);
             _pointLights.push(light);
         }
 

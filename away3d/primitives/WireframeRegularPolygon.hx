@@ -82,8 +82,8 @@ class WireframeRegularPolygon extends WireframePrimitiveBase {
     override private function buildGeometry():Void {
         var v0:Vector3D = new Vector3D();
         var v1:Vector3D = new Vector3D();
-        var index:Int;
-        var s:Int;
+        var index:Int = 0;
+        var s:Int = 0;
         if (_orientation == ORIENTATION_XY) {
             v0.z = 0;
             v1.z = 0;

@@ -127,7 +127,7 @@ class BitmapCubeTexture extends CubeTextureBase {
         return value;
     }
 
-    private function testSize(value:BitmapData):Void {  
+    private function testSize(value:BitmapData):Void {
         if (value.width != value.height) throw new Error("BitmapData should have equal width and height!");
         if (!TextureUtils.isBitmapDataValid(value)) throw new Error("Invalid bitmapData: Width and height must be power of 2 and cannot exceed 2048");
     }

@@ -37,18 +37,18 @@ class SpriteSheetMaterial extends TextureMaterial {
         _speculars = speculars;
         initTextures();
         super(_TBDiffuse, smooth, repeat, mipmap);
-        if (_TBNormal) this.normalMap = _TBNormal;
-        if (_TBSpecular) this.specularMap = _TBSpecular;
+        if (_TBNormal != null) this.normalMap = _TBNormal;
+        if (_TBSpecular != null) this.specularMap = _TBSpecular;
     }
 
     private function initTextures():Void {
-        if (!_diffuses || _diffuses.length == 0) throw new Error("you must pass at least one bitmapdata into diffuses param!");
+        if (_diffuses != null || _diffuses.length == 0) throw new Error("you must pass at least one bitmapdata into diffuses param!");
         _TBDiffuse = _diffuses[0];
-        if (_normals && _normals.length > 0) {
+        if (_normals != null && _normals.length > 0) {
             if (_normals.length != _diffuses.length) throw new Error("The amount of normals bitmapDatas must be same as the amount of diffuses param!");
             _TBNormal = _normals[0];
         }
-        if (_speculars && _speculars.length > 0) {
+        if (_speculars != null && _speculars.length > 0) {
             if (_speculars.length != _diffuses.length) throw new Error("The amount of normals bitmapDatas must be same as the amount of diffuses param!");
             _TBSpecular = _speculars[0];
         }
@@ -60,8 +60,8 @@ class SpriteSheetMaterial extends TextureMaterial {
             _currentMapID = mapID;
             _TBDiffuse = _diffuses[mapID];
             this.texture = _TBDiffuse;
-            if (_TBNormal) this.normalMap = _TBNormal = _normals[mapID];
-            if (_TBSpecular) this.specularMap = _TBSpecular = _speculars[mapID];
+            if (_TBNormal != null) this.normalMap = _TBNormal = _normals[mapID];
+            if (_TBSpecular != null) this.specularMap = _TBSpecular = _speculars[mapID];
             return true;
         }
         return false;

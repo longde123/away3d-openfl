@@ -21,8 +21,8 @@ class NURBSGeometry extends PrimitiveBase {
     public var vSegments(get_vSegments, set_vSegments):Int;
 
     private var _controlNet:Vector<NURBSVertex>;
-    private var _uOrder:Float;
-    private var _vOrder:Float;
+    private var _uOrder:Int;
+    private var _vOrder:Int;
     private var _numVContolPoints:Int;
     private var _numUContolPoints:Int;
     private var _uSegments:Int;
@@ -52,7 +52,7 @@ class NURBSGeometry extends PrimitiveBase {
     }
 
     public function set_controlNet(value:Vector<NURBSVertex>):Vector<NURBSVertex> {
-        if (_controlNet == value) return;
+        if (_controlNet == value) return value;
         _controlNet = value;
         invalidateGeometry();
         invalidateUVs();
@@ -68,7 +68,7 @@ class NURBSGeometry extends PrimitiveBase {
     }
 
     public function set_uOrder(value:Int):Int {
-        if (_uOrder == value) return;
+        if (_uOrder == value) return value;
         _uOrder = value;
         invalidateGeometry();
         invalidateUVs();
@@ -84,7 +84,7 @@ class NURBSGeometry extends PrimitiveBase {
     }
 
     public function set_vOrder(value:Int):Int {
-        if (_vOrder == value) return;
+        if (_vOrder == value) return value;
         _vOrder = value;
         invalidateGeometry();
         invalidateUVs();
@@ -100,7 +100,7 @@ class NURBSGeometry extends PrimitiveBase {
     }
 
     public function set_uControlPoints(value:Int):Int {
-        if (_numUContolPoints == value) return;
+        if (_numUContolPoints == value) return value;
         _numUContolPoints = value;
         invalidateGeometry();
         invalidateUVs();
@@ -116,7 +116,7 @@ class NURBSGeometry extends PrimitiveBase {
     }
 
     public function set_vControlPoints(value:Int):Int {
-        if (_numVContolPoints == value) return;
+        if (_numVContolPoints == value) return value;
         _numVContolPoints = value;
         invalidateGeometry();
         invalidateUVs();
@@ -133,9 +133,9 @@ class NURBSGeometry extends PrimitiveBase {
     }
 
     public function set_uKnot(value:Vector<Float>):Vector<Float> {
-        if (_uKnotSequence == value) return;
+        if (_uKnotSequence == value) return value;
         _uKnotSequence = value;
-        _autoGenKnotSeq = ((!_uKnotSequence || _uKnotSequence.length == 0) || (!_vKnotSequence || _vKnotSequence.length == 0));
+        _autoGenKnotSeq = ((_uKnotSequence == null || _uKnotSequence.length == 0) || (_vKnotSequence == null || _vKnotSequence.length == 0));
         invalidateGeometry();
         invalidateUVs();
         return value;
@@ -151,9 +151,9 @@ class NURBSGeometry extends PrimitiveBase {
     }
 
     public function set_vKnot(value:Vector<Float>):Vector<Float> {
-        if (_vKnotSequence == value) return;
+        if (_vKnotSequence == value) return value;
         _vKnotSequence = value;
-        _autoGenKnotSeq = ((!_uKnotSequence || _uKnotSequence.length == 0) || (!_vKnotSequence || _vKnotSequence.length == 0));
+        _autoGenKnotSeq = ((_uKnotSequence == null || _uKnotSequence.length == 0) || (_vKnotSequence == null || _vKnotSequence.length == 0));
         invalidateGeometry();
         invalidateUVs();
         return value;
@@ -168,7 +168,7 @@ class NURBSGeometry extends PrimitiveBase {
     }
 
     public function set_uSegments(value:Int):Int {
-        if (_uSegments == value) return;
+        if (_uSegments == value) return value;
         _uSegments = value;
         invalidateGeometry();
         invalidateUVs();
@@ -184,7 +184,7 @@ class NURBSGeometry extends PrimitiveBase {
     }
 
     public function set_vSegments(value:Int):Int {
-        if (_vSegments == value) return;
+        if (_vSegments == value) return value;
         _vSegments = value;
         invalidateGeometry();
         invalidateUVs();
@@ -224,7 +224,7 @@ class NURBSGeometry extends PrimitiveBase {
         _nplusc = uCtrlPnts + _uOrder;
         _mplusc = vCtrlPnts + _vOrder;
 // Generate the open uniform knot vectors if not already defined
-        _autoGenKnotSeq = ((!_uKnotSequence || _uKnotSequence.length == 0) || (!_vKnotSequence || _vKnotSequence.length == 0));
+        _autoGenKnotSeq = ((_uKnotSequence == null || _uKnotSequence.length == 0) || (_vKnotSequence == null || _vKnotSequence.length == 0));
         _rebuildUVs = true;
         invalidateGeometry();
         invalidateUVs();
@@ -238,7 +238,7 @@ class NURBSGeometry extends PrimitiveBase {
         var j1:Int;
         var u:Float = _uKnotSequence[1] + (_uRange * nU);
         var v:Float = _vKnotSequence[1] + (_vRange * nV);
-        if (target) target.setTo(0, 0, 0)
+        if (target != null) target.setTo(0, 0, 0)
         else target = new Vector3D();
         if (_vKnotSequence[_mplusc] - v < 0.00005) v = _vKnotSequence[_mplusc];
         _mbasis = basis(_vOrder, v, _numVContolPoints, _vKnotSequence);
@@ -432,7 +432,7 @@ class NURBSGeometry extends PrimitiveBase {
         }
 // Render the mesh faces
         var vPos:Int = 0;
-        var iBase:Int;
+        var iBase:Int = 0;
         i = 1;
         while (i <= _vSegments) {
             j = 1;
@@ -478,7 +478,7 @@ class NURBSGeometry extends PrimitiveBase {
         var uvLen:Int = numVertices * stride;
         var i:Int;
         var j:Int;
-        if (target.UVData && uvLen == target.UVData.length) data = target.UVData
+        if (target.UVData != null && uvLen == target.UVData.length) data = target.UVData
         else {
             data = new Vector<Float>(uvLen, true);
             invalidateGeometry();

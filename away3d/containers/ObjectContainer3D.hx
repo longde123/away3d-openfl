@@ -131,9 +131,9 @@ class ObjectContainer3D extends Object3D implements IAsset {
         _scenePositionDirty = !value;
         if (!value) {
             _sceneTransform.identity();
-			_scenePosition.x = 0;
-			_scenePosition.y = 0;
-			_scenePosition.z = 0; 
+            _scenePosition.x = 0;
+            _scenePosition.y = 0;
+            _scenePosition.z = 0;
         }
         return value;
     }

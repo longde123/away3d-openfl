@@ -299,7 +299,7 @@ class MeshDebugData {
     public var addChilded:Bool;
 
     public function new() {
-        
+
     }
 }
 

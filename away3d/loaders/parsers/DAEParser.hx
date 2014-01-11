@@ -569,7 +569,7 @@ class DAEParser extends ParserBase {
 //var animation : SkeletonAnimation = new SkeletonAnimation(skeleton, skin.maxBones, useGPU);
         var animated:Bool = isAnimatedSkeleton(skeleton);
         var duration:Float = _animationInfo.numFrames == 0 ? 1.0 : _animationInfo.maxTime - _animationInfo.minTime;
-        var numFrames:Int =  Std.int(Math.max(_animationInfo.numFrames, (animated ? 50 : 2)));
+        var numFrames:Int = Std.int(Math.max(_animationInfo.numFrames, (animated ? 50 : 2)));
         var frameDuration:Float = duration / numFrames;
 
         var t:Float = 0;
@@ -2406,7 +2406,7 @@ class DAESkin extends DAEElement {
             var numBones:Int = vcount[i];
             var vertex_weights:Vector<DAEVertexWeight> = new Vector<DAEVertexWeight>();
 
-            this.maxBones =  Std.int(Math.max(this.maxBones, numBones));
+            this.maxBones = Std.int(Math.max(this.maxBones, numBones));
 
             for (j in 0...numBones) {
                 var influence:DAEVertexWeight = new DAEVertexWeight();

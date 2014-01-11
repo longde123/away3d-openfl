@@ -35,7 +35,7 @@ class SkyBoxMaterial extends MaterialBase {
     }
 
     public function set_cubeMap(value:CubeTextureBase):CubeTextureBase {
-        if (value!=null && _cubeMap!=null && (value.hasMipMaps != _cubeMap.hasMipMaps || value.format != _cubeMap.format)) invalidatePasses(null);
+        if (value != null && _cubeMap != null && (value.hasMipMaps != _cubeMap.hasMipMaps || value.format != _cubeMap.format)) invalidatePasses(null);
         _cubeMap = value;
         _skyboxPass.cubeTexture = _cubeMap;
         return value;

@@ -116,7 +116,7 @@ class FresnelPlanarReflectionMethod extends EffectMethodBase {
     }
 
     public function set_normalDisplacement(value:Float):Float {
-        if (_normalDisplacement == value) return;
+        if (_normalDisplacement == value) return value;
         if (_normalDisplacement == 0 || value == 0) invalidateShaderProgram();
         _normalDisplacement = value;
         return value;

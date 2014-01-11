@@ -360,7 +360,7 @@ class Loader3D extends ObjectContainer3D {
         if (ev.type == AssetEvent.ASSET_COMPLETE) {
 // TODO: not used
 // var type : String = ev.asset.assetType;
-            var obj:ObjectContainer3D;
+            var obj:ObjectContainer3D = null;
             var _sw0_ = (ev.asset.assetType);
             switch(_sw0_) {
                 case AssetType.LIGHT:
@@ -380,7 +380,7 @@ class Loader3D extends ObjectContainer3D {
             }
 // If asset was of fitting type, and doesn't
 // already have a parent, add to loader container
-            if (obj!=null && obj.parent == null) addChild(obj);
+            if (obj != null && obj.parent == null) addChild(obj);
         }
         this.dispatchEvent(ev.clone());
     }

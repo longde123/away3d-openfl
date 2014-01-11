@@ -31,7 +31,8 @@ class VideoTexture extends BitmapTexture {
 // this clipping ensures the bimapdata size is valid.
         _clippingRect = new Rectangle(0, 0, _materialWidth, _materialHeight);
 // assigns the provided player or creates a simple player if null.
-        _player = player || new SimpleVideoPlayer();
+        _player = player ;
+        if (_player == null)_player = new SimpleVideoPlayer();
         _player.loop = loop;
         _player.source = source;
         _player.width = _materialWidth;
@@ -128,7 +129,7 @@ class VideoTexture extends BitmapTexture {
     }
 
     public function set_autoUpdate(value:Bool):Bool {
-        if (value == _autoUpdate) return;
+        if (value == _autoUpdate) return value;
         _autoUpdate = value;
         if (value) _broadcaster.addEventListener(Event.ENTER_FRAME, autoUpdateHandler, false, 0, true)
         else _broadcaster.removeEventListener(Event.ENTER_FRAME, autoUpdateHandler);

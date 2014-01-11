@@ -5,7 +5,6 @@ package away3d.loaders.parsers;
 
 import away3d.animators.nodes.VertexClipNode;
 import flash.net.URLRequest;
-import flash.utils.RegExp;
 import flash.utils.Endian;
 import away3d.materials.utils.DefaultMaterialManager;
 import away3d.materials.TextureMultiPassMaterial;
@@ -20,12 +19,15 @@ import away3d.core.base.CompactSubGeometry;
 import away3d.animators.VertexAnimationSet;
 import flash.utils.ByteArray;
 import flash.Vector;
-import haxe.ds.IntMap.IntMap;
 import haxe.ds.WeakMap;
 
-class MD2Parser extends ParserBase {
 
-    static public var FPS:Int = 6;
+/**
+ * MD2Parser provides a parser for the MD2 data type.
+ */
+class MD2Parser extends ParserBase {
+    public static var FPS:Int = 6;
+
     private var _clipNodes:WeakMap<String, VertexClipNode>;
     private var _byteData:ByteArray;
     private var _startedParsing:Bool;
@@ -33,54 +35,56 @@ class MD2Parser extends ParserBase {
     private var _parsedUV:Bool;
     private var _parsedFaces:Bool;
     private var _parsedFrames:Bool;
+
     private var _ident:Int;
     private var _version:Int;
     private var _skinWidth:Int;
     private var _skinHeight:Int;
-//private var _frameSize : uint;
+//private var _frameSize : Int;
     private var _numSkins:Int;
     private var _numVertices:Int;
     private var _numST:Int;
     private var _numTris:Int;
-//private var _numGlCmds : uint;
+//private var _numGlCmds : Int;
     private var _numFrames:Int;
     private var _offsetSkins:Int;
     private var _offsetST:Int;
     private var _offsetTris:Int;
     private var _offsetFrames:Int;
-//private var _offsetGlCmds : uint;
+//private var _offsetGlCmds : Int;
     private var _offsetEnd:Int;
+
     private var _uvIndices:Vector<Float>;
     private var _indices:Vector<UInt>;
     private var _vertIndices:Vector<Float>;
-    private var _indexMap:IntMap<IntMap<Int>>;  
+
 // the current subgeom being built
     private var _animationSet:VertexAnimationSet;
     private var _firstSubGeom:CompactSubGeometry;
     private var _uvs:Vector<Float>;
     private var _finalUV:Vector<Float>;
+
     private var _materialNames:Vector<String>;
     private var _textureType:String;
     private var _ignoreTexturePath:Bool;
     private var _mesh:Mesh;
     private var _geometry:Geometry;
-    private var materialFinal:Bool;
-    private var geoCreated:Bool;
+
+    private var materialFinal:Bool = false;
+    private var geoCreated:Bool = false;
+
 /**
 	 * Creates a new MD2Parser object.
-	 * @param textureType The extension of the texture (e.g. jpg/png/...)
-	 * @param ignoreTexturePath If true, the path of the texture is ignored
+	 * @param uri The url or id of the data or file to be parsed.
+	 * @param extra The holder for extra contextual data that the parser might need.
 	 */
 
     public function new(textureType:String = "jpg", ignoreTexturePath:Bool = true) {
-        _clipNodes = new WeakMap<String, VertexClipNode>();
-        _indexMap = new IntMap<IntMap<Int>>();
-        _animationSet = new VertexAnimationSet();
-        materialFinal = false;
-        geoCreated = false;
         super(ParserDataFormat.BINARY);
         _textureType = textureType;
         _ignoreTexturePath = ignoreTexturePath;
+        _clipNodes = new WeakMap<String, VertexClipNode>();
+        _animationSet = new VertexAnimationSet();
     }
 
 /**
@@ -89,7 +93,7 @@ class MD2Parser extends ParserBase {
 	 * @return Whether or not the given file type is supported.
 	 */
 
-    static public function supportsType(extension:String):Bool {
+    public static function supportsType(extension:String):Bool {
         extension = extension.toLowerCase();
         return extension == "md2";
     }
@@ -100,21 +104,26 @@ class MD2Parser extends ParserBase {
 	 * @return Whether or not the given data is supported.
 	 */
 
-    static public function supportsData(data:Dynamic):Bool {
-        return (ParserUtil.toString(data, 4) == "IDP2");
+    public static function supportsData(data:Dynamic):Bool {
+        return (ParserUtil.toString(data, 4) == 'IDP2');
     }
 
 /**
 	 * @inheritDoc
 	 */
 
-    override private function resolveDependency(resourceDependency:ResourceDependency):Void {
-        if (resourceDependency.assets.length != 1) return;
-        var asset:Texture2DBase = cast(resourceDependency.assets[0], Texture2DBase) ;
-        if (asset) {
+    override public function resolveDependency(resourceDependency:ResourceDependency):Void {
+        if (resourceDependency.assets.length != 1)
+            return;
+
+        var asset:Texture2DBase = cast(resourceDependency.assets[0], Texture2DBase);
+        if (asset != null) {
             var material:MaterialBase;
-            if (materialMode < 2) material = new TextureMaterial(asset)
-            else material = new TextureMultiPassMaterial(asset);
+            if (materialMode < 2)
+                material = new TextureMaterial(asset);
+            else
+                material = new TextureMultiPassMaterial(asset);
+
             material.name = _mesh.material.name;
             _mesh.material = material;
             finalizeAsset(material);
@@ -128,13 +137,17 @@ class MD2Parser extends ParserBase {
 	 * @inheritDoc
 	 */
 
-    override private function resolveDependencyFailure(resourceDependency:ResourceDependency):Void {
+    override public function resolveDependencyFailure(resourceDependency:ResourceDependency):Void {
 // apply system default
-        if (materialMode < 2) _mesh.material = DefaultMaterialManager.getDefaultMaterial()
-        else _mesh.material = new TextureMultiPassMaterial(DefaultMaterialManager.getDefaultTexture());
+        if (materialMode < 2)
+            _mesh.material = DefaultMaterialManager.getDefaultMaterial();
+        else
+            _mesh.material = new TextureMultiPassMaterial(DefaultMaterialManager.getDefaultTexture());
+
         finalizeAsset(_mesh.geometry);
         finalizeAsset(_mesh);
         materialFinal = true;
+
     }
 
 /**
@@ -145,30 +158,47 @@ class MD2Parser extends ParserBase {
         if (!_startedParsing) {
             _byteData = getByteData();
             _startedParsing = true;
+
 // Reset bytearray read position (which may have been
 // moved forward by the supportsData() function.)
             _byteData.position = 0;
         }
+
         while (hasTime()) {
             if (!_parsedHeader) {
                 _byteData.endian = Endian.LITTLE_ENDIAN;
+
 // TODO: Create a mesh only when encountered (if it makes sense
 // for this file format) and return it using finalizeAsset()
                 _geometry = new Geometry();
                 _mesh = new Mesh(_geometry, null);
-                if (materialMode < 2) _mesh.material = DefaultMaterialManager.getDefaultMaterial()
-                else _mesh.material = new TextureMultiPassMaterial(DefaultMaterialManager.getDefaultTexture());
+                if (materialMode < 2)
+                    _mesh.material = DefaultMaterialManager.getDefaultMaterial();
+                else
+                    _mesh.material = new TextureMultiPassMaterial(DefaultMaterialManager.getDefaultTexture());
+
 //_geometry.animation = new VertexAnimation(2, VertexAnimationMode.ABSOLUTE);
 //_animator = new VertexAnimator(VertexAnimationState(_mesh.animationState));
+
 // Parse header and decompress body
                 parseHeader();
                 parseMaterialNames();
             }
 
-            else if (!_parsedUV) parseUV()
-            else if (!_parsedFaces) parseFaces()
-            else if (!_parsedFrames) parseFrames()
-            else if ((geoCreated) && (materialFinal)) return PARSING_DONE
+            else if (!_parsedUV) {
+                parseUV();
+            }
+
+            else if (!_parsedFaces) {
+                parseFaces();
+            }
+
+            else if (!_parsedFrames) {
+                parseFrames();
+            }
+            else if ((geoCreated) && (materialFinal))
+                return ParserBase.PARSING_DONE;
+
             else if (!geoCreated) {
                 geoCreated = true;
                 createDefaultSubGeometry();
@@ -178,11 +208,12 @@ class MD2Parser extends ParserBase {
                     finalizeAsset(_mesh.geometry);
                     finalizeAsset(_mesh);
                 }
+
                 pauseAndRetrieveDependencies();
             }
         }
 
-        return MORE_TO_PARSE;
+        return ParserBase.MORE_TO_PARSE;
     }
 
 /**
@@ -211,6 +242,7 @@ class MD2Parser extends ParserBase {
 //skip _offsetGlCmds
         _byteData.readInt();
         _offsetEnd = _byteData.readInt();
+
         _parsedHeader = true;
     }
 
@@ -219,45 +251,41 @@ class MD2Parser extends ParserBase {
 	 */
 
     private function parseMaterialNames():Void {
-        	var url:String;
-		var name:String;
-		var extIndex:Int;
-		var slashIndex:Int = 0;
-		_materialNames = new Vector<String>();
-		_byteData.position = _offsetSkins;
+        var url:String;
+        var name:String;
+        var extIndex:Int;
+        var slashIndex:Int = 0;
+        _materialNames = new Vector<String>();
+        _byteData.position = _offsetSkins;
 
-		var regExp:EReg = ~/[^a-zA-Z0-9\\_\/./g;
-		for (i in 0..._numSkins)
-		{
-			name = _byteData.readUTFBytes(64);
-			name = regExp.replace(name, "");
-			extIndex = name.lastIndexOf(".");
-			if (_ignoreTexturePath)
-			{
-				slashIndex = name.lastIndexOf("/");
-			}
-			if (name.toLowerCase().indexOf(".jpg") == -1 && name.toLowerCase().indexOf(".png") == -1)
-			{
-				name = name.substring(slashIndex + 1, extIndex);
-				url = name + "." + _textureType;
-			}
-			else
-			{
-				url = name;
-			}
+        var regExp:EReg = ~/[^a-zA-Z0-9\\_\/./g;
+        for (i in 0..._numSkins) {
+            name = _byteData.readUTFBytes(64);
+            name = regExp.replace(name, "");
+            extIndex = name.lastIndexOf(".");
+            if (_ignoreTexturePath) {
+                slashIndex = name.lastIndexOf("/");
+            }
+            if (name.toLowerCase().indexOf(".jpg") == -1 && name.toLowerCase().indexOf(".png") == -1) {
+                name = name.substring(slashIndex + 1, extIndex);
+                url = name + "." + _textureType;
+            }
+            else {
+                url = name;
+            }
 
-			_materialNames[i] = name;
-			// only support 1 skin TODO: really?
-			if (dependencies.length == 0)
-			{
-				addDependency(name, new URLRequest(url));
-			}
-		}
+            _materialNames[i] = name;
+// only support 1 skin TODO: really?
+            if (dependencies.length == 0) {
+                addDependency(name, new URLRequest(url));
+            }
+        }
 
-		if (_materialNames.length > 0)
-			_mesh.material.name = _materialNames[0];
-		else
-			materialFinal = true;
+        if (_materialNames.length > 0)
+            _mesh.material.name = _materialNames[0];
+        else
+            materialFinal = true;
+
     }
 
 /**
@@ -265,15 +293,15 @@ class MD2Parser extends ParserBase {
 	 */
 
     private function parseUV():Void {
-        var j:Int;
+        var j:Int = 0;
+
         _uvs = new Vector<Float>(_numST * 2);
         _byteData.position = _offsetST;
-        var i:Int = 0;
-        while (i < _numST) {
+        for (i in 0..._numST) {
             _uvs[j++] = _byteData.readShort() / _skinWidth;
             _uvs[j++] = _byteData.readShort() / _skinHeight;
-            i++;
         }
+
         _parsedUV = true;
     }
 
@@ -282,40 +310,41 @@ class MD2Parser extends ParserBase {
 	 */
 
     private function parseFaces():Void {
-        var a:Int;
-        var b:Int;
-        var c:Int;
-        var ta:Int;
-        var tb:Int;
-        var tc:Int;
-        var i:Int;
+        var a:Int, b:Int, c:Int, ta:Int, tb:Int, tc:Int;
+
         _vertIndices = new Vector<Float>();
         _uvIndices = new Vector<Float>();
         _indices = new Vector<UInt>();
+
         _byteData.position = _offsetTris;
-        i = 0;
-        while (i < _numTris) {
+
+        for (i in 0..._numTris) {
 //collect vertex indices
             a = _byteData.readUnsignedShort();
             b = _byteData.readUnsignedShort();
             c = _byteData.readUnsignedShort();
+
 //collect uv indices
             ta = _byteData.readUnsignedShort();
             tb = _byteData.readUnsignedShort();
             tc = _byteData.readUnsignedShort();
+
             addIndex(a, ta);
             addIndex(b, tb);
             addIndex(c, tc);
-            i++;
         }
+
         var len:Int = _uvIndices.length;
         _finalUV = new Vector<Float>(len * 2, true);
-        i = 0;
-        while (i < len) {
-            _finalUV[(i << 1)] = _uvs[(_uvIndices[i] << 1)];
-            _finalUV[(((i << 1) + 1))] = _uvs[((_uvIndices[i] << 1) + 1)];
-            ++i;
+
+        for (i in 0...len) {
+            var t:Int = Std.int(_uvIndices[i]);
+            t = t << 1;
+            var t2:Int = i << 1;
+            _finalUV[t2] = _uvs[t];
+            _finalUV[t2 + 1] = _uvs[t + 1];
         }
+
         _parsedFaces = true;
     }
 
@@ -328,15 +357,15 @@ class MD2Parser extends ParserBase {
 
     private function addIndex(vertexIndex:Int, uvIndex:Int):Void {
         var index:Int = findIndex(vertexIndex, uvIndex);
+
         if (index == -1) {
-            if (_indexMap.get(vertexIndex) == null)_indexMap.set(vertexIndex, new IntMap<Int>());
-            _indexMap.get(vertexIndex).set(uvIndex, _vertIndices.length);
-            _indices.push(_indexMap.get(vertexIndex).get(uvIndex));
+            _indices.push(_vertIndices.length);
             _vertIndices.push(vertexIndex);
             _uvIndices.push(uvIndex);
         }
-
-        else _indices.push(index);
+        else {
+            _indices.push(index);
+        }
     }
 
 /**
@@ -347,107 +376,124 @@ class MD2Parser extends ParserBase {
 	 */
 
     private function findIndex(vertexIndex:Int, uvIndex:Int):Int {
-        if (_indexMap.get(vertexIndex) != null && _indexMap.get(vertexIndex).get(uvIndex) != null) return _indexMap.get(vertexIndex).get(uvIndex);
+        var len:Int = _vertIndices.length;
+        for (i in 0...len)
+            if (_vertIndices[i] == vertexIndex && _uvIndices[i] == uvIndex)
+                return i;
+
         return -1;
     }
+
 
 /**
 	 * Parses all the frame geometries.
 	 */
 
     private function parseFrames():Void {
-        var sx:Float;
-        var sy:Float;
-        var sz:Float;
-        var tx:Float;
-        var ty:Float;
-        var tz:Float;
+        var sx:Float, sy:Float, sz:Float;
+        var tx:Float, ty:Float, tz:Float;
         var geometry:Geometry;
         var subGeom:CompactSubGeometry;
-        var vertLen:Int = _vertIndices.length;
+        var vertLen:UInt = _vertIndices.length;
         var fvertices:Vector<Float>;
         var tvertices:Vector<Float>;
-        var i:Int;
-        var j:Int;
         var k:Int;
 //var ch : uint;
         var name:String = "";
         var prevClip:VertexClipNode = null;
+
         _byteData.position = _offsetFrames;
-        i = 0;
-        while (i < _numFrames) {
+
+        for (i in 0..._numFrames) {
             subGeom = new CompactSubGeometry();
-            if (_firstSubGeom == null)
+            if (_firstSubGeom == null) {
                 _firstSubGeom = subGeom;
+            }
             geometry = new Geometry();
             geometry.addSubGeometry(subGeom);
             tvertices = new Vector<Float>();
             fvertices = new Vector<Float>(vertLen * 3, true);
+
             sx = _byteData.readFloat();
             sy = _byteData.readFloat();
             sz = _byteData.readFloat();
+
             tx = _byteData.readFloat();
             ty = _byteData.readFloat();
             tz = _byteData.readFloat();
+
             name = readFrameName();
+
 // Note, the extra data.position++ in the for loop is there
 // to skip over a byte that holds the "vertex normal index"
-            j = 0;
-            while (j < _numVertices) {
-                tvertices.push(sx * _byteData.readUnsignedByte() + tx, sy * _byteData.readUnsignedByte() + ty, sz * _byteData.readUnsignedByte() + tz);
-                j++;
+            for (j in 0..._numVertices) {
+                tvertices.push(sx * _byteData.readUnsignedByte() + tx);
+                tvertices.push(sy * _byteData.readUnsignedByte() + ty);
+                tvertices.push(sz * _byteData.readUnsignedByte() + tz);
                 _byteData.position++;
             }
+
             k = 0;
-            j = 0;
-            while (j < vertLen) {
-                fvertices[k++] = tvertices[(_vertIndices[j] * 3)];
-                fvertices[k++] = tvertices[(_vertIndices[j] * 3 + 2)];
-                fvertices[k++] = tvertices[(_vertIndices[j] * 3 + 1)];
-                j++;
+            for (j in 0...vertLen) {
+                fvertices[k++] = tvertices[Std.int(_vertIndices[j]) * 3];
+                fvertices[k++] = tvertices[Std.int(_vertIndices[j]) * 3 + 2];
+                fvertices[k++] = tvertices[Std.int(_vertIndices[j]) * 3 + 1];
             }
+
             subGeom.fromVectors(fvertices, _finalUV, null, null);
             subGeom.updateIndexData(_indices);
             subGeom.vertexNormalData;
             subGeom.vertexTangentData;
             subGeom.autoDeriveVertexNormals = false;
             subGeom.autoDeriveVertexTangents = false;
-            var clip:VertexClipNode = _clipNodes[name];
-            if (!clip) {
+
+            var clip:VertexClipNode = _clipNodes.get(name);
+
+            if (clip == null) {
 // If another sequence was parsed before this one, starting
 // a new state means the previous one is complete and can
 // hence be finalized.
-                if (prevClip) {
+                if (prevClip != null) {
                     finalizeAsset(prevClip);
                     _animationSet.addAnimation(prevClip);
                 }
+
                 clip = new VertexClipNode();
                 clip.name = name;
                 clip.stitchFinalFrame = true;
-                _clipNodes[name] = clip;
+
+                _clipNodes.set(name, clip);
+
                 prevClip = clip;
             }
-            clip.addFrame(geometry, 1000 / FPS);
-            i++;
+            clip.addFrame(geometry, Std.int(1000 / FPS));
         }
+
 // Finalize the last state
-        if (prevClip) {
+        if (prevClip != null) {
             finalizeAsset(prevClip);
             _animationSet.addAnimation(prevClip);
         }
+
+// Force finalizeAsset() to decide name
         finalizeAsset(_animationSet);
+
         _parsedFrames = true;
     }
 
     private function readFrameName():String {
         var name:String = "";
         var k:Int = 0;
-        var j:Int = 0;
-        while (j < 16) {
+        for (j in 0...16) {
             var ch:Int = _byteData.readUnsignedByte();
-            if (uint(ch) > 0x39 && uint(ch) <= 0x7A && k == 0) name += String.fromCharCode(ch);
-            if (uint(ch) >= 0x30 && uint(ch) <= 0x39) k++;
-            j++;
+
+            if (ch > 0x39 && ch <= 0x7A && k == 0) {
+                name += String.fromCharCode(ch);
+            }
+
+            if (ch >= 0x30 && ch <= 0x39) {
+                k++;
+            }
         }
         return name;
     }
@@ -460,4 +506,3 @@ class MD2Parser extends ParserBase {
     }
 
 }
-

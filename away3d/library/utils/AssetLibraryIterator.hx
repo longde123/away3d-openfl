@@ -48,9 +48,9 @@ class AssetLibraryIterator {
             _filtered = new Vector<IAsset>();
             for (asset in _assets) {
 // Skip this assets if filtering on type and this is wrong type
-                if (assetTypeFilter!=null && asset.assetType != assetTypeFilter) continue;
-                if (namespaceFilter!=null && asset.assetNamespace != namespaceFilter) continue;
-                if (filterFunc != null && filterFunc(asset)==null) continue;
+                if (assetTypeFilter != null && asset.assetType != assetTypeFilter) continue;
+                if (namespaceFilter != null && asset.assetNamespace != namespaceFilter) continue;
+                if (filterFunc != null && filterFunc(asset) == null) continue;
                 _filtered[idx++] = asset;
             }
 

@@ -66,7 +66,7 @@ class CascadeShadowMapper extends DirectionalShadowMapper implements IEventDispa
             s *= .4;
             --i;
         }
-        _texOffsetsX =Vector.ofArray([-1., 1, -1, 1]);
+        _texOffsetsX = Vector.ofArray([-1., 1, -1, 1]);
         _texOffsetsY = Vector.ofArray([1., 1, -1, -1]);
         _scissorRects = new Vector<Rectangle>(4, true);
         _depthLenses = new Vector<FreeMatrixLens>();

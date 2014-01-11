@@ -1,5 +1,6 @@
 package away3d.materials.utils;
 
+import String;
 import flash.display.Sprite;
 import flash.events.AsyncErrorEvent;
 import flash.events.IOErrorEvent;
@@ -44,11 +45,10 @@ class SimpleVideoPlayer implements IVideoPlayer {
         _paused = false;
         _lastVolume = 1;
 // client object that'll redirect various calls from the video stream
-        _nsClient = { };
-        _nsClient["onCuePoint"] = metaDataHandler;
-        _nsClient["onMetaData"] = metaDataHandler;
-        _nsClient["onBWDone"] = onBWDone;
-        _nsClient["close"] = streamClose;
+        _nsClient = {"onCuePoint":metaDataHandler,
+        "onMetaData":metaDataHandler,
+        "onBWDone":onBWDone,
+        "close":streamClose};
 // NetConnection
         _nc = new NetConnection();
         _nc.client = _nsClient;
@@ -77,7 +77,7 @@ class SimpleVideoPlayer implements IVideoPlayer {
 //////////////////////////////////////////////////////
 
     public function play():Void {
-        if (!_src) {
+        if (_src == null) {
             trace("Video source not set.");
             return;
         }
@@ -123,10 +123,7 @@ class SimpleVideoPlayer implements IVideoPlayer {
         _nc.removeEventListener(SecurityErrorEvent.SECURITY_ERROR, securityErrorHandler);
         _nc.removeEventListener(IOErrorEvent.IO_ERROR, ioErrorHandler);
         _nc.removeEventListener(AsyncErrorEvent.ASYNC_ERROR, asyncErrorHandler);
-        _nsClient["onCuePoint"] = null;
-        _nsClient["onMetaData"] = null;
-        _nsClient["onBWDone"] = null;
-        _nsClient["close"] = null;
+
         _container.removeChild(_video);
         _container = null;
         _src = null;
@@ -169,7 +166,8 @@ class SimpleVideoPlayer implements IVideoPlayer {
     }
 
     private function netStatusHandler(e:NetStatusEvent):Void {
-        var _sw0_ = (e.info["code"]);
+
+        var _sw0_:String = Reflect.field(e.info, "code");
         switch(_sw0_) {
             case "NetStream.Play.Stop":
 //this.dispatchEvent( new VideoEvent(VideoEvent.STOP,_netStream, file) );
@@ -247,7 +245,7 @@ class SimpleVideoPlayer implements IVideoPlayer {
     }
 
     public function get_width():Int {
-        return _video.width;
+        return Std.int(_video.width);
     }
 
     public function set_width(val:Int):Int {
@@ -256,7 +254,7 @@ class SimpleVideoPlayer implements IVideoPlayer {
     }
 
     public function get_height():Int {
-        return _video.height;
+        return Std.int(_video.height);
     }
 
     public function set_height(val:Int):Int {

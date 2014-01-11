@@ -40,7 +40,7 @@ class AnimationSetBase extends NamedAssetBase implements IAsset {
 	 */
 
     private function findTempReg(exclude:Vector<String>, excludeAnother:String = null):String {
-        var i:Int;
+        var i:Int = 0;
         var reg:String;
         while (true) {
             reg = "vt" + i;

@@ -124,7 +124,7 @@ class TouchEvent3D extends Event {
 
     override public function clone():Event {
         var result:TouchEvent3D = new TouchEvent3D(type);
-		#if flash
+#if flash
         if (isDefaultPrevented()) result.preventDefault();
 		#end
         result.screenX = screenX;

@@ -124,7 +124,7 @@ class LightingPass extends CompiledPass {
         var numDirectionalLights:Int;
         var numPointLights:Int;
         var numLightProbes:Int;
-        if (_lightPicker!=null) {
+        if (_lightPicker != null) {
             numDirectionalLights = calculateNumDirectionalLights(_lightPicker.numDirectionalLights);
             numPointLights = calculateNumPointLights(_lightPicker.numPointLights);
             numLightProbes = calculateNumProbes(_lightPicker.numLightProbes);
@@ -176,10 +176,10 @@ class LightingPass extends CompiledPass {
 	 */
 
     private function calculateNumProbes(numLightProbes:Int):Int {
-        var numChannels:Int;
+        var numChannels:Int = 0;
         if ((_specularLightSources & LightSources.PROBES) != 0) ++numChannels;
         if ((_diffuseLightSources & LightSources.PROBES) != 0) ++numChannels;
-        return Std.int( Math.min(numLightProbes - _lightProbesOffset, Std.int(4 / numChannels)));
+        return Std.int(Math.min(numLightProbes - _lightProbesOffset, Std.int(4 / numChannels)));
     }
 
 /**
@@ -401,7 +401,7 @@ class LightingPass extends CompiledPass {
         var weights:Vector<Float> = _lightPicker.lightProbeWeights;
         var len:Int = lightProbes.length - _lightProbesOffset;
         var addDiff:Bool = usesProbesForDiffuse();
-        var addSpec:Bool = cast((_methodSetup._specularMethod!=null && usesProbesForSpecular()), Bool);
+        var addSpec:Bool = cast((_methodSetup._specularMethod != null && usesProbesForSpecular()), Bool);
         if (!(addDiff || addSpec)) return;
         if (len > _numLightProbes) len = _numLightProbes;
         var i:Int = 0;

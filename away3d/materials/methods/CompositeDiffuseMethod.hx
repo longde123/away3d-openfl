@@ -22,9 +22,9 @@ class CompositeDiffuseMethod extends BasicDiffuseMethod {
 	 * @param baseDiffuseMethod The base diffuse method on which this method's shading is based.
 	 */
 
-    public function new(modulateMethod:Dynamic = null,?baseDiffuseMethod:BasicDiffuseMethod = null) {
+    public function new(modulateMethod:Dynamic = null, ?baseDiffuseMethod:BasicDiffuseMethod = null) {
         _baseMethod = baseDiffuseMethod ;
-        if(_baseMethod==null) _baseMethod=new BasicDiffuseMethod();
+        if (_baseMethod == null) _baseMethod = new BasicDiffuseMethod();
         _baseMethod._modulateMethod = modulateMethod;
         _baseMethod.addEventListener(ShadingMethodEvent.SHADER_INVALIDATED, onShaderInvalidated);
         super();
@@ -191,48 +191,54 @@ class CompositeDiffuseMethod extends BasicDiffuseMethod {
 /**
 	 * @inheritDoc
 	 */
-    override public function  getFragmentPostLightingCode( vo:MethodVO, regCache:ShaderRegisterCache, targetReg:ShaderRegisterElement) : String {
-    return _baseMethod.getFragmentPostLightingCode(vo, regCache, targetReg);
+
+    override public function getFragmentPostLightingCode(vo:MethodVO, regCache:ShaderRegisterCache, targetReg:ShaderRegisterElement):String {
+        return _baseMethod.getFragmentPostLightingCode(vo, regCache, targetReg);
     }
 
 /**
 	 * @inheritDoc
 	 */
-    override private function reset() : Void {
-    _baseMethod.reset();
+
+    override public function reset():Void {
+        _baseMethod.reset();
     }
 
 /**
 	 * @inheritDoc
 	 */
-    override public function cleanCompilationData() : Void {
-    super.cleanCompilationData();
-    _baseMethod.cleanCompilationData();
+
+    override public function cleanCompilationData():Void {
+        super.cleanCompilationData();
+        _baseMethod.cleanCompilationData();
     }
 
 /**
 	 * @inheritDoc
 	 */
-    override private function set_sharedRegisters(value : ShaderRegisterData) : ShaderRegisterData { 
-    super.sharedRegisters = _baseMethod.sharedRegisters = value;
-    return value;
+
+    override private function set_sharedRegisters(value:ShaderRegisterData):ShaderRegisterData {
+        super.sharedRegisters = _baseMethod.sharedRegisters = value;
+        return value;
     }
 
 /**
 	 * @inheritDoc
 	 */
-    override private function set_shadowRegister(value : ShaderRegisterElement) : ShaderRegisterElement {
-    super.shadowRegister = value;
-    _baseMethod.shadowRegister = value;
-    return value;
+
+    override private function set_shadowRegister(value:ShaderRegisterElement):ShaderRegisterElement {
+        super.shadowRegister = value;
+        _baseMethod.shadowRegister = value;
+        return value;
     }
 
 /**
 	 * Called when the base method's shader code is invalidated.
 	 */
-    private function onShaderInvalidated(event : ShadingMethodEvent) : Void {
-    invalidateShaderProgram();
+
+    private function onShaderInvalidated(event:ShadingMethodEvent):Void {
+        invalidateShaderProgram();
     }
 
-    }
+}
 

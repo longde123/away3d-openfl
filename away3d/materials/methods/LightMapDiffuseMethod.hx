@@ -6,6 +6,7 @@
 package away3d.materials.methods;
 
 
+import flash.display.BlendMode;
 import flash.errors.Error;
 import away3d.core.managers.Stage3DProxy;
 import away3d.materials.compilation.ShaderRegisterCache;
@@ -13,21 +14,21 @@ import away3d.materials.compilation.ShaderRegisterElement;
 import away3d.textures.Texture2DBase;
 
 class LightMapDiffuseMethod extends CompositeDiffuseMethod {
-    public var blendMode(get_blendMode, set_blendMode):String;
+    public var blendMode(get_blendMode, set_blendMode):BlendMode;
     public var lightMapTexture(get_lightMapTexture, set_lightMapTexture):Texture2DBase;
 
 /**
 	 * Indicates the light map should be multiplied with the calculated shading result.
 	 * This can be used to add pre-calculated shadows or occlusion.
 	 */
-    static public var MULTIPLY:String = "multiply";
+    static public var MULTIPLY:BlendMode = BlendMode.MULTIPLY;
 /**
 	 * Indicates the light map should be added into the calculated shading result.
 	 * This can be used to add pre-calculated lighting or global illumination.
 	 */
-    static public var ADD:String = "add";
-    //private var _texture:Texture2DBase;
-    private var _blendMode:String;
+    static public var ADD:BlendMode = BlendMode.ADD;
+//private var _texture:Texture2DBase;
+    private var _blendMode:BlendMode;
     private var _useSecondaryUV:Bool;
 /**
 	 * Creates a new LightMapDiffuseMethod method.
@@ -37,10 +38,11 @@ class LightMapDiffuseMethod extends CompositeDiffuseMethod {
 	 * @param baseMethod The diffuse method used to calculate the regular light-based lighting.
 	 */
 
-    public function new(lightMap:Texture2DBase, blendMode:String = "multiply", useSecondaryUV:Bool = false, baseMethod:BasicDiffuseMethod = null) {
+    public function new(lightMap:Texture2DBase, blendMode:BlendMode = null, useSecondaryUV:Bool = false, baseMethod:BasicDiffuseMethod = null) {
         super(null, baseMethod);
         _useSecondaryUV = useSecondaryUV;
         _texture = lightMap;
+        if (blendMode == null)blendMode = BlendMode.MULTIPLY;
         this.blendMode = blendMode;
     }
 
@@ -60,12 +62,12 @@ class LightMapDiffuseMethod extends CompositeDiffuseMethod {
 	 * @see LightMapDiffuseMethod.MULTIPLY
 	 */
 
-    public function get_blendMode():String {
+    public function get_blendMode():BlendMode {
         return _blendMode;
     }
 
-    public function set_blendMode(value:String):String {
-        if (value != ADD && value != MULTIPLY) throw new Error("Unknown blendmode!");
+    public function set_blendMode(value:BlendMode):BlendMode {
+        if (value != LightMapDiffuseMethod.ADD && value != LightMapDiffuseMethod.MULTIPLY) throw new Error("Unknown blendmode!");
         if (_blendMode == value) return value;
         _blendMode = value;
         invalidateShaderProgram();
@@ -97,21 +99,22 @@ class LightMapDiffuseMethod extends CompositeDiffuseMethod {
 /**
 	 * @inheritDoc
 	 */
-    override public function getFragmentPostLightingCode(  vo:MethodVO, regCache:ShaderRegisterCache, targetReg:ShaderRegisterElement) : String {
-    var code : String;
-    var lightMapReg : ShaderRegisterElement = regCache.getFreeTextureReg();
-    var temp : ShaderRegisterElement = regCache.getFreeFragmentVectorTemp();
-    vo.secondaryTexturesIndex = lightMapReg.index;
-    code = getTex2DSampleCode(vo, temp, lightMapReg, _texture, _sharedRegisters.secondaryUVVarying);
-    switch(_blendMode) {
-    case LightMapDiffuseMethod.MULTIPLY:
-    code += "mul " + _totalLightColorReg + ", " + _totalLightColorReg + ", " + temp + "\n";
-    case LightMapDiffuseMethod.ADD:
-    code += "add " + _totalLightColorReg + ", " + _totalLightColorReg + ", " + temp + "\n";
-    }
-    code += super.getFragmentPostLightingCode(vo, regCache, targetReg);
-    return code;
+
+    override public function getFragmentPostLightingCode(vo:MethodVO, regCache:ShaderRegisterCache, targetReg:ShaderRegisterElement):String {
+        var code:String;
+        var lightMapReg:ShaderRegisterElement = regCache.getFreeTextureReg();
+        var temp:ShaderRegisterElement = regCache.getFreeFragmentVectorTemp();
+        vo.secondaryTexturesIndex = lightMapReg.index;
+        code = getTex2DSampleCode(vo, temp, lightMapReg, _texture, _sharedRegisters.secondaryUVVarying);
+        switch(_blendMode) {
+            case LightMapDiffuseMethod.MULTIPLY:
+                code += "mul " + _totalLightColorReg + ", " + _totalLightColorReg + ", " + temp + "\n";
+            case LightMapDiffuseMethod.ADD:
+                code += "add " + _totalLightColorReg + ", " + _totalLightColorReg + ", " + temp + "\n";
+        }
+        code += super.getFragmentPostLightingCode(vo, regCache, targetReg);
+        return code;
     }
 
-    }
+}
 

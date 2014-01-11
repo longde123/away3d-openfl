@@ -15,6 +15,7 @@ class Scene3DEvent extends Event {
         return objectContainer3D;
     }
 #end
+
     public function new(type:String, objectContainer:ObjectContainer3D) {
         objectContainer3D = objectContainer;
         super(type);

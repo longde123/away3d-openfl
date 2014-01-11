@@ -5,6 +5,7 @@
  */
 package away3d.animators;
 
+import flash.Vector;
 import away3d.animators.data.VertexAnimationMode;
 import flash.Vector.Vector;
 
@@ -73,7 +74,7 @@ class VertexAnimationSet extends AnimationSetBase implements IAnimationSet {
 	 */
 
     public function getAGALVertexCode(pass:MaterialPassBase, sourceRegisters:Vector<String>, targetRegisters:Vector<String>, profile:String):String {
-        if (_blendMode == VertexAnimationMode.ABSOLUTE) return getAbsoluteAGALCode(pass, sourceRegisters, targetRegisters); 
+        if (_blendMode == VertexAnimationMode.ABSOLUTE) return getAbsoluteAGALCode(pass, sourceRegisters, targetRegisters);
         else return getAdditiveAGALCode(pass, sourceRegisters, targetRegisters);
     }
 
@@ -168,7 +169,7 @@ class VertexAnimationSet extends AnimationSetBase implements IAnimationSet {
         var len:Int = sourceRegisters.length;
         var regs:Array<Dynamic> = ["x", "y", "z", "w"];
         var temp1:String = findTempReg(targetRegisters);
-        var k:Int;
+        var k:Int = 0;
         _useTangents.set(pass, len > 2);
         _useNormals.set(pass, len > 1);
         _streamIndices.set(pass, pass.numUsedStreams);

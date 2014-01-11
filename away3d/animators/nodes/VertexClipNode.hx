@@ -43,10 +43,10 @@ class VertexClipNode extends AnimationClipNodeBase {
     public function addFrame(geometry:Geometry, duration:Int, translation:Vector3D = null):Void {
         _frames.push(geometry);
         _durations.push(duration);
-        if(translation!=null){
-         _translations.push(translation);
-        }else{
-            _translations.push(new Vector3D() );
+        if (translation != null) {
+            _translations.push(translation);
+        } else {
+            _translations.push(new Vector3D());
         }
         _numFrames = _durations.length;
         _stitchDirty = true;
@@ -62,7 +62,7 @@ class VertexClipNode extends AnimationClipNodeBase {
         var p1:Vector3D;
         var p2:Vector3D;
         var delta:Vector3D;
-        while (i-- >0) {
+        while (i-- > 0) {
             _totalDuration += _durations[i];
             p1 = _translations[i];
             p2 = _translations[i + 1];
