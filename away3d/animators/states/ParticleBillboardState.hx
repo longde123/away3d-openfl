@@ -36,7 +36,7 @@ class ParticleBillboardState extends ParticleStateBase {
 // TODO: not used
 
         var comps:Vector<Vector3D>;
-        if (_billboardAxis!=null) {
+        if (_billboardAxis != null) {
             var pos:Vector3D = renderable.sceneTransform.position;
             var look:Vector3D = camera.sceneTransform.position.subtract(pos);
             var right:Vector3D = look.crossProduct(_billboardAxis);
@@ -77,8 +77,8 @@ class ParticleBillboardState extends ParticleStateBase {
     }
 
     public function set_billboardAxis(value:Vector3D):Vector3D {
-        _billboardAxis = (value!=null) ? value.clone() : null;
-        if (_billboardAxis!=null) _billboardAxis.normalize();
+        _billboardAxis = (value != null) ? value.clone() : null;
+        if (_billboardAxis != null) _billboardAxis.normalize();
         return value;
     }
 

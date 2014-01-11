@@ -27,6 +27,7 @@ import flash.events.Event;
 import flash.events.EventDispatcher;
 import flash.geom.Rectangle;
 using OpenFLStage3D;
+
 class Stage3DProxy extends EventDispatcher {
     public var profile(get_profile, never):String;
     public var enableDepthAndStencil(get_enableDepthAndStencil, set_enableDepthAndStencil):Bool;

@@ -8,7 +8,7 @@ import flash.Vector;
 import away3d.animators.data.ParticleProperties;
 import away3d.animators.ParticleAnimationSet;
 import away3d.animators.data.AnimationRegisterCache;
-import away3d.materials.passes.MaterialPassBase; 
+import away3d.materials.passes.MaterialPassBase;
 
 class ParticleNodeBase extends AnimationNodeBase {
     public var mode(get_mode, never):Int;
@@ -83,13 +83,13 @@ class ParticleNodeBase extends AnimationNodeBase {
 	 */
 
     static public function getParticleNodeName(particleNodeClass:Dynamic, particleNodeMode:Int):String {
-        var nodeName:String = Reflect.field( particleNodeClass,"ANIMATION_NODE_NAME");
-        if (nodeName==null) nodeName = getNodeNameFromClass(particleNodeClass);
+        var nodeName:String = Reflect.field(particleNodeClass, "ANIMATION_NODE_NAME");
+        if (nodeName == null) nodeName = getNodeNameFromClass(particleNodeClass);
         return nodeName + MODES[particleNodeMode];
     }
 
     static private function getNodeNameFromClass(particleNodeClass:Dynamic):String {
-        return StringTools.replace(Type.getClassName(particleNodeClass),"Node", "").split("::")[1];
+        return StringTools.replace(Type.getClassName(particleNodeClass), "Node", "").split("::")[1];
     }
 
 /**

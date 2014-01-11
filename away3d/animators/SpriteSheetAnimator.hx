@@ -23,7 +23,7 @@ import away3d.animators.states.SpriteSheetAnimationState;
 import away3d.animators.transitions.IAnimationTransition;
 
 import away3d.cameras.Camera3D;
-import flash.display3D.Context3DProgramType;  
+import flash.display3D.Context3DProgramType;
 class SpriteSheetAnimator extends AnimatorBase implements IAnimator {
     public var fps(get_fps, set_fps):Int;
     public var reverse(get_reverse, set_reverse):Bool;
@@ -122,10 +122,10 @@ class SpriteSheetAnimator extends AnimatorBase implements IAnimator {
 
     public function setRenderState(stage3DProxy:Stage3DProxy, renderable:IRenderable, vertexConstantOffset:Int, vertexStreamOffset:Int, camera:Camera3D):Void {
         var material:MaterialBase = renderable.material;
-        if (material==null || !Std.is(material, TextureMaterial)) return;
+        if (material == null || !Std.is(material, TextureMaterial)) return;
         var subMesh:SubMesh = cast(renderable, SubMesh) ;
-        if (subMesh==null ) return;
-        var swapped:Bool=false;
+        if (subMesh == null) return;
+        var swapped:Bool = false;
         if (Std.is(material, SpriteSheetMaterial) && _mapDirty) swapped = cast((material), SpriteSheetMaterial).swap(_frame.mapID);
         if (!swapped) {
             _vectorFrame[0] = _frame.offsetU;
@@ -182,7 +182,7 @@ class SpriteSheetAnimator extends AnimatorBase implements IAnimator {
     }
 
     private function gotoFrame(frameNumber:Int, doPlay:Bool):Void {
-        if (_activeState==null) return;
+        if (_activeState == null) return;
         cast((_activeState), SpriteSheetAnimationState).currentFrameNumber = ((frameNumber == 0)) ? frameNumber : frameNumber - 1;
         var currentMapID:Int = _frame.mapID;
         _frame = cast((_activeSpriteSheetState), SpriteSheetAnimationState).currentFrameData;

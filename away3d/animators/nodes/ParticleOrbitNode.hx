@@ -61,7 +61,7 @@ class ParticleOrbitNode extends ParticleNodeBase {
         _cycleDuration = cycleDuration;
         _cyclePhase = cyclePhase;
         _eulers = eulers;
-        if(_eulers==null)_eulers= new Vector3D();
+        if (_eulers == null)_eulers = new Vector3D();
     }
 
 /**
@@ -126,8 +126,8 @@ class ParticleOrbitNode extends ParticleNodeBase {
 
     override public function generatePropertyOfOneParticle(param:ParticleProperties):Void {
 //Vector3D.x is radius, Vector3D.y is cycle duration, Vector3D.z is phase
-        var orbit:Vector3D = Reflect.field( param,ORBIT_VECTOR3D);
-        if (orbit==null) throw new Error("there is no " + ORBIT_VECTOR3D + " in param!");
+        var orbit:Vector3D = Reflect.field(param, ORBIT_VECTOR3D);
+        if (orbit == null) throw new Error("there is no " + ORBIT_VECTOR3D + " in param!");
         _oneData[0] = orbit.x;
         if (_usesCycle && orbit.y <= 0) throw (new Error("the cycle duration must be greater than zero"));
         _oneData[1] = Math.PI * 2 / (!(_usesCycle) ? 1 : orbit.y);

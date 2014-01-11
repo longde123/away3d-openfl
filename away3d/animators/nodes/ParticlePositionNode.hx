@@ -36,7 +36,7 @@ class ParticlePositionNode extends ParticleNodeBase {
         super("ParticlePosition", mode, 3);
         _stateClass = ParticlePositionState;
         _position = position ;
-        if(_position==null)_position= new Vector3D();
+        if (_position == null)_position = new Vector3D();
     }
 
 /**
@@ -63,8 +63,8 @@ class ParticlePositionNode extends ParticleNodeBase {
 	 */
 
     override public function generatePropertyOfOneParticle(param:ParticleProperties):Void {
-        var offset:Vector3D = Reflect.field(param,POSITION_VECTOR3D);
-        if (offset==null) throw (new Error("there is no " + POSITION_VECTOR3D + " in param!"));
+        var offset:Vector3D = Reflect.field(param, POSITION_VECTOR3D);
+        if (offset == null) throw (new Error("there is no " + POSITION_VECTOR3D + " in param!"));
         _oneData[0] = offset.x;
         _oneData[1] = offset.y;
         _oneData[2] = offset.z;

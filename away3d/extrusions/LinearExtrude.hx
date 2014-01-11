@@ -956,7 +956,8 @@ class SubGeometryList {
     public var indices:Vector<UInt>;
     public var subGeometry:SubGeometry;
     public var material:MaterialBase;
-	public function new(){}
+
+    public function new() {}
 }
 
 class RenderSide {
@@ -967,7 +968,8 @@ class RenderSide {
     public var left:Bool;
     public var front:Bool;
     public var back:Bool;
-	public function new(){}
+
+    public function new() {}
 }
 
 class Line {
@@ -976,7 +978,8 @@ class Line {
     public var ay:Float;
     public var bx:Float;
     public var by:Float;
-	public function new(){}
+
+    public function new() {}
 }
 
 class FourPoints {
@@ -985,6 +988,7 @@ class FourPoints {
     public var pt2:Point;
     public var pt3:Point;
     public var pt4:Point;
-	public function new(){}
+
+    public function new() {}
 }
 

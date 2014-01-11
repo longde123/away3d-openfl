@@ -126,12 +126,12 @@ class ParticleSegmentedColorState extends ParticleStateBase {
             _multiplierData.push(_startColor.alphaMultiplier);
             i = 0;
             while (i < _numSegmentPoint) {
-                if (i == 0){
+                if (i == 0) {
                     _multiplierData.push((_segmentPoints[i].color.redMultiplier - _startColor.redMultiplier) / _timeLifeData[i]);
                     _multiplierData.push((_segmentPoints[i].color.greenMultiplier - _startColor.greenMultiplier) / _timeLifeData[i]);
                     _multiplierData.push((_segmentPoints[i].color.blueMultiplier - _startColor.blueMultiplier) / _timeLifeData[i]);
                     _multiplierData.push((_segmentPoints[i].color.alphaMultiplier - _startColor.alphaMultiplier) / _timeLifeData[i]);
-                }else {
+                } else {
                     _multiplierData.push((_segmentPoints[i].color.redMultiplier - _segmentPoints[i - 1].color.redMultiplier) / _timeLifeData[i]);
                     _multiplierData.push((_segmentPoints[i].color.greenMultiplier - _segmentPoints[i - 1].color.greenMultiplier) / _timeLifeData[i]);
                     _multiplierData.push((_segmentPoints[i].color.blueMultiplier - _segmentPoints[i - 1].color.blueMultiplier) / _timeLifeData[i]);
@@ -140,12 +140,12 @@ class ParticleSegmentedColorState extends ParticleStateBase {
                 }
                 i++;
             }
-            if (_numSegmentPoint == 0){
+            if (_numSegmentPoint == 0) {
                 _multiplierData.push(_endColor.redMultiplier - _startColor.redMultiplier);
-                _multiplierData.push( _endColor.greenMultiplier - _startColor.greenMultiplier);
+                _multiplierData.push(_endColor.greenMultiplier - _startColor.greenMultiplier);
                 _multiplierData.push(_endColor.blueMultiplier - _startColor.blueMultiplier);
-                _multiplierData.push( _endColor.alphaMultiplier - _startColor.alphaMultiplier);
-            }else {
+                _multiplierData.push(_endColor.alphaMultiplier - _startColor.alphaMultiplier);
+            } else {
                 _multiplierData.push((_endColor.redMultiplier - _segmentPoints[i - 1].color.redMultiplier) / _timeLifeData[i]);
                 _multiplierData.push((_endColor.greenMultiplier - _segmentPoints[i - 1].color.greenMultiplier) / _timeLifeData[i]);
                 _multiplierData.push((_endColor.blueMultiplier - _segmentPoints[i - 1].color.blueMultiplier) / _timeLifeData[i]);
@@ -159,13 +159,12 @@ class ParticleSegmentedColorState extends ParticleStateBase {
             _offsetData.push(_startColor.alphaOffset / 255);
             i = 0;
             while (i < _numSegmentPoint) {
-                if (i == 0)
-                {
+                if (i == 0) {
                     _offsetData.push((_segmentPoints[i].color.redOffset - _startColor.redOffset) / _timeLifeData[i] / 255);
                     _offsetData.push((_segmentPoints[i].color.greenOffset - _startColor.greenOffset) / _timeLifeData[i] / 255);
                     _offsetData.push((_segmentPoints[i].color.blueOffset - _startColor.blueOffset) / _timeLifeData[i] / 255);
                     _offsetData.push((_segmentPoints[i].color.alphaOffset - _startColor.alphaOffset) / _timeLifeData[i] / 255);
-                }else{
+                } else {
                     _offsetData.push((_segmentPoints[i].color.redOffset - _segmentPoints[i - 1].color.redOffset) / _timeLifeData[i] / 255);
                     _offsetData.push((_segmentPoints[i].color.greenOffset - _segmentPoints[i - 1].color.greenOffset) / _timeLifeData[i] / 255);
                     _offsetData.push((_segmentPoints[i].color.blueOffset - _segmentPoints[i - 1].color.blueOffset) / _timeLifeData[i] / 255);
@@ -173,12 +172,12 @@ class ParticleSegmentedColorState extends ParticleStateBase {
                 }
                 i++;
             }
-            if (_numSegmentPoint == 0){
+            if (_numSegmentPoint == 0) {
                 _offsetData.push((_endColor.redOffset - _startColor.redOffset) / 255);
                 _offsetData.push((_endColor.greenOffset - _startColor.greenOffset) / 255);
                 _offsetData.push((_endColor.blueOffset - _startColor.blueOffset) / 255);
                 _offsetData.push((_endColor.alphaOffset - _startColor.alphaOffset) / 255);
-            }else {_offsetData.push((_endColor.redOffset - _segmentPoints[i - 1].color.redOffset) / _timeLifeData[i] / 255);
+            } else {_offsetData.push((_endColor.redOffset - _segmentPoints[i - 1].color.redOffset) / _timeLifeData[i] / 255);
                 _offsetData.push((_endColor.greenOffset - _segmentPoints[i - 1].color.greenOffset) / _timeLifeData[i] / 255);
                 _offsetData.push((_endColor.blueOffset - _segmentPoints[i - 1].color.blueOffset) / _timeLifeData[i] / 255);
                 _offsetData.push((_endColor.alphaOffset - _segmentPoints[i - 1].color.alphaOffset) / _timeLifeData[i] / 255);

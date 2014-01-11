@@ -77,8 +77,8 @@ class ParticleSpriteSheetNode extends ParticleNodeBase {
 	 * @param    [optional] looping         Defines whether the spritesheet animation is set to loop indefinitely. Defaults to true.
 	 */
 
-    public function new(mode:Int, usesCycle:Bool, usesPhase:Bool, numColumns:Int = 1, numRows:Int = 1, cycleDuration:Float = 1, cyclePhase:Float = 0, totalFrames:Int=MathConsts.MAX_VALUE  ) {
-        var len:Int=0;
+    public function new(mode:Int, usesCycle:Bool, usesPhase:Bool, numColumns:Int = 1, numRows:Int = 1, cycleDuration:Float = 1, cyclePhase:Float = 0, totalFrames:Int = MathConsts.MAX_VALUE) {
+        var len:Int = 0;
         if (usesCycle) {
             len = 2;
             if (usesPhase) len++;
@@ -91,7 +91,7 @@ class ParticleSpriteSheetNode extends ParticleNodeBase {
         _numRows = numRows;
         _cyclePhase = cyclePhase;
         _cycleDuration = cycleDuration;
-        _totalFrames =Std.int( Math.min(totalFrames, numColumns * numRows));
+        _totalFrames = Std.int(Math.min(totalFrames, numColumns * numRows));
     }
 
 /**
@@ -169,8 +169,8 @@ class ParticleSpriteSheetNode extends ParticleNodeBase {
 
     override public function generatePropertyOfOneParticle(param:ParticleProperties):Void {
         if (_usesCycle) {
-            var uvCycle:Vector3D =Reflect.field( param,UV_VECTOR3D);
-            if (uvCycle==null) throw (new Error("there is no " + UV_VECTOR3D + " in param!"));
+            var uvCycle:Vector3D = Reflect.field(param, UV_VECTOR3D);
+            if (uvCycle == null) throw (new Error("there is no " + UV_VECTOR3D + " in param!"));
             if (uvCycle.x <= 0) throw (new Error("the cycle duration must be greater than zero"));
             var uTotal:Float = _totalFrames / _numColumns;
             _oneData[0] = uTotal / uvCycle.x;

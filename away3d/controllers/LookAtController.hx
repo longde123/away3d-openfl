@@ -27,7 +27,7 @@ class LookAtController extends ControllerBase {
         _origin = new Vector3D(0.0, 0.0, 0.0);
         _upAxis = Vector3D.Y_AXIS;
         super(targetObject);
-        if (lookAtObject!=null) this.lookAtObject = lookAtObject
+        if (lookAtObject != null) this.lookAtObject = lookAtObject
         else this.lookAtPosition = new Vector3D();
     }
 
@@ -54,7 +54,7 @@ class LookAtController extends ControllerBase {
     }
 
     public function set_lookAtPosition(val:Vector3D):Vector3D {
-        if (_lookAtObject!=null) {
+        if (_lookAtObject != null) {
             _lookAtObject.removeEventListener(Object3DEvent.SCENETRANSFORM_CHANGED, onLookAtObjectChanged);
             _lookAtObject = null;
         }
@@ -72,11 +72,11 @@ class LookAtController extends ControllerBase {
     }
 
     public function set_lookAtObject(val:ObjectContainer3D):ObjectContainer3D {
-        if (_lookAtPosition!=null) _lookAtPosition = null;
+        if (_lookAtPosition != null) _lookAtPosition = null;
         if (_lookAtObject == val) return val;
-        if (_lookAtObject!=null) _lookAtObject.removeEventListener(Object3DEvent.SCENETRANSFORM_CHANGED, onLookAtObjectChanged);
+        if (_lookAtObject != null) _lookAtObject.removeEventListener(Object3DEvent.SCENETRANSFORM_CHANGED, onLookAtObjectChanged);
         _lookAtObject = val;
-        if (_lookAtObject!=null) _lookAtObject.addEventListener(Object3DEvent.SCENETRANSFORM_CHANGED, onLookAtObjectChanged);
+        if (_lookAtObject != null) _lookAtObject.addEventListener(Object3DEvent.SCENETRANSFORM_CHANGED, onLookAtObjectChanged);
         notifyUpdate();
         return val;
     }
@@ -88,13 +88,13 @@ class LookAtController extends ControllerBase {
     override public function update(interpolate:Bool = true):Void {
 
 // prevents unused warning
-        if (_targetObject!=null) {
-            if (_lookAtPosition!=null) {
+        if (_targetObject != null) {
+            if (_lookAtPosition != null) {
                 _targetObject.lookAt(_lookAtPosition, _upAxis);
             }
 
-            else if (_lookAtObject!=null) {
-                _targetObject.lookAt((_lookAtObject.scene!=null) ? _lookAtObject.scenePosition : _lookAtObject.position, _upAxis);
+            else if (_lookAtObject != null) {
+                _targetObject.lookAt((_lookAtObject.scene != null) ? _lookAtObject.scenePosition : _lookAtObject.position, _upAxis);
             }
         }
     }

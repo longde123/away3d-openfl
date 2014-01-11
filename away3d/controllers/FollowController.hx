@@ -18,7 +18,7 @@ class FollowController extends HoverController {
     override public function update(interpolate:Bool = true):Void {
 
 // unused: prevents warning
-        if (lookAtObject==null) return;
+        if (lookAtObject == null) return;
         panAngle = _lookAtObject.rotationY - 180;
         super.update();
     }

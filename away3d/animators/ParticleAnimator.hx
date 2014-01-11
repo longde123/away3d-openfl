@@ -34,7 +34,7 @@ class ParticleAnimator extends AnimatorBase implements IAnimator {
     private var _animatorParticleStates:Vector<ParticleStateBase>;
     private var _timeParticleStates:Vector<ParticleStateBase>;
     private var _totalLenOfOneVertex:Int;
-    private var _animatorSubGeometries:ObjectMap<ISubGeometry,AnimationSubGeometry>;
+    private var _animatorSubGeometries:ObjectMap<ISubGeometry, AnimationSubGeometry>;
 /**
 	 * Creates a new <code>ParticleAnimator</code> object.
 	 *
@@ -46,13 +46,13 @@ class ParticleAnimator extends AnimatorBase implements IAnimator {
         _animatorParticleStates = new Vector<ParticleStateBase>();
         _timeParticleStates = new Vector<ParticleStateBase>();
         _totalLenOfOneVertex = 0;
-        _animatorSubGeometries = new ObjectMap<ISubGeometry,AnimationSubGeometry>();
+        _animatorSubGeometries = new ObjectMap<ISubGeometry, AnimationSubGeometry>();
         super(particleAnimationSet);
         _particleAnimationSet = particleAnimationSet;
         var state:ParticleStateBase;
         var node:ParticleNodeBase;
         for (i in 0..._particleAnimationSet.particleNodes.length) {
-            node=_particleAnimationSet.particleNodes[i];
+            node = _particleAnimationSet.particleNodes[i];
             state = cast(getAnimationState(node), ParticleStateBase) ;
             if (node.mode == ParticlePropertiesMode.LOCAL_DYNAMIC) {
                 _animatorParticleStates.push(state);
@@ -82,12 +82,12 @@ class ParticleAnimator extends AnimatorBase implements IAnimator {
         var animationRegisterCache:AnimationRegisterCache = _particleAnimationSet._animationRegisterCache;
         var subMesh:SubMesh = cast(renderable, SubMesh) ;
         var state:ParticleStateBase;
-        if (subMesh==null) throw (new Error("Must be subMesh"));
-        if (subMesh.animationSubGeometry==null) _particleAnimationSet.generateAnimationSubGeometries(subMesh.parentMesh);
+        if (subMesh == null) throw (new Error("Must be subMesh"));
+        if (subMesh.animationSubGeometry == null) _particleAnimationSet.generateAnimationSubGeometries(subMesh.parentMesh);
         var animationSubGeometry:AnimationSubGeometry = subMesh.animationSubGeometry;
         for (state in _animationParticleStates)state.setRenderState(stage3DProxy, renderable, animationSubGeometry, animationRegisterCache, camera);
 //process animator subgeometries
-        if (subMesh.animatorSubGeometry==null && _animatorParticleStates.length>0) generateAnimatorSubGeometry(subMesh);
+        if (subMesh.animatorSubGeometry == null && _animatorParticleStates.length > 0) generateAnimatorSubGeometry(subMesh);
         var animatorSubGeometry:AnimationSubGeometry = subMesh.animatorSubGeometry;
         for (state in _animatorParticleStates)state.setRenderState(stage3DProxy, renderable, animatorSubGeometry, animationRegisterCache, camera);
         stage3DProxy.context3D.setProgramConstantsFromVector(Context3DProgramType.VERTEX, animationRegisterCache.vertexConstantOffset, animationRegisterCache.vertexConstantData, animationRegisterCache.numVertexConstant);
@@ -135,8 +135,8 @@ class ParticleAnimator extends AnimatorBase implements IAnimator {
 
     private function generateAnimatorSubGeometry(subMesh:SubMesh):Void {
         var subGeometry:ISubGeometry = subMesh.subGeometry;
-        _animatorSubGeometries.set(subGeometry,new AnimationSubGeometry());
-        var animatorSubGeometry:AnimationSubGeometry = subMesh.animatorSubGeometry =_animatorSubGeometries.get(subGeometry) ;
+        _animatorSubGeometries.set(subGeometry, new AnimationSubGeometry());
+        var animatorSubGeometry:AnimationSubGeometry = subMesh.animatorSubGeometry = _animatorSubGeometries.get(subGeometry) ;
 //create the vertexData vector that will be used for local state data
         animatorSubGeometry.createVertexData(subGeometry.numVertices, _totalLenOfOneVertex);
 //pass the particles data to the animator subGeometry

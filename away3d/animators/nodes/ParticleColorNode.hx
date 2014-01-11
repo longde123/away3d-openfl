@@ -73,9 +73,9 @@ class ParticleColorNode extends ParticleNodeBase {
         _usesCycle = usesCycle;
         _usesPhase = usesPhase;
         _startColor = startColor ;
-        if(_startColor==null)_startColor=new ColorTransform();
+        if (_startColor == null)_startColor = new ColorTransform();
         _endColor = endColor;
-        if(_endColor==null)_endColor= new ColorTransform();
+        if (_endColor == null)_endColor = new ColorTransform();
         _cycleDuration = cycleDuration;
         _cyclePhase = cyclePhase;
         super("ParticleColor", mode, ((_usesMultiplier && _usesOffset)) ? 16 : 8, ParticleAnimationSet.COLOR_PRIORITY);
@@ -114,7 +114,7 @@ class ParticleColorNode extends ParticleNodeBase {
                 var deltaOffsetValue:ShaderRegisterElement = ((_mode == ParticlePropertiesMode.LOCAL_STATIC)) ? animationRegisterCache.getFreeVertexAttribute() : animationRegisterCache.getFreeVertexConstant();
                 animationRegisterCache.setRegisterIndex(this, START_OFFSET_INDEX, startOffsetValue.index);
                 animationRegisterCache.setRegisterIndex(this, DELTA_OFFSET_INDEX, deltaOffsetValue.index);
-                code += "mul " + temp + "," + deltaOffsetValue + "," + ((_usesCycle) ? "sin ": animationRegisterCache.vertexLife.toString()) + "\n";
+                code += "mul " + temp + "," + deltaOffsetValue + "," + ((_usesCycle) ? "sin " : animationRegisterCache.vertexLife.toString()) + "\n";
                 code += "add " + temp + "," + temp + "," + startOffsetValue + "\n";
                 code += "add " + animationRegisterCache.colorAddTarget + "," + temp + "," + animationRegisterCache.colorAddTarget + "\n";
             }
@@ -144,11 +144,11 @@ class ParticleColorNode extends ParticleNodeBase {
 	 */
 
     override public function generatePropertyOfOneParticle(param:ParticleProperties):Void {
-        var startColor:ColorTransform = Reflect.field(param,COLOR_START_COLORTRANSFORM);
-        if (startColor==null) throw (new Error("there is no " + COLOR_START_COLORTRANSFORM + " in param!"));
-        var endColor:ColorTransform = Reflect.field(param,COLOR_END_COLORTRANSFORM);
-        if (endColor==null) throw (new Error("there is no " + COLOR_END_COLORTRANSFORM + " in param!"));
-        var i:Int=0;
+        var startColor:ColorTransform = Reflect.field(param, COLOR_START_COLORTRANSFORM);
+        if (startColor == null) throw (new Error("there is no " + COLOR_START_COLORTRANSFORM + " in param!"));
+        var endColor:ColorTransform = Reflect.field(param, COLOR_END_COLORTRANSFORM);
+        if (endColor == null) throw (new Error("there is no " + COLOR_END_COLORTRANSFORM + " in param!"));
+        var i:Int = 0;
         if (!_usesCycle) {
 //multiplier
             if (_usesMultiplier) {

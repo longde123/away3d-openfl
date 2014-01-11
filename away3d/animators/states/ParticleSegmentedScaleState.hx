@@ -100,15 +100,15 @@ class ParticleSegmentedScaleState extends ParticleStateBase {
         _scaleData.push(_startScale.x);
         _scaleData.push(_startScale.y);
         _scaleData.push(_startScale.z);
-        _scaleData.push( 0);
+        _scaleData.push(0);
         i = 0;
         while (i < _numSegmentPoint) {
-            if (i == 0){
+            if (i == 0) {
                 _scaleData.push((_segmentPoints[i].x - _startScale.x) / _timeLifeData[i]);
                 _scaleData.push((_segmentPoints[i].y - _startScale.y) / _timeLifeData[i]);
                 _scaleData.push((_segmentPoints[i].z - _startScale.z) / _timeLifeData[i]);
-                _scaleData.push( _timeLifeData[i]);
-            } else{
+                _scaleData.push(_timeLifeData[i]);
+            } else {
                 _scaleData.push((_segmentPoints[i].x - _segmentPoints[i - 1].x) / _timeLifeData[i]);
                 _scaleData.push((_segmentPoints[i].y - _segmentPoints[i - 1].y) / _timeLifeData[i]);
                 _scaleData.push((_segmentPoints[i].z - _segmentPoints[i - 1].z) / _timeLifeData[i]);
@@ -116,12 +116,12 @@ class ParticleSegmentedScaleState extends ParticleStateBase {
             }
             i++;
         }
-        if (_numSegmentPoint == 0){
+        if (_numSegmentPoint == 0) {
             _scaleData.push(_endScale.x - _startScale.x);
             _scaleData.push(_endScale.y - _startScale.y);
             _scaleData.push(_endScale.z - _startScale.z);
             _scaleData.push(1);
-        }else {
+        } else {
             _scaleData.push((_endScale.x - _segmentPoints[i - 1].x) / _timeLifeData[i]);
             _scaleData.push((_endScale.y - _segmentPoints[i - 1].y) / _timeLifeData[i]);
             _scaleData.push((_endScale.z - _segmentPoints[i - 1].z) / _timeLifeData[i]);

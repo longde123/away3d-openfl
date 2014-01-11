@@ -87,7 +87,7 @@ class UVAnimator extends AnimatorBase implements IAnimator {
 
     public function set_autoTranslate(b:Bool):Bool {
         _autoTranslate = b;
-        if (b && _translateIncrease==null) _translateIncrease = Vector.ofArray(cast [0, 0]);
+        if (b && _translateIncrease == null) _translateIncrease = Vector.ofArray(cast [0, 0]);
         return b;
     }
 
@@ -101,7 +101,7 @@ class UVAnimator extends AnimatorBase implements IAnimator {
 	 */
 
     public function setTranslateIncrease(u:Float, v:Float):Void {
-        if (_translateIncrease==null) _translateIncrease = Vector.ofArray(cast [0, 0]);
+        if (_translateIncrease == null) _translateIncrease = Vector.ofArray(cast [0, 0]);
         _translateIncrease[0] = u;
         _translateIncrease[1] = v;
     }
@@ -117,7 +117,7 @@ class UVAnimator extends AnimatorBase implements IAnimator {
     public function setRenderState(stage3DProxy:Stage3DProxy, renderable:IRenderable, vertexConstantOffset:Int, vertexStreamOffset:Int, camera:Camera3D):Void {
         var material:TextureMaterial = cast(renderable.material, TextureMaterial) ;
         var subMesh:SubMesh = cast(renderable, SubMesh) ;
-        if (material==null || subMesh==null) return;
+        if (material == null || subMesh == null) return;
         if (autoTranslate) {
             _deltaFrame.offsetU += _translateIncrease[0];
             _deltaFrame.offsetV += _translateIncrease[1];
@@ -163,7 +163,7 @@ class UVAnimator extends AnimatorBase implements IAnimator {
         var currentUVFrame:UVAnimationFrame = _activeUVState.currentUVFrame;
         var nextUVFrame:UVAnimationFrame = _activeUVState.nextUVFrame;
         var blendWeight:Float = _activeUVState.blendWeight;
-        if (currentUVFrame !=null && nextUVFrame!=null ) {
+        if (currentUVFrame != null && nextUVFrame != null) {
             _deltaFrame.offsetU = currentUVFrame.offsetU + blendWeight * (nextUVFrame.offsetU - currentUVFrame.offsetU);
             _deltaFrame.offsetV = currentUVFrame.offsetV + blendWeight * (nextUVFrame.offsetV - currentUVFrame.offsetV);
             _deltaFrame.scaleU = currentUVFrame.scaleU + blendWeight * (nextUVFrame.scaleU - currentUVFrame.scaleU);

@@ -35,7 +35,7 @@ class ParticleRotationalVelocityNode extends ParticleNodeBase {
         _stateClass = ParticleRotationalVelocityState;
         super("ParticleRotationalVelocity", mode, 4);
         _rotationalVelocity = rotationalVelocity ;
-        if(  _rotationalVelocity ==null)   _rotationalVelocity =new Vector3D();
+        if (_rotationalVelocity == null) _rotationalVelocity = new Vector3D();
     }
 
 /**
@@ -121,8 +121,8 @@ class ParticleRotationalVelocityNode extends ParticleNodeBase {
 
     override public function generatePropertyOfOneParticle(param:ParticleProperties):Void {
 //(Vector3d.x,Vector3d.y,Vector3d.z) is rotation axis,Vector3d.w is cycle duration
-        var rotate:Vector3D = Reflect.field(param,ROTATIONALVELOCITY_VECTOR3D);
-        if (rotate==null) throw (new Error("there is no " + ROTATIONALVELOCITY_VECTOR3D + " in param!"));
+        var rotate:Vector3D = Reflect.field(param, ROTATIONALVELOCITY_VECTOR3D);
+        if (rotate == null) throw (new Error("there is no " + ROTATIONALVELOCITY_VECTOR3D + " in param!"));
         if (rotate.length <= 0) rotate.z = 1
         else rotate.normalize();
         _oneData[0] = rotate.x;

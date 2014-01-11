@@ -34,7 +34,7 @@ class ParticleInitialColorNode extends ParticleNodeBase {
         _usesMultiplier = usesMultiplier;
         _usesOffset = usesOffset;
         _initialColor = initialColor ;
-        if(_initialColor ==null)_initialColor = new ColorTransform();
+        if (_initialColor == null)_initialColor = new ColorTransform();
         super("ParticleInitialColor", mode, ((_usesMultiplier && _usesOffset)) ? 8 : 4, ParticleAnimationSet.COLOR_PRIORITY);
     }
 
@@ -74,9 +74,9 @@ class ParticleInitialColorNode extends ParticleNodeBase {
 	 */
 
     override public function generatePropertyOfOneParticle(param:ParticleProperties):Void {
-        var initialColor:ColorTransform = Reflect.field(param,COLOR_INITIAL_COLORTRANSFORM);
-        if (initialColor==null) throw (new Error("there is no " + COLOR_INITIAL_COLORTRANSFORM + " in param!"));
-        var i:Int=0;
+        var initialColor:ColorTransform = Reflect.field(param, COLOR_INITIAL_COLORTRANSFORM);
+        if (initialColor == null) throw (new Error("there is no " + COLOR_INITIAL_COLORTRANSFORM + " in param!"));
+        var i:Int = 0;
 //multiplier
         if (_usesMultiplier) {
             _oneData[i++] = initialColor.redMultiplier;

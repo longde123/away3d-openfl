@@ -60,6 +60,6 @@ interface ISound3DDriver extends IEventDispatcher {
 	 *
 	 * @param v Sound source position vector relative to the listener.
 	 */
-    function updateReferenceVector(v:Vector3D):Void; 
+    function updateReferenceVector(v:Vector3D):Void;
 }
 

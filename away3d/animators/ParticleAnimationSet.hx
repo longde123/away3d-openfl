@@ -256,8 +256,8 @@ class ParticleAnimationSet extends AnimationSetBase implements IAnimationSet {
         if (geometry == null) throw (new Error("Particle animation can only be performed on a ParticleGeometry object"));
         var i:Int;
         var j:Int;
-        var animationSubGeometry:AnimationSubGeometry=null;
-        var newAnimationSubGeometry:Bool=false;
+        var animationSubGeometry:AnimationSubGeometry = null;
+        var newAnimationSubGeometry:Bool = false;
         var subGeometry:ISubGeometry;
         var subMesh:SubMesh;
         var localNode:ParticleNodeBase;
@@ -284,7 +284,7 @@ class ParticleAnimationSet extends AnimationSetBase implements IAnimationSet {
             animationSubGeometry.createVertexData(subGeometry.numVertices, _totalLenOfOneVertex);
             i++;
         }
-        if (newAnimationSubGeometry==false) return;
+        if (newAnimationSubGeometry == false) return;
         var particles:Vector<ParticleData> = geometry.particles;
         var particlesLength:Int = particles.length;
         var numParticles:Int = geometry.numParticles;
@@ -349,7 +349,7 @@ class ParticleAnimationSet extends AnimationSetBase implements IAnimationSet {
                     }
 
 //store particle properties if they need to be retreived for dynamic local nodes
-                    if (_localDynamicNodes.length>0) animationSubGeometry.animationParticles.push(new ParticleAnimationData(i, particleProperties.startTime, particleProperties.duration, particleProperties.delay, particle));
+                    if (_localDynamicNodes.length > 0) animationSubGeometry.animationParticles.push(new ParticleAnimationData(i, particleProperties.startTime, particleProperties.duration, particleProperties.delay, particle));
                     animationSubGeometry.numProcessedVertices += numVertices;
 //next index
                     j++;

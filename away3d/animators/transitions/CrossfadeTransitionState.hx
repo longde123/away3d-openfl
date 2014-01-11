@@ -21,13 +21,13 @@ class CrossfadeTransitionState extends SkeletonBinaryLERPState {
 	 */
 
     override private function updateTime(time:Int):Void {
-        blendWeight = Math.abs(time -__skeletonAnimationNode.startBlend) / (1000 * __skeletonAnimationNode.blendSpeed);
+        blendWeight = Math.abs(time - __skeletonAnimationNode.startBlend) / (1000 * __skeletonAnimationNode.blendSpeed);
         if (blendWeight >= 1) {
             blendWeight = 1;
-			if (_animationStateTransitionComplete == null){
-                _animationStateTransitionComplete  =  new AnimationStateEvent(AnimationStateEvent.TRANSITION_COMPLETE, _animator, this, __skeletonAnimationNode);
+            if (_animationStateTransitionComplete == null) {
+                _animationStateTransitionComplete = new AnimationStateEvent(AnimationStateEvent.TRANSITION_COMPLETE, _animator, this, __skeletonAnimationNode);
             }
-            _skeletonAnimationNode.dispatchEvent(_animationStateTransitionComplete  );
+            _skeletonAnimationNode.dispatchEvent(_animationStateTransitionComplete);
         }
         super.updateTime(time);
     }

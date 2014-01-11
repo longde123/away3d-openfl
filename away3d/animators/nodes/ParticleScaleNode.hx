@@ -94,8 +94,8 @@ class ParticleScaleNode extends ParticleNodeBase {
 	 */
 
     override public function generatePropertyOfOneParticle(param:ParticleProperties):Void {
-        var scale:Vector3D = Reflect.field( param,SCALE_VECTOR3D);
-        if (scale==null) throw (new Error("there is no " + SCALE_VECTOR3D + " in param!"));
+        var scale:Vector3D = Reflect.field(param, SCALE_VECTOR3D);
+        if (scale == null) throw (new Error("there is no " + SCALE_VECTOR3D + " in param!"));
         if (_usesCycle) {
             _oneData[0] = (scale.x + scale.y) / 2;
             _oneData[1] = Math.abs(scale.x - scale.y) / 2;

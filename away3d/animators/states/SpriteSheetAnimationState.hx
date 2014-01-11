@@ -68,7 +68,7 @@ class SpriteSheetAnimationState extends AnimationClipState implements ISpriteShe
 	 */
 
     private function get_totalFrames():Int {
-        return ((_frames==null)) ? 0 : _frames.length;
+        return ((_frames == null)) ? 0 : _frames.length;
     }
 
 /**

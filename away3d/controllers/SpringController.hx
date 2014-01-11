@@ -54,7 +54,7 @@ class SpringController extends LookAtController {
 
 // prevents unused warning
         var offs:Vector3D;
-        if (_lookAtObject==null || _targetObject==null) return;
+        if (_lookAtObject == null || _targetObject == null) return;
         offs = _lookAtObject.transform.deltaTransformVector(positionOffset);
         _desiredPosition.x = _lookAtObject.x + offs.x;
         _desiredPosition.y = _lookAtObject.y + offs.y;

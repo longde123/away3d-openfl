@@ -203,7 +203,7 @@ class FirstPersonController extends ControllerBase {
         }
         targetObject.rotationX = _currentTiltAngle;
         targetObject.rotationY = _currentPanAngle;
-        if (!Math.isNaN(_walkIncrement) ) {
+        if (!Math.isNaN(_walkIncrement)) {
             if (fly) targetObject.moveForward(_walkIncrement)
             else {
                 targetObject.x += _walkIncrement * Math.sin(_panAngle * MathConsts.DEGREES_TO_RADIANS);

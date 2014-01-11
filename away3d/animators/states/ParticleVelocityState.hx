@@ -55,7 +55,7 @@ class ParticleVelocityState extends ParticleStateBase {
     }
 
     override public function setRenderState(stage3DProxy:Stage3DProxy, renderable:IRenderable, animationSubGeometry:AnimationSubGeometry, animationRegisterCache:AnimationRegisterCache, camera:Camera3D):Void {
-        if (_particleVelocityNode.mode == ParticlePropertiesMode.LOCAL_DYNAMIC && _dynamicPropertiesDirty.get(animationSubGeometry)==null) updateDynamicProperties(animationSubGeometry);
+        if (_particleVelocityNode.mode == ParticlePropertiesMode.LOCAL_DYNAMIC && _dynamicPropertiesDirty.get(animationSubGeometry) == null) updateDynamicProperties(animationSubGeometry);
         var index:Int = animationRegisterCache.getRegisterIndex(_animationNode, ParticleVelocityNode.VELOCITY_INDEX);
         if (_particleVelocityNode.mode == ParticlePropertiesMode.GLOBAL) animationRegisterCache.setVertexConst(index, _velocity.x, _velocity.y, _velocity.z)
         else animationSubGeometry.activateVertexBuffer(index, _particleVelocityNode.dataOffset, stage3DProxy, Context3DVertexBufferFormat.FLOAT_3);

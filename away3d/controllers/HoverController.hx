@@ -208,7 +208,7 @@ class HoverController extends LookAtController {
 	 * Creates a new <code>HoverController</code> object.
 	 */
 
-    public function new(targetObject:Entity = null, lookAtObject:ObjectContainer3D = null, panAngle:Float = 0, tiltAngle:Float = 90, distance:Float = 1000, minTiltAngle:Float = -90, maxTiltAngle:Float = 90,? minPanAngle:Float = null,? maxPanAngle:Float = null, ?steps:Int = 8, ?yFactor:Float = 2, ?wrapPanAngle:Bool = false) {
+    public function new(targetObject:Entity = null, lookAtObject:ObjectContainer3D = null, panAngle:Float = 0, tiltAngle:Float = 90, distance:Float = 1000, minTiltAngle:Float = -90, maxTiltAngle:Float = 90, ? minPanAngle:Float = null, ? maxPanAngle:Float = null, ?steps:Int = 8, ?yFactor:Float = 2, ?wrapPanAngle:Bool = false) {
         _currentPanAngle = 0;
         _currentTiltAngle = 90;
         _panAngle = 0;
@@ -226,9 +226,9 @@ class HoverController extends LookAtController {
         this.panAngle = panAngle;
         this.tiltAngle = tiltAngle;
         this.minPanAngle = minPanAngle ;
-        if(Math.isNaN( this.minPanAngle)) this.minPanAngle= -MathConsts.Infinity;
+        if (Math.isNaN(this.minPanAngle)) this.minPanAngle = -MathConsts.Infinity;
         this.maxPanAngle = maxPanAngle;
-        if(Math.isNaN( this.maxPanAngle)) this.maxPanAngle= MathConsts.Infinity;
+        if (Math.isNaN(this.maxPanAngle)) this.maxPanAngle = MathConsts.Infinity;
         this.minTiltAngle = minTiltAngle;
         this.maxTiltAngle = maxTiltAngle;
         this.steps = steps;
@@ -284,7 +284,7 @@ class HoverController extends LookAtController {
                 _currentPanAngle = _panAngle;
             }
         }
-        var pos:Vector3D = ((lookAtObject!=null)) ? lookAtObject.position : ((lookAtPosition!=null)) ? lookAtPosition : _origin;
+        var pos:Vector3D = ((lookAtObject != null)) ? lookAtObject.position : ((lookAtPosition != null)) ? lookAtPosition : _origin;
         targetObject.x = pos.x + distance * Math.sin(_currentPanAngle * MathConsts.DEGREES_TO_RADIANS) * Math.cos(_currentTiltAngle * MathConsts.DEGREES_TO_RADIANS);
         targetObject.z = pos.z + distance * Math.cos(_currentPanAngle * MathConsts.DEGREES_TO_RADIANS) * Math.cos(_currentTiltAngle * MathConsts.DEGREES_TO_RADIANS);
         targetObject.y = pos.y + distance * Math.sin(_currentTiltAngle * MathConsts.DEGREES_TO_RADIANS) * yFactor;

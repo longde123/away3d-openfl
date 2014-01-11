@@ -52,7 +52,7 @@ class Sound3D extends ObjectContainer3D {
         _sound = sound;
         _reference = reference;
         _driver = driver;
-        if(_driver==null)_driver= new SimplePanVolumeDriver();
+        if (_driver == null)_driver = new SimplePanVolumeDriver();
         _driver.sourceSound = _sound;
         _driver.volume = volume;
         _driver.scale = scale;

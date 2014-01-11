@@ -45,9 +45,9 @@ class ParticleBezierCurveNode extends ParticleNodeBase {
         super("ParticleBezierCurve", mode, 6);
         _stateClass = ParticleBezierCurveState;
         _controlPoint = controlPoint;
-        if(_controlPoint==null)_controlPoint=new Vector3D();
+        if (_controlPoint == null)_controlPoint = new Vector3D();
         _endPoint = endPoint ;
-        if(_endPoint==null)_endPoint=new Vector3D();
+        if (_endPoint == null)_endPoint = new Vector3D();
     }
 
 /**
@@ -102,10 +102,10 @@ class ParticleBezierCurveNode extends ParticleNodeBase {
 	 */
 
     override public function generatePropertyOfOneParticle(param:ParticleProperties):Void {
-        var bezierControl:Vector3D = Reflect.field(param,BEZIER_CONTROL_VECTOR3D);
-        if (bezierControl==null) throw new Error("there is no " + BEZIER_CONTROL_VECTOR3D + " in param!");
-        var bezierEnd:Vector3D =  Reflect.field(param,BEZIER_END_VECTOR3D);
-        if (bezierEnd==null) throw new Error("there is no " + BEZIER_END_VECTOR3D + " in param!");
+        var bezierControl:Vector3D = Reflect.field(param, BEZIER_CONTROL_VECTOR3D);
+        if (bezierControl == null) throw new Error("there is no " + BEZIER_CONTROL_VECTOR3D + " in param!");
+        var bezierEnd:Vector3D = Reflect.field(param, BEZIER_END_VECTOR3D);
+        if (bezierEnd == null) throw new Error("there is no " + BEZIER_END_VECTOR3D + " in param!");
         _oneData[0] = bezierControl.x;
         _oneData[1] = bezierControl.y;
         _oneData[2] = bezierControl.z;

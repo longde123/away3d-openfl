@@ -35,7 +35,7 @@ class ParticleRotateToPositionNode extends ParticleNodeBase {
         super("ParticleRotateToPosition", mode, 3, 3);
         _stateClass = ParticleRotateToPositionState;
         _position = position;
-        if(_position==null)_position=new Vector3D();
+        if (_position == null)_position = new Vector3D();
     }
 
 /**
@@ -191,8 +191,8 @@ class ParticleRotateToPositionNode extends ParticleNodeBase {
 	 */
 
     override public function generatePropertyOfOneParticle(param:ParticleProperties):Void {
-        var offset:Vector3D = Reflect.field(param,POSITION_VECTOR3D);
-        if (offset==null) throw (new Error("there is no " + POSITION_VECTOR3D + " in param!"));
+        var offset:Vector3D = Reflect.field(param, POSITION_VECTOR3D);
+        if (offset == null) throw (new Error("there is no " + POSITION_VECTOR3D + " in param!"));
         _oneData[0] = offset.x;
         _oneData[1] = offset.y;
         _oneData[2] = offset.z;

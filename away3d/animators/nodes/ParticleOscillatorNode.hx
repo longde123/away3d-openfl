@@ -35,7 +35,7 @@ class ParticleOscillatorNode extends ParticleNodeBase {
         super("ParticleOscillator", mode, 4);
         _stateClass = ParticleOscillatorState;
         _oscillator = oscillator ;
-        if(_oscillator==null)_oscillator =new Vector3D();
+        if (_oscillator == null)_oscillator = new Vector3D();
     }
 
 /**
@@ -81,8 +81,8 @@ class ParticleOscillatorNode extends ParticleNodeBase {
 
     override public function generatePropertyOfOneParticle(param:ParticleProperties):Void {
 //(Vector3D.x,Vector3D.y,Vector3D.z) is oscillator axis, Vector3D.w is oscillator cycle duration
-        var drift:Vector3D =Reflect.field( param,OSCILLATOR_VECTOR3D);
-        if (drift==null) throw (new Error("there is no " + OSCILLATOR_VECTOR3D + " in param!"));
+        var drift:Vector3D = Reflect.field(param, OSCILLATOR_VECTOR3D);
+        if (drift == null) throw (new Error("there is no " + OSCILLATOR_VECTOR3D + " in param!"));
         _oneData[0] = drift.x;
         _oneData[1] = drift.y;
         _oneData[2] = drift.z;
