@@ -2,7 +2,7 @@
  * A Quaternion object which can be used to represent rotations.
  */
 package away3d.core.math;
-
+import flash.geom.Orientation3D;
 import flash.Vector;
 import flash.geom.Matrix3D;
 import flash.geom.Vector3D;
@@ -305,7 +305,7 @@ class Quaternion {
 			tmp= matrix.decompose();
 		#end
 #if flash
-			tmp = matrix.decompose(Orientation3D.QUATERNION);
+			tmp = matrix.decompose(Orientation3D.QUATERNION);  
 		#end
         var v:Vector3D = tmp[1];
         x = v.x;

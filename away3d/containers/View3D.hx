@@ -1,5 +1,7 @@
 package away3d.containers;
 
+import flash.errors.Error;
+import flash.geom.Transform;
 import flash.Lib;
 import away3d.core.managers.Touch3DManager;
 import away3d.events.Scene3DEvent;
@@ -267,7 +269,7 @@ class View3D extends Sprite {
 
     public function set_filters(value:Array<Dynamic>):Array<Dynamic> {
         throw new Error("filters is not supported in View3D. Use filters3d instead.");
-        return value;
+        return value;  
     }
 #end
 
@@ -915,7 +917,7 @@ class View3D extends Sprite {
     @:setter(rotationZ) function set_rotationZ(value:Float):Void {
     }
 
-    @:setter(transform) function set_transform(value:Transform):Void {
+    @:setter(transform) function set_transform(value:Transform):Void {  
     }
 
     @:setter(scaleX) function set_scaleX(value:Float):Void {

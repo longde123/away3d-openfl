@@ -13,6 +13,7 @@
 package away3d.core.managers;
 
 
+import flash.display.Shape;
 import flash.errors.Error;
 import away3d.debug.Debug;
 import away3d.events.Stage3DEvent;
@@ -49,7 +50,7 @@ class Stage3DProxy extends EventDispatcher {
     public var mouse3DManager(get_mouse3DManager, set_mouse3DManager):Mouse3DManager;
     public var touch3DManager(get_touch3DManager, set_touch3DManager):Touch3DManager;
 #if flash
-    static private var _frameEventDriver:Shape = new Shape();
+    static private var _frameEventDriver:Shape = new Shape();  
 	#end
     public var _context3D:Context3D;
     public var _stage3DIndex:Int;
