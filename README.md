@@ -14,8 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 
 
-working...
-
+base test...
+https://github.com/longde123/away3d-openfl-test
 
 it need 
 
