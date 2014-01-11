@@ -38,7 +38,7 @@ import flash.display3D.Context3D;
 import flash.display3D.Program3D;
 import flash.display.BitmapData;
 #if (cpp || neko || js)
-using OpenFLStage3D;
+using away3d.Stage3DUtils;
 #end
 class ShaderPicker implements IPicker {
     public var onlyMouseEnabled(get_onlyMouseEnabled, set_onlyMouseEnabled):Bool;

@@ -7,7 +7,7 @@ import flash.Vector;
 import flash.geom.Matrix3D;
 import flash.geom.Vector3D;
 #if (cpp || neko || js)
-using OpenFLStage3D;
+using away3d.Stage3DUtils;
 #end
 class Quaternion {
     public var magnitude(get_magnitude, never):Float;

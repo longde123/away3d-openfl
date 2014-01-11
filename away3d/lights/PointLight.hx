@@ -16,7 +16,7 @@ import away3d.lights.shadowmaps.ShadowMapperBase;
 import flash.geom.Matrix3D;
 import flash.geom.Vector3D;
 #if (cpp || neko || js)
-using OpenFLStage3D;
+using away3d.Stage3DUtils;
 #end
 class PointLight extends LightBase {
     public var radius(get_radius, set_radius):Float;

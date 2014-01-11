@@ -8,7 +8,7 @@ import flash.geom.Vector3D;
 import flash.Vector;
 import flash.geom.Matrix3D;
 #if (cpp || neko || js)
-using OpenFLStage3D;
+using away3d.Stage3DUtils;
 #end
 class Matrix3DUtils {
 

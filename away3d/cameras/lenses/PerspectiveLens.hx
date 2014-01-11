@@ -7,7 +7,7 @@ import flash.Vector;
 import away3d.core.math.Matrix3DUtils;
 import flash.geom.Vector3D;
 #if (cpp || neko || js)
-using OpenFLStage3D;
+using away3d.Stage3DUtils;
 #end
 class PerspectiveLens extends LensBase {
     public var fieldOfView(get_fieldOfView, set_fieldOfView):Float;

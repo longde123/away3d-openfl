@@ -21,7 +21,7 @@ import away3d.events.CameraEvent;
 import away3d.events.LensEvent;
 import away3d.library.assets.AssetType;
 #if (cpp || neko || js)
-using OpenFLStage3D;
+using away3d.Stage3DUtils;
 #end
 class Camera3D extends Entity {
     public var frustumPlanes(get_frustumPlanes, never):Vector<Plane3D>;

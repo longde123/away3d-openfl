@@ -69,7 +69,7 @@ import flash.geom.Vector3D;
 import away3d.library.assets.NamedAssetBase;
 import away3d.events.Object3DEvent;
 #if (cpp || neko || js)
-using OpenFLStage3D;
+using away3d.Stage3DUtils;
 #end
 
 class Object3D extends NamedAssetBase {
