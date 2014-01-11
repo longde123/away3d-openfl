@@ -35,6 +35,7 @@ class Skeleton extends NamedAssetBase implements IAsset {
     public function new() {
 // in the long run, it might be a better idea to not store Joint objects, but keep all data in Vectors, that we can upload easily?
         joints = new Vector<SkeletonJoint>();
+        super();
     }
 
 /**

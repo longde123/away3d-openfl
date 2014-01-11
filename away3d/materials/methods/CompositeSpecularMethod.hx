@@ -23,7 +23,7 @@ class CompositeSpecularMethod extends BasicSpecularMethod {
 	 * @param baseSpecularMethod The base specular method on which this method's shading is based.
 	 */
 
-    public function new(modulateMethod:BasicSpecularMethod, baseSpecularMethod:BasicSpecularMethod = null) {
+    public function new(modulateMethod:Dynamic, baseSpecularMethod:BasicSpecularMethod = null) {
         super();
         _baseMethod = baseSpecularMethod ;
 		if(_baseMethod==null)_baseMethod= new BasicSpecularMethod();
@@ -35,7 +35,7 @@ class CompositeSpecularMethod extends BasicSpecularMethod {
 	 * @inheritDoc
 	 */
 
-    override private function initVO(vo:MethodVO):Void {
+    override public function initVO(vo:MethodVO):Void {
         _baseMethod.initVO(vo);
     }
 

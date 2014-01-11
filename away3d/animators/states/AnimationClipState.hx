@@ -75,7 +75,7 @@ class AnimationClipState extends AnimationStateBase {
 	 */
 
     override public function phase(value:Float):Void {
-        var time:Int = value * _animationClipNode.totalDuration + _startTime;
+        var time:Int = Std.int(value * _animationClipNode.totalDuration + _startTime);
         if (_time == time - _startTime) return;
         updateTime(time);
     }
@@ -124,7 +124,7 @@ class AnimationClipState extends AnimationStateBase {
 
         else if (_animationClipNode.fixedFrameRate) {
             var t:Float = time / totalDuration * lastFrame;
-            _currentFrame = t;
+            _currentFrame = Std.int(t);
             _blendWeight = t - _currentFrame;
             _nextFrame = _currentFrame + 1;
         }

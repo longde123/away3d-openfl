@@ -22,10 +22,12 @@ class CompositeDiffuseMethod extends BasicDiffuseMethod {
 	 * @param baseDiffuseMethod The base diffuse method on which this method's shading is based.
 	 */
 
-    public function new(modulateMethod:Dynamic -> Void = null, baseDiffuseMethod:BasicDiffuseMethod = null) {
-        _baseMethod = baseDiffuseMethod || new BasicDiffuseMethod();
+    public function new(modulateMethod:Dynamic = null,?baseDiffuseMethod:BasicDiffuseMethod = null) {
+        _baseMethod = baseDiffuseMethod ;
+        if(_baseMethod==null) _baseMethod=new BasicDiffuseMethod();
         _baseMethod._modulateMethod = modulateMethod;
         _baseMethod.addEventListener(ShadingMethodEvent.SHADER_INVALIDATED, onShaderInvalidated);
+        super();
     }
 
 /**
@@ -37,7 +39,7 @@ class CompositeDiffuseMethod extends BasicDiffuseMethod {
     }
 
     public function set_baseMethod(value:BasicDiffuseMethod):BasicDiffuseMethod {
-        if (_baseMethod == value) return;
+        if (_baseMethod == value) return value;
         _baseMethod.removeEventListener(ShadingMethodEvent.SHADER_INVALIDATED, onShaderInvalidated);
         _baseMethod = value;
         _baseMethod.addEventListener(ShadingMethodEvent.SHADER_INVALIDATED, onShaderInvalidated, false, 0, true);
@@ -49,7 +51,7 @@ class CompositeDiffuseMethod extends BasicDiffuseMethod {
 	 * @inheritDoc
 	 */
 
-    override private function initVO(vo:MethodVO):Void {
+    override public function initVO(vo:MethodVO):Void {
         _baseMethod.initVO(vo);
     }
 

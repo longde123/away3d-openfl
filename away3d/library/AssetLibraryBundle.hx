@@ -153,6 +153,7 @@
 package away3d.library;
 
 
+import haxe.ds.StringMap;
 import flash.errors.Error;
 import flash.Vector;
 import away3d.events.AssetEvent;
@@ -173,27 +174,62 @@ import away3d.loaders.parsers.ParserBase;
 import flash.events.EventDispatcher;
 import flash.net.URLRequest;
 
-class AssetLibraryBundle extends EventDispatcher {
-    public var conflictStrategy(get_conflictStrategy, set_conflictStrategy):ConflictStrategyBase;
-    public var conflictPrecedence(get_conflictPrecedence, set_conflictPrecedence):String;
+
+/**
+ * AssetLibraryBundle enforces a multiton pattern and is not intended to be instanced directly.
+ * Its purpose is to create a container for 3D data management, both before and after parsing.
+ * If you are interested in creating multiple library bundles, please use the <code>getInstance()</code> method.
+ */
+class AssetLibraryBundle extends EventDispatcher
+{
+/**
+	 * Defines which strategy should be used for resolving naming conflicts, when two library
+	 * assets are given the same name. By default, <code>ConflictStrategy.APPEND_NUM_SUFFIX</code>
+	 * is used which means that a numeric suffix is appended to one of the assets. The
+	 * <code>conflictPrecedence</code> property defines which of the two conflicting assets will
+	 * be renamed.
+	 *
+	 * @see a3d.library.naming.ConflictStrategy
+	 * @see a3d.library.AssetLibrary.conflictPrecedence
+	*/
+    public var conflictStrategy(get, set):ConflictStrategyBase;
+
+/**
+	 * Defines which asset should have precedence when resolving a naming conflict between
+	 * two assets of which one has just been renamed by the user or by a parser. By default
+	 * <code>ConflictPrecedence.FAVOR_NEW</code> is used, meaning that the newly renamed
+	 * asset will keep it's new name while the older asset gets renamed to not conflict.
+	 *
+	 * This property is ignored for conflict strategies that do not actually rename an
+	 * asset automatically, such as ConflictStrategy.IGNORE and ConflictStrategy.THROW_ERROR.
+	 *
+	 * @see a3d.library.naming.ConflictPrecedence
+	 * @see a3d.library.naming.ConflictStrategy
+	*/
+    public var conflictPrecedence(get, set):String;
 
     private var _loadingSessions:Vector<AssetLoader>;
+
     private var _strategy:ConflictStrategyBase;
     private var _strategyPreference:String;
+
     private var _assets:Vector<IAsset>;
-    private var _assetDictionary:Dynamic;
+    private var _assetDictionary:StringMap<StringMap<IAsset>>;
     private var _assetDictDirty:Bool;
+
 /**
 	 * Creates a new <code>AssetLibraryBundle</code> object.
 	 *
 	 * @param me A multiton enforcer for the AssetLibraryBundle ensuring it cannnot be instanced.
 	 */
+    public function new()
+    {
+        super();
 
-    public function new(me:AssetLibraryBundleSingletonEnforcer) {
-        me = me;
         _assets = new Vector<IAsset>();
-        _assetDictionary = { };
+        _assetDictionary = new StringMap<StringMap<IAsset>>();
         _loadingSessions = new Vector<AssetLoader>();
+
         conflictStrategy = ConflictStrategy.IGNORE.create();
         conflictPrecedence = ConflictPrecedence.FAVOR_NEW;
     }
@@ -207,70 +243,56 @@ class AssetLibraryBundle extends EventDispatcher {
 	 * @param key Defines which multiton instance should be returned.
 	 * @return An instance of the asset library
 	 */
+    public static function getInstance(key:String = 'default'):AssetLibraryBundle
+    {
+        if (key == null)
+            key = 'default';
 
-    static public function getInstance(key:String = "default"):AssetLibraryBundle {
-        if (!key) key = "default";
-        if (!AssetLibrary._instances.hasOwnProperty(key)) AssetLibrary._instances[key] = new AssetLibraryBundle(new AssetLibraryBundleSingletonEnforcer());
-        return AssetLibrary._instances[key];
+        if (!AssetLibrary._instances.exists(key))
+            AssetLibrary._instances.set(key,new AssetLibraryBundle());
+
+        return AssetLibrary._instances.get(key);
     }
 
 /**
 	 *
 	 */
-
-    public function enableParser(parserClass:Class<Dynamic>):Void {
+    public function enableParser(parserClass:Class<ParserBase>):Void
+    {
         SingleFileLoader.enableParser(parserClass);
     }
 
 /**
 	 *
 	 */
-
-    public function enableParsers(parserClasses:Vector<Class<Dynamic>>):Void {
+    public function enableParsers(parserClasses:Array<Class<ParserBase>>):Void
+    {
         SingleFileLoader.enableParsers(parserClasses);
     }
 
-/**
-	 * Defines which strategy should be used for resolving naming conflicts, when two library
-	 * assets are given the same name. By default, <code>ConflictStrategy.APPEND_NUM_SUFFIX</code>
-	 * is used which means that a numeric suffix is appended to one of the assets. The
-	 * <code>conflictPrecedence</code> property defines which of the two conflicting assets will
-	 * be renamed.
-	 *
-	 * @see away3d.library.naming.ConflictStrategy
-	 * @see away3d.library.AssetLibrary.conflictPrecedence
-	 */
 
-    public function get_conflictStrategy():ConflictStrategyBase {
+    private function get_conflictStrategy():ConflictStrategyBase
+    {
         return _strategy;
     }
 
-    public function set_conflictStrategy(val:ConflictStrategyBase):ConflictStrategyBase {
-        if (!val) throw new Error("namingStrategy must not be null. To ignore naming, use AssetLibrary.IGNORE");
-        _strategy = val.create();
-        return val;
+    private function set_conflictStrategy(val:ConflictStrategyBase):ConflictStrategyBase
+    {
+        if (val == null)
+            throw new Error('namingStrategy must not be null. To ignore naming, use AssetLibrary.IGNORE');
+
+        return _strategy = val.create();
     }
 
-/**
-	 * Defines which asset should have precedence when resolving a naming conflict between
-	 * two assets of which one has just been renamed by the user or by a parser. By default
-	 * <code>ConflictPrecedence.FAVOR_NEW</code> is used, meaning that the newly renamed
-	 * asset will keep it's new name while the older asset gets renamed to not conflict.
-	 *
-	 * This property is ignored for conflict strategies that do not actually rename an
-	 * asset automatically, such as ConflictStrategy.IGNORE and ConflictStrategy.THROW_ERROR.
-	 *
-	 * @see away3d.library.naming.ConflictPrecedence
-	 * @see away3d.library.naming.ConflictStrategy
-	 */
 
-    public function get_conflictPrecedence():String {
+    private function get_conflictPrecedence():String
+    {
         return _strategyPreference;
     }
 
-    public function set_conflictPrecedence(val:String):String {
-        _strategyPreference = val;
-        return val;
+    private function set_conflictPrecedence(val:String):String
+    {
+        return _strategyPreference = val;
     }
 
 /**
@@ -283,12 +305,12 @@ class AssetLibraryBundle extends EventDispatcher {
 	 * @param namespaceFilter Namespace to filter on. Use null to not filter on namespace.
 	 * @param filterFunc Callback function to use when deciding whether an asset should be
 	 * included in the iteration or not. This needs to be a function that takes a single
-	 * parameter of type IAsset and returns a boolean where true means it should be included.
+	 * parameter of type IAsset and returns a Bool where true means it should be included.
 	 *
-	 * @see away3d.library.assets.AssetType
+	 * @see a3d.library.assets.AssetType
 	 */
-
-    public function createIterator(assetTypeFilter:String = null, namespaceFilter:String = null, filterFunc:Dynamic -> Void = null):AssetLibraryIterator {
+    public function createIterator(assetTypeFilter:String = null, namespaceFilter:String = null, filterFunc:Dynamic = null):AssetLibraryIterator
+    {
         return new AssetLibraryIterator(_assets, assetTypeFilter, namespaceFilter, filterFunc);
     }
 
@@ -300,8 +322,8 @@ class AssetLibraryBundle extends EventDispatcher {
 	 * @param ns An optional namespace string under which the file is to be loaded, allowing the differentiation of two resources with identical assets
 	 * @param parser An optional parser object for translating the loaded data into a usable resource. If not provided, AssetLoader will attempt to auto-detect the file type.
 	 */
-
-    public function load(req:URLRequest, context:AssetLoaderContext = null, ns:String = null, parser:ParserBase = null):AssetLoaderToken {
+    public function load(req:URLRequest, context:AssetLoaderContext = null, ns:String = null, parser:ParserBase = null):AssetLoaderToken
+    {
         return loadResource(req, context, ns, parser);
     }
 
@@ -313,22 +335,25 @@ class AssetLibraryBundle extends EventDispatcher {
 	 * @param ns An optional namespace string under which the file is to be loaded, allowing the differentiation of two resources with identical assets
 	 * @param parser An optional parser object for translating the loaded data into a usable resource. If not provided, AssetLoader will attempt to auto-detect the file type.
 	 */
-
-    public function loadData(data:Dynamic, context:AssetLoaderContext = null, ns:String = null, parser:ParserBase = null):AssetLoaderToken {
+    public function loadData(data:Dynamic, context:AssetLoaderContext = null, ns:String = null, parser:ParserBase = null):AssetLoaderToken
+    {
         return parseResource(data, context, ns, parser);
     }
 
 /**
 	 *
 	 */
-
-    public function getAsset(name:String, ns:String = null):IAsset {
-//var asset : IAsset;
-        if (_assetDictDirty) rehashAssetDict();
+    public function getAsset(name:String, ns:String = null):IAsset
+    {
+        if (_assetDictDirty)
+            rehashAssetDict();
         if (ns == null)
             ns = NamedAssetBase.DEFAULT_NAMESPACE;
-        if (!_assetDictionary.hasOwnProperty(ns)) return null;
-        return _assetDictionary[ns][name];
+
+        if (!_assetDictionary.exists(ns))
+            return null;
+
+        return _assetDictionary.get(ns).get(name);
     }
 
 /**
@@ -336,20 +361,40 @@ class AssetLibraryBundle extends EventDispatcher {
 	 * using the method defined by the <code>conflictStrategy</code> and
 	 * <code>conflictPrecedence</code> properties.
 	 */
-
-    public function addAsset(asset:IAsset):Void {
+    public function addAsset(asset:IAsset):Void
+    {
         var ns:String;
         var old:IAsset;
+
 // Bail if asset has already been added.
-        if (_assets.indexOf(asset) >= 0) return;
+        if (_assets.indexOf(asset) >= 0)
+            return;
+
         old = getAsset(asset.name, asset.assetNamespace);
-        ns = asset.assetNamespace || NamedAssetBase.DEFAULT_NAMESPACE;
-        if (old != null) _strategy.resolveConflict(asset, old, _assetDictionary[ns], _strategyPreference);
+        if (asset.assetNamespace != null)
+        {
+            ns = asset.assetNamespace;
+        }
+        else
+        {
+            ns = NamedAssetBase.DEFAULT_NAMESPACE;
+        }
+
+
+        if (old != null)
+        {
+            _strategy.resolveConflict(asset, old, _assetDictionary.get(ns), _strategyPreference);
+        }
+
+//create unique-id (for now this is used in AwayBuilder only
         asset.id = IDUtil.createUID();
+
 // Add it
         _assets.push(asset);
-        if (!_assetDictionary.hasOwnProperty(ns)) _assetDictionary[ns] = { };
-        _assetDictionary[ns][asset.name] = asset;
+        if (!_assetDictionary.exists(ns))
+            _assetDictionary.set(ns, new StringMap<IAsset>());
+        _assetDictionary.get(ns).set(asset.name,asset);
+
         asset.addEventListener(AssetEvent.ASSET_RENAME, onAssetRename);
         asset.addEventListener(AssetEvent.ASSET_CONFLICT_RESOLVED, onAssetConflictResolved);
     }
@@ -362,15 +407,21 @@ class AssetLibraryBundle extends EventDispatcher {
 	 * @param asset The asset which should be removed from this library.
 	 * @param dispose Defines whether the assets should also be disposed.
 	 */
-
-    public function removeAsset(asset:IAsset, dispose:Bool = true):Void {
+    public function removeAsset(asset:IAsset, dispose:Bool = true):Void
+    {
         var idx:Int;
+
         removeAssetFromDict(asset);
+
         asset.removeEventListener(AssetEvent.ASSET_RENAME, onAssetRename);
         asset.removeEventListener(AssetEvent.ASSET_CONFLICT_RESOLVED, onAssetConflictResolved);
+
         idx = _assets.indexOf(asset);
-        if (idx >= 0) _assets.splice(idx, 1);
-        if (dispose) asset.dispose();
+        if (idx >= 0)
+            _assets.splice(idx, 1);
+
+        if (dispose)
+            asset.dispose();
     }
 
 /**
@@ -380,12 +431,14 @@ class AssetLibraryBundle extends EventDispatcher {
 	 * @param ns The namespace to which the desired asset belongs.
 	 * @param dispose Defines whether the assets should also be disposed.
 	 *
-	 * @see away3d.library.AssetLibrary.removeAsset()
+	 * @see a3d.library.AssetLibrary.removeAsset()
 	 */
-
-    public function removeAssetByName(name:String, ns:String = null, dispose:Bool = true):IAsset {
+    public function removeAssetByName(name:String, ns:String = null, dispose:Bool = true):IAsset
+    {
         var asset:IAsset = getAsset(name, ns);
-        if (asset) removeAsset(asset, dispose);
+        if (asset != null)
+            removeAsset(asset, dispose);
+
         return asset;
     }
 
@@ -395,12 +448,15 @@ class AssetLibraryBundle extends EventDispatcher {
 	 *
 	 * @param dispose Defines whether the assets should also be disposed.
 	 */
-
-    public function removeAllAssets(dispose:Bool = true):Void {
-        if (dispose) {
+    public function removeAllAssets(dispose:Bool = true):Void
+    {
+        if (dispose)
+        {
             var asset:IAsset;
-            for (asset in _assets)asset.dispose();
+            for (asset in _assets)
+                asset.dispose();
         }
+
         _assets.length = 0;
         rehashAssetDict();
     }
@@ -413,50 +469,70 @@ class AssetLibraryBundle extends EventDispatcher {
 	 * @param ns The namespace from which all assets should be removed.
 	 * @param dispose Defines whether the assets should also be disposed.
 	 *
-	 * @see away3d.library.AssetLibrary.removeAsset()
+	 * @see a3d.library.AssetLibrary.removeAsset()
 	 */
-
-    public function removeNamespaceAssets(ns:String = null, dispose:Bool = true):Void {
+    public function removeNamespaceAssets(ns:String = null, dispose:Bool = true):Void
+    {
         var idx:Int = 0;
         var asset:IAsset;
         var old_assets:Vector<IAsset>;
+
 // Empty the assets vector after having stored a copy of it.
 // The copy will be filled with all assets which weren't removed.
         old_assets = _assets.concat();
         _assets.length = 0;
+
         if (ns == null)
             ns = NamedAssetBase.DEFAULT_NAMESPACE;
-        for (asset in old_assets) {
+        for (asset in old_assets)
+        {
 // Remove from dict if in the supplied namespace. If not,
 // transfer over to the new vector.
-            if (asset.assetNamespace == ns) {
-                if (dispose) asset.dispose();
+            if (asset.assetNamespace == ns)
+            {
+                if (dispose)
+                    asset.dispose();
+
+// Remove asset from dictionary, but don't try to auto-remove
+// the namespace, which will trigger an unnecessarily expensive
+// test that is not needed since we know that the namespace
+// will be empty when loop finishes.
                 removeAssetFromDict(asset, false);
             }
-
-            else _assets[idx++] = asset;
+            else
+            {
+                _assets[idx++] = asset;
+            }
         }
 
 // Remove empty namespace
-        if (_assetDictionary.hasOwnProperty(ns)) delete;
-        _assetDictionary[ns];
+        if (_assetDictionary.exists(ns))
+            _assetDictionary.remove(ns);
     }
 
-    private function removeAssetFromDict(asset:IAsset, autoRemoveEmptyNamespace:Bool = true):Void {
-        if (_assetDictDirty) rehashAssetDict();
-        if (_assetDictionary.hasOwnProperty(asset.assetNamespace)) {
-            if (_assetDictionary[asset.assetNamespace].hasOwnProperty(asset.name)) delete;
-            _assetDictionary[asset.assetNamespace][asset.name];
-            if (autoRemoveEmptyNamespace) {
+    private function removeAssetFromDict(asset:IAsset, autoRemoveEmptyNamespace:Bool = true):Void
+    {
+        if (_assetDictDirty)
+            rehashAssetDict();
+
+        if (_assetDictionary.exists(asset.assetNamespace))
+        {
+            if (_assetDictionary.get(asset.assetNamespace).exists(asset.name))
+                _assetDictionary.get(asset.assetNamespace).remove(asset.name);
+
+            if (autoRemoveEmptyNamespace)
+            {
                 var key:String;
                 var empty:Bool = true;
-                for (key in Reflect.fields(_assetDictionary[asset.assetNamespace])) {
+
+                var map:StringMap<IAsset> = _assetDictionary.get(asset.assetNamespace);
+                if (map.keys().hasNext())
+                {
                     empty = false;
-                    break;
                 }
 
-                if (empty) delete;
-                _assetDictionary[asset.assetNamespace];
+                if (empty)
+                    _assetDictionary.remove(asset.assetNamespace);
             }
         }
     }
@@ -464,10 +540,11 @@ class AssetLibraryBundle extends EventDispatcher {
 /**
 	 * Loads a yet unloaded resource file from the given url.
 	 */
-
-    private function loadResource(req:URLRequest, context:AssetLoaderContext = null, ns:String = null, parser:ParserBase = null):AssetLoaderToken {
+    private function loadResource(req:URLRequest, context:AssetLoaderContext = null, ns:String = null, parser:ParserBase = null):AssetLoaderToken
+    {
         var loader:AssetLoader = new AssetLoader();
-        if (!_loadingSessions) _loadingSessions = new Vector<AssetLoader>();
+        if (_loadingSessions == null)
+            _loadingSessions = new Vector<AssetLoader>();
         _loadingSessions.push(loader);
         loader.addEventListener(LoaderEvent.RESOURCE_COMPLETE, onResourceRetrieved);
         loader.addEventListener(LoaderEvent.DEPENDENCY_COMPLETE, onDependencyRetrieved);
@@ -485,20 +562,22 @@ class AssetLibraryBundle extends EventDispatcher {
         loader.addEventListener(AssetEvent.ENTITY_COMPLETE, onAssetComplete);
         loader.addEventListener(AssetEvent.SKELETON_COMPLETE, onAssetComplete);
         loader.addEventListener(AssetEvent.SKELETON_POSE_COMPLETE, onAssetComplete);
+
 // Error are handled separately (see documentation for addErrorHandler)
         loader.addErrorHandler(onDependencyRetrievingError);
         loader.addParseErrorHandler(onDependencyRetrievingParseError);
+
         return loader.load(req, context, ns, parser);
     }
 
-    public function stopAllLoadingSessions():Void {
-        var i:Int;
-        if (!_loadingSessions) _loadingSessions = new Vector<AssetLoader>();
+    public function stopAllLoadingSessions():Void
+    {
+        if (_loadingSessions == null)
+            _loadingSessions = new Vector<AssetLoader>();
         var length:Int = _loadingSessions.length;
-        i = 0;
-        while (i < length) {
+        for (i in 0...length)
+        {
             killLoadingSession(_loadingSessions[i]);
-            i++;
         }
         _loadingSessions = null;
     }
@@ -511,10 +590,11 @@ class AssetLibraryBundle extends EventDispatcher {
 	 * @param parser An optional parser object that will translate the data into a usable resource.
 	 * @return A handle to the retrieved resource.
 	 */
-
-    private function parseResource(data:Dynamic, context:AssetLoaderContext = null, ns:String = null, parser:ParserBase = null):AssetLoaderToken {
+    private function parseResource(data:Dynamic, context:AssetLoaderContext = null, ns:String = null, parser:ParserBase = null):AssetLoaderToken
+    {
         var loader:AssetLoader = new AssetLoader();
-        if (!_loadingSessions) _loadingSessions = new Vector<AssetLoader>();
+        if (_loadingSessions == null)
+            _loadingSessions = new Vector<AssetLoader>();
         _loadingSessions.push(loader);
         loader.addEventListener(LoaderEvent.RESOURCE_COMPLETE, onResourceRetrieved);
         loader.addEventListener(LoaderEvent.DEPENDENCY_COMPLETE, onDependencyRetrieved);
@@ -532,89 +612,112 @@ class AssetLibraryBundle extends EventDispatcher {
         loader.addEventListener(AssetEvent.ENTITY_COMPLETE, onAssetComplete);
         loader.addEventListener(AssetEvent.SKELETON_COMPLETE, onAssetComplete);
         loader.addEventListener(AssetEvent.SKELETON_POSE_COMPLETE, onAssetComplete);
+
 // Error are handled separately (see documentation for addErrorHandler)
         loader.addErrorHandler(onDependencyRetrievingError);
         loader.addParseErrorHandler(onDependencyRetrievingParseError);
-        return loader.loadData(data, "", context, ns, parser);
+
+        return loader.loadData(data, '', context, ns, parser);
     }
 
-    private function rehashAssetDict():Void {
+    private function rehashAssetDict():Void
+    {
         var asset:IAsset;
-        _assetDictionary = { };
-        _assets.fixed = true;
-        for (asset in _assets) {
-            if (!_assetDictionary.hasOwnProperty(asset.assetNamespace)) _assetDictionary[asset.assetNamespace] = { };
-            _assetDictionary[asset.assetNamespace][asset.name] = asset;
-        }
 
+        _assetDictionary = new StringMap<StringMap<IAsset>>();
+
+        _assets.fixed = true;
+        for (asset in _assets)
+        {
+            if (!_assetDictionary.exists(asset.assetNamespace))
+                _assetDictionary.set(asset.assetNamespace, new StringMap<IAsset>());
+
+            _assetDictionary.get(asset.assetNamespace).set(asset.name, asset);
+        }
         _assets.fixed = false;
+
         _assetDictDirty = false;
     }
 
 /**
 	 * Called when a dependency was retrieved.
 	 */
-
-    private function onDependencyRetrieved(event:LoaderEvent):Void {
-        if (hasEventListener(LoaderEvent.DEPENDENCY_COMPLETE)) dispatchEvent(event);
+    private function onDependencyRetrieved(event:LoaderEvent):Void
+    {
+        if (hasEventListener(LoaderEvent.DEPENDENCY_COMPLETE))
+            dispatchEvent(event);
     }
 
 /**
 	 * Called when a an error occurs during dependency retrieving.
 	 */
-
-    private function onDependencyRetrievingError(event:LoaderEvent):Bool {
-        if (hasEventListener(LoaderEvent.LOAD_ERROR)) {
+    private function onDependencyRetrievingError(event:LoaderEvent):Bool
+    {
+        if (hasEventListener(LoaderEvent.LOAD_ERROR))
+        {
             dispatchEvent(event);
             return true;
         }
-
-        else return false;
+        else
+        {
+            return false;
+        }
     }
 
 /**
 	 * Called when a an error occurs during parsing.
 	 */
-
-    private function onDependencyRetrievingParseError(event:ParserEvent):Bool {
-        if (hasEventListener(ParserEvent.PARSE_ERROR)) {
+    private function onDependencyRetrievingParseError(event:ParserEvent):Bool
+    {
+        if (hasEventListener(ParserEvent.PARSE_ERROR))
+        {
             dispatchEvent(event);
             return true;
         }
-
-        else return false;
+        else
+        {
+            return false;
+        }
     }
 
-    private function onAssetComplete(event:AssetEvent):Void {
+    private function onAssetComplete(event:AssetEvent):Void
+    {
 // Only add asset to library the first time.
-        if (event.type == AssetEvent.ASSET_COMPLETE) addAsset(event.asset);
+        if (event.type == AssetEvent.ASSET_COMPLETE)
+            addAsset(event.asset);
+
         dispatchEvent(event.clone());
     }
 
-    private function onTextureSizeError(event:AssetEvent):Void {
+    private function onTextureSizeError(event:AssetEvent):Void
+    {
         this.dispatchEvent(event.clone());
     }
 
 /**
 	 * Called when the resource and all of its dependencies was retrieved.
 	 */
-
-    private function onResourceRetrieved(event:LoaderEvent):Void {
-        var loader:AssetLoader = cast((event.target), AssetLoader);
+    private function onResourceRetrieved(event:LoaderEvent):Void
+    {
+        var loader:AssetLoader = cast(event.target,AssetLoader);
         killLoadingSession(loader);
         var index:Int = _loadingSessions.indexOf(loader);
         _loadingSessions.splice(index, 1);
+
 /*
-		 if(session.handle){
-		 dispatchEvent(event);
-		 }else{
-		 onResourceError((session is IResource)? IResource(session) : null);
-		 }
-		 */
+		if(session.handle){
+			dispatchEvent(event);
+		}else{
+			onResourceError((session is IResource)? IResource(session) : null);
+		}
+		*/
+
         dispatchEvent(event.clone());
     }
 
-    private function killLoadingSession(loader:AssetLoader):Void {
+    private function killLoadingSession(loader:AssetLoader):Void
+    {
+
         loader.removeEventListener(LoaderEvent.LOAD_ERROR, onDependencyRetrievingError);
         loader.removeEventListener(LoaderEvent.RESOURCE_COMPLETE, onResourceRetrieved);
         loader.removeEventListener(LoaderEvent.DEPENDENCY_COMPLETE, onDependencyRetrieved);
@@ -633,44 +736,45 @@ class AssetLibraryBundle extends EventDispatcher {
         loader.removeEventListener(AssetEvent.SKELETON_COMPLETE, onAssetComplete);
         loader.removeEventListener(AssetEvent.SKELETON_POSE_COMPLETE, onAssetComplete);
         loader.stop();
+
     }
 
 /**
 	 * Called when unespected error occurs
 	 */
 /*
-	 private function onResourceError() : void
-	 {
-	 var msg:String = "Unexpected parser error";
-	 if(hasEventListener(LoaderEvent.DEPENDENCY_ERROR)){
-	 var re:LoaderEvent = new LoaderEvent(LoaderEvent.DEPENDENCY_ERROR, "");
-	 dispatchEvent(re);
-	 } else{
-	 throw new Error(msg);
-	 }
-	 }
-	 */
+	private function onResourceError() : void
+	{
+		var msg:String = "Unexpected parser error";
+		if(hasEventListener(LoaderEvent.DEPENDENCY_ERROR)){
+			var re:LoaderEvent = new LoaderEvent(LoaderEvent.DEPENDENCY_ERROR, "");
+			dispatchEvent(re);
+		} else{
+			throw new Error(msg);
+		}
+	}
+	*/
 
-    private function onAssetRename(ev:AssetEvent):Void {
-        var asset:IAsset = cast((ev.currentTarget), IAsset);
+    private function onAssetRename(ev:AssetEvent):Void
+    {
+        var asset:IAsset =cast(ev.currentTarget,IAsset);
         var old:IAsset = getAsset(asset.assetNamespace, asset.name);
-        if (old != null) _strategy.resolveConflict(asset, old, _assetDictionary[asset.assetNamespace], _strategyPreference)
-        else {
-            var dict:Dynamic = _assetDictionary[ev.asset.assetNamespace];
-            if (dict == null) return;
-            dict[ev.assetPrevName] = null;
-            dict[ev.asset.name] = ev.asset;
-        }
 
+        if (old != null)
+            _strategy.resolveConflict(asset, old, _assetDictionary.get(asset.assetNamespace), _strategyPreference);
+        else
+        {
+            var dict:StringMap<IAsset> = _assetDictionary.get(ev.asset.assetNamespace);
+            if (dict == null)
+                return;
+
+            dict.remove(ev.assetPrevName);
+            dict.set(ev.asset.name, ev.asset);
+        }
     }
 
-    private function onAssetConflictResolved(ev:AssetEvent):Void {
+    private function onAssetConflictResolved(ev:AssetEvent):Void
+    {
         dispatchEvent(ev.clone());
     }
-
 }
-
-class AssetLibraryBundleSingletonEnforcer {
-
-}
-

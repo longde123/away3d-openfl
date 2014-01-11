@@ -137,7 +137,7 @@ class OBJParser extends ParserBase
 			{
 				var lm:LoadedMaterial = new LoadedMaterial();
 				lm.materialID = resourceDependency.id;
-				lm.texture = Std.instance(asset,Texture2DBase);
+				lm.texture = cast(asset,Texture2DBase);
 
 				_materialLoaded.push(lm);
 
@@ -759,24 +759,24 @@ class OBJParser extends ParserBase
 				if (materialMode < 2)
 				{
 					cm = new ColorMaterial(diffuseColor);
-					Std.instance(cm,ColorMaterial).alpha = alpha;
-					Std.instance(cm,ColorMaterial).ambientColor = ambientColor;
-					Std.instance(cm,ColorMaterial).repeat = true;
+					cast(cm,ColorMaterial).alpha = alpha;
+					cast(cm,ColorMaterial).ambientColor = ambientColor;
+					cast(cm,ColorMaterial).repeat = true;
 					if (useSpecular)
 					{
-						Std.instance(cm,ColorMaterial).specularColor = specularColor;
-						Std.instance(cm,ColorMaterial).specular = specular;
+						cast(cm,ColorMaterial).specularColor = specularColor;
+						cast(cm,ColorMaterial).specular = specular;
 					}
 				}
 				else
 				{
 					cm = new ColorMultiPassMaterial(diffuseColor);
-					Std.instance(cm,ColorMultiPassMaterial).ambientColor = ambientColor;
-					Std.instance(cm,ColorMultiPassMaterial).repeat = true;
+					cast(cm,ColorMultiPassMaterial).ambientColor = ambientColor;
+					cast(cm,ColorMultiPassMaterial).repeat = true;
 					if (useSpecular)
 					{
-						Std.instance(cm,ColorMultiPassMaterial).specularColor = specularColor;
-						Std.instance(cm,ColorMultiPassMaterial).specular = specular;
+						cast(cm,ColorMultiPassMaterial).specularColor = specularColor;
+						cast(cm,ColorMultiPassMaterial).specular = specular;
 					}
 				}
 
@@ -872,11 +872,11 @@ class OBJParser extends ParserBase
 					if (materialMode < 2)
 					{ 
 						// if materialMode is 0 or 1, we create a SinglePass				
-						mat = Std.instance(mesh.material,TextureMaterial);
-						Std.instance(mat,TextureMaterial).texture = lm.texture;
-						Std.instance(mat,TextureMaterial).ambientColor = lm.ambientColor;
-						Std.instance(mat,TextureMaterial).alpha = lm.alpha;
-						Std.instance(mat,TextureMaterial).repeat = true;
+						mat = cast(mesh.material,TextureMaterial);
+						cast(mat,TextureMaterial).texture = lm.texture;
+						cast(mat,TextureMaterial).ambientColor = lm.ambientColor;
+						cast(mat,TextureMaterial).alpha = lm.alpha;
+						cast(mat,TextureMaterial).repeat = true;
 
 						if (lm.specularMethod != null)
 						{
@@ -884,8 +884,8 @@ class OBJParser extends ParserBase
 							// the actual method instance, we avoid having the properties of
 							// the new method being overridden with the settings from the old
 							// one, which is default behavior of the setter.
-							Std.instance(mat,TextureMaterial).specularMethod = null;
-							Std.instance(mat,TextureMaterial).specularMethod = lm.specularMethod;
+							cast(mat,TextureMaterial).specularMethod = null;
+							cast(mat,TextureMaterial).specularMethod = lm.specularMethod;
 						}
 						else if (_materialSpecularData != null)
 						{
@@ -894,10 +894,10 @@ class OBJParser extends ParserBase
 								specularData = _materialSpecularData[j];
 								if (specularData.materialID == lm.materialID)
 								{
-									Std.instance(mat,TextureMaterial).specularMethod = null; // Prevent property overwrite (see above)
-									Std.instance(mat,TextureMaterial).specularMethod = specularData.basicSpecularMethod;
-									Std.instance(mat,TextureMaterial).ambientColor = specularData.ambientColor;
-									Std.instance(mat,TextureMaterial).alpha = specularData.alpha;
+									cast(mat,TextureMaterial).specularMethod = null; // Prevent property overwrite (see above)
+									cast(mat,TextureMaterial).specularMethod = specularData.basicSpecularMethod;
+									cast(mat,TextureMaterial).ambientColor = specularData.ambientColor;
+									cast(mat,TextureMaterial).alpha = specularData.alpha;
 									break;
 								}
 							}
@@ -906,10 +906,10 @@ class OBJParser extends ParserBase
 					else
 					{ 
 						//if materialMode==2 this is a MultiPassTexture					
-						mat = Std.instance(mesh.material,TextureMultiPassMaterial);
-						Std.instance(mat,TextureMultiPassMaterial).texture = lm.texture;
-						Std.instance(mat,TextureMultiPassMaterial).ambientColor = lm.ambientColor;
-						Std.instance(mat,TextureMultiPassMaterial).repeat = true;
+						mat = cast(mesh.material,TextureMultiPassMaterial);
+						cast(mat,TextureMultiPassMaterial).texture = lm.texture;
+						cast(mat,TextureMultiPassMaterial).ambientColor = lm.ambientColor;
+						cast(mat,TextureMultiPassMaterial).repeat = true;
 
 						if (lm.specularMethod != null)
 						{
@@ -917,8 +917,8 @@ class OBJParser extends ParserBase
 							// the actual method instance, we avoid having the properties of
 							// the new method being overridden with the settings from the old
 							// one, which is default behavior of the setter.
-							Std.instance(mat,TextureMultiPassMaterial).specularMethod = null;
-							Std.instance(mat,TextureMultiPassMaterial).specularMethod = lm.specularMethod;
+							cast(mat,TextureMultiPassMaterial).specularMethod = null;
+							cast(mat,TextureMultiPassMaterial).specularMethod = lm.specularMethod;
 						}
 						else if (_materialSpecularData != null)
 						{
@@ -927,9 +927,9 @@ class OBJParser extends ParserBase
 								specularData = _materialSpecularData[j];
 								if (specularData.materialID == lm.materialID)
 								{
-									Std.instance(mat,TextureMultiPassMaterial).specularMethod = null; // Prevent property overwrite (see above)
-									Std.instance(mat,TextureMultiPassMaterial).specularMethod = specularData.basicSpecularMethod;
-									Std.instance(mat,TextureMultiPassMaterial).ambientColor = specularData.ambientColor;
+									cast(mat,TextureMultiPassMaterial).specularMethod = null; // Prevent property overwrite (see above)
+									cast(mat,TextureMultiPassMaterial).specularMethod = specularData.basicSpecularMethod;
+									cast(mat,TextureMultiPassMaterial).ambientColor = specularData.ambientColor;
 									break;
 								}
 							}

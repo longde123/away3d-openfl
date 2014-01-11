@@ -24,6 +24,7 @@ class StaticLightPicker extends LightPickerBase {
 
     public function new(lights:Array<Dynamic>) {
         this.lights = lights;
+        super();
     }
 
 /**
@@ -41,7 +42,7 @@ class StaticLightPicker extends LightPickerBase {
         var numCastingDirectionalLights:Int = 0;
         var numLightProbes:Int = 0;
         var light:LightBase;
-        if (_lights) clearListeners();
+        if (_lights!=null) clearListeners();
         _lights = value;
         _allPickedLights = Vector.ofArray(cast value);
         _pointLights = new Vector<PointLight>();
@@ -68,7 +69,7 @@ class StaticLightPicker extends LightPickerBase {
             ++i;
         }
         if (_numDirectionalLights == numDirectionalLights && _numPointLights == numPointLights && _numLightProbes == numLightProbes && _numCastingPointLights == numCastingPointLights && _numCastingDirectionalLights == numCastingDirectionalLights) {
-            return;
+            return value;
         }
         _numDirectionalLights = numDirectionalLights;
         _numCastingDirectionalLights = numCastingDirectionalLights;

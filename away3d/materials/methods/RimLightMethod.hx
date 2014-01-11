@@ -53,7 +53,7 @@ class RimLightMethod extends EffectMethodBase {
 	 * @inheritDoc
 	 */
 
-    override private function initVO(vo:MethodVO):Void {
+    override public function initVO(vo:MethodVO):Void {
         vo.needsNormals = true;
         vo.needsView = true;
     }
@@ -71,7 +71,7 @@ class RimLightMethod extends EffectMethodBase {
     }
 
     public function set_blendMode(value:String):String {
-        if (_blendMode == value) return;
+        if (_blendMode == value) return value;
         _blendMode = value;
         invalidateShaderProgram();
         return value;

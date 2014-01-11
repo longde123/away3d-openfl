@@ -37,7 +37,7 @@ class AutoPickingCollider implements IPickingCollider {
 
     public function setLocalRay(localPosition:Vector3D, localDirection:Vector3D):Void {
         _as3PickingCollider.setLocalRay(localPosition, localDirection);
-        _pbPickingCollider.setLocalRay(localPosition, localDirection);
+
     }
 
 /**
@@ -45,7 +45,7 @@ class AutoPickingCollider implements IPickingCollider {
 	 */
 
     public function testSubMeshCollision(subMesh:SubMesh, pickingCollisionVO:PickingCollisionVO, shortestCollisionDistance:Float):Bool {
-        _activePickingCollider = ((subMesh.numTriangles > triangleThreshold)) ? _pbPickingCollider : _as3PickingCollider;
+        _activePickingCollider =   _as3PickingCollider;
         return _activePickingCollider.testSubMeshCollision(subMesh, pickingCollisionVO, shortestCollisionDistance);
     }
 

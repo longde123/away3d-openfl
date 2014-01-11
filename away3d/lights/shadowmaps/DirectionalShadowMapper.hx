@@ -18,8 +18,8 @@ using OpenFLStage3D;
 class DirectionalShadowMapper extends ShadowMapperBase {
     public var snap(get_snap, set_snap):Float;
     public var lightOffset(get_lightOffset, set_lightOffset):Float;
-    var depthProjection(get_depthProjection, never):Matrix3D;
-    var depth(get_depth, never):Float;
+    public var depthProjection(get_depthProjection, never):Matrix3D;
+    public var depth(get_depth, never):Float;
 
     private var _overallDepthCamera:Camera3D;
     private var _localFrustum:Vector<Float>;

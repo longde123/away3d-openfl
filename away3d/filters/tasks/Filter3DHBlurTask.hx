@@ -34,7 +34,7 @@ class Filter3DHBlurTask extends Filter3DTaskBase {
     }
 
     public function set_amount(value:Int):Int {
-        if (value == _amount) return;
+        if (value == _amount) return value;
         _amount = value;
         invalidateProgram3D();
         updateBlurData();
@@ -47,7 +47,7 @@ class Filter3DHBlurTask extends Filter3DTaskBase {
     }
 
     public function set_stepSize(value:Int):Int {
-        if (value == _stepSize) return;
+        if (value == _stepSize) return value;
         _stepSize = value;
         calculateStepSize();
         invalidateProgram3D();

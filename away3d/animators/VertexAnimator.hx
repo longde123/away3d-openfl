@@ -55,7 +55,8 @@ class VertexAnimator extends AnimatorBase implements IAnimator {
 	 * @param sequenceName The name of the clip to be played.
 	 */
 
-    public function play(name:String, transition:IAnimationTransition = null, offset:Float = NaN):Void {
+    public function play(name:String, transition:IAnimationTransition = null, offset:Int = null):Void {
+
         if (_activeAnimationName == name) return;
         _activeAnimationName = name;
 //TODO: implement transitions in vertex animator
@@ -77,7 +78,7 @@ class VertexAnimator extends AnimatorBase implements IAnimator {
 	 * @inheritDoc
 	 */
 
-    override private function updateDeltaTime(dt:Float):Void {
+    override private function updateDeltaTime(dt:Int):Void {
         super.updateDeltaTime(dt);
         _poses[(0)] = _activeVertexState.currentGeometry;
         _poses[(1)] = _activeVertexState.nextGeometry;
@@ -91,7 +92,7 @@ class VertexAnimator extends AnimatorBase implements IAnimator {
     public function setRenderState(stage3DProxy:Stage3DProxy, renderable:IRenderable, vertexConstantOffset:Int, vertexStreamOffset:Int, camera:Camera3D):Void {
 // todo: add code for when running on cpu
 // if no poses defined, set temp data
-        if (!_poses.length) {
+        if (_poses.length>0) {
             setNullPose(stage3DProxy, renderable, vertexConstantOffset, vertexStreamOffset);
             return;
         }
@@ -104,12 +105,14 @@ class VertexAnimator extends AnimatorBase implements IAnimator {
             i = 1;
             subGeom = _poses[(0)].subGeometries[subMesh._index];
 // set the base sub-geometry so the material can simply pick up on this data
-            if (subGeom) subMesh.subGeometry = subGeom;
+            if (subGeom!=null) subMesh.subGeometry = subGeom;
         }
 
         else i = 0;
         while (i < len) {
-            subGeom = _poses[i].subGeometries[subMesh._index] || subMesh.subGeometry;
+
+            subGeom = _poses[i].subGeometries[subMesh._index];
+            if(subGeom==null)subGeom=subMesh.subGeometry;
             subGeom.activateVertexBuffer(vertexStreamOffset++, stage3DProxy);
             if (_vertexAnimationSet.useNormals) subGeom.activateVertexNormalBuffer(vertexStreamOffset++, stage3DProxy);
             ++i;

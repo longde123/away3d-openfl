@@ -320,7 +320,7 @@ class Loader3D extends ObjectContainer3D {
 	 * @see away3d.loaders.parsers.Parsers
 	*/
 
-    static public function enableParser(parserClass:Class<Dynamic>):Void {
+    static public function enableParser(parserClass:Class<ParserBase>):Void {
         SingleFileLoader.enableParser(parserClass);
     }
 
@@ -334,7 +334,7 @@ class Loader3D extends ObjectContainer3D {
 	 * @see away3d.loaders.parsers.Parsers
 	 */
 
-    static public function enableParsers(parserClasses:Vector<Class<Dynamic>>):Void {
+    static public function enableParsers(parserClasses:Array<Class<ParserBase>>):Void {
         SingleFileLoader.enableParsers(parserClasses);
     }
 
@@ -380,7 +380,7 @@ class Loader3D extends ObjectContainer3D {
             }
 // If asset was of fitting type, and doesn't
 // already have a parent, add to loader container
-            if (obj && obj.parent == null) addChild(obj);
+            if (obj!=null && obj.parent == null) addChild(obj);
         }
         this.dispatchEvent(ev.clone());
     }

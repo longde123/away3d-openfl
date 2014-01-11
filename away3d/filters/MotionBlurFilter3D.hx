@@ -30,7 +30,7 @@ class MotionBlurFilter3D extends Filter3DBase {
 
     override public function update(stage:Stage3DProxy, camera:Camera3D):Void {
 // TODO: not used
-        camera = camera;
+
         _compositeTask.overlayTexture = _copyTask.getMainInputTexture(stage);
         _compositeTask.target = _copyTask.secondaryInputTexture;
     }

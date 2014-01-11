@@ -14,7 +14,7 @@ class ParserUtil {
 	 *
 	 */
     static public function toByteArray(data:Dynamic):ByteArray {
-        if (Std.is(data, Class)) data = Type.createInstance(data);
+        if (Std.is(data, Class)) data = Type.createInstance(data,[]);
         if (Std.is(data, ByteArray)) return data
         else return null;
     }
@@ -35,9 +35,9 @@ class ParserUtil {
             length = MathConsts.MAX_VALUE;
         if (Std.is(data, String)) return Std.string(data).substr(0, length);
         ba = toByteArray(data);
-        if (ba) {
+        if (ba!=null) {
             ba.position = 0;
-            return ba.readUTFBytes(Math.min(ba.bytesAvailable, length));
+            return ba.readUTFBytes(Std.int(Math.min(ba.bytesAvailable, length)));
         }
         return null;
     }

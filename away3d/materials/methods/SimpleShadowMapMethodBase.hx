@@ -4,6 +4,7 @@
 package away3d.materials.methods;
 
 
+import flash.geom.Vector3D;
 import away3d.core.base.IRenderable;
 import away3d.core.managers.Stage3DProxy;
 import away3d.cameras.Camera3D;
@@ -34,7 +35,7 @@ class SimpleShadowMapMethodBase extends ShadowMapMethodBase {
 	 * @inheritDoc
 	 */
 
-    override private function initVO(vo:MethodVO):Void {
+    override public function initVO(vo:MethodVO):Void {
         vo.needsView = true;
         vo.needsGlobalVertexPos = true;
         vo.needsGlobalFragmentPos = _usePoint;
@@ -175,7 +176,7 @@ class SimpleShadowMapMethodBase extends ShadowMapMethodBase {
 	 */
 
     override public function setRenderState(vo:MethodVO, renderable:IRenderable, stage3DProxy:Stage3DProxy, camera:Camera3D):Void {
-        if (!_usePoint) cast((_shadowMapper), DirectionalShadowMapper).depthProjection.copyRawDataTo(vo.vertexData, vo.vertexConstantsIndex + 4, true);
+        if (_usePoint==null) cast((_shadowMapper), DirectionalShadowMapper).depthProjection.copyRawDataTo(vo.vertexData, vo.vertexConstantsIndex + 4, true);
     }
 
 /**
@@ -189,8 +190,9 @@ class SimpleShadowMapMethodBase extends ShadowMapMethodBase {
 	 * @return
 	 */
 
-    private function getCascadeFragmentCode(vo:MethodVO, regCache:ShaderRegisterCache, decodeRegister:ShaderRegisterElement, depthTexture:ShaderRegisterElement, depthProjection:ShaderRegisterElement, targetRegister:ShaderRegisterElement):String {
+    public function getCascadeFragmentCode(vo:MethodVO, regCache:ShaderRegisterCache, decodeRegister:ShaderRegisterElement, depthTexture:ShaderRegisterElement, depthProjection:ShaderRegisterElement, targetRegister:ShaderRegisterElement):String {
         throw new Error("This shadow method is incompatible with cascade shadows");
+        return "";
     }
 
 /**
@@ -219,7 +221,7 @@ class SimpleShadowMapMethodBase extends ShadowMapMethodBase {
 	 * Sets the method state for cascade shadow mapping.
 	 */
 
-    private function activateForCascade(vo:MethodVO, stage3DProxy:Stage3DProxy):Void {
+    public function activateForCascade(vo:MethodVO, stage3DProxy:Stage3DProxy):Void {
         throw new Error("This shadow method is incompatible with cascade shadows");
     }
 

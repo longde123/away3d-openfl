@@ -165,7 +165,7 @@ import flash.events.EventDispatcher;
 
 class AssetLoaderToken extends EventDispatcher {
 
-    private var _loader:AssetLoader;
+    public var _loader:AssetLoader;
 
     public function new(loader:AssetLoader) {
         super();

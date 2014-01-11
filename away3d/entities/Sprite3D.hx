@@ -66,7 +66,7 @@ class Sprite3D extends Entity implements IRenderable {
         _width = width;
         _height = height;
         _spriteMatrix = new Matrix3D();
-        if (!_geometry) {
+        if (_geometry==null) {
             _geometry = new SubGeometry();
             _geometry.updateVertexData(Vector.ofArray(cast [-.5, .5, .0, .5, .5, .0, .5, -.5, .0, -.5, -.5, .0]));
             _geometry.updateUVData(Vector.ofArray(cast [.0, .0, 1.0, .0, 1.0, 1.0, .0, 1.0]));
@@ -78,7 +78,7 @@ class Sprite3D extends Entity implements IRenderable {
 
     override public function set_pickingCollider(value:IPickingCollider):IPickingCollider {
         super.pickingCollider = value;
-        if (value) {
+        if (value!=null) {
 // bounds collider is the only null value
             _pickingSubMesh = new SubMesh(_geometry, null);
             _pickingTransform = new Matrix3D();
@@ -91,7 +91,7 @@ class Sprite3D extends Entity implements IRenderable {
     }
 
     public function set_width(value:Float):Float {
-        if (_width == value) return;
+        if (_width == value) return value;
         _width = value;
         invalidateTransform();
         return value;
@@ -102,7 +102,7 @@ class Sprite3D extends Entity implements IRenderable {
     }
 
     public function set_height(value:Float):Float {
-        if (_height == value) return;
+        if (_height == value) return value;
         _height = value;
         invalidateTransform();
         return value;
@@ -145,10 +145,10 @@ class Sprite3D extends Entity implements IRenderable {
     }
 
     public function set_material(value:MaterialBase):MaterialBase {
-        if (value == _material) return;
-        if (_material) _material.removeOwner(this);
+        if (value == _material) return value;
+        if (_material!=null) _material.removeOwner(this);
         _material = value;
-        if (_material) _material.addOwner(this);
+        if (_material!=null) _material.addOwner(this);
         return value;
     }
 
@@ -227,7 +227,7 @@ class Sprite3D extends Entity implements IRenderable {
     }
 
     override private function collidesBefore(shortestCollisionDistance:Float, findClosest:Bool):Bool {
-        findClosest = findClosest;
+
         var viewTransform:Matrix3D = _camera.inverseSceneTransform.clone();
         viewTransform.transpose();
         var rawViewTransform:Vector<Float> = Matrix3DUtils.RAW_DATA_CONTAINER;

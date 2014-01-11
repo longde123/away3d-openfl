@@ -64,7 +64,7 @@ class RefractionEnvMapMethod extends EffectMethodBase {
 	 * @inheritDoc
 	 */
 
-    override private function initVO(vo:MethodVO):Void {
+    override public function initVO(vo:MethodVO):Void {
         vo.needsNormals = true;
         vo.needsView = true;
     }

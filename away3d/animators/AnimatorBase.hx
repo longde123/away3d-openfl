@@ -23,6 +23,8 @@
  */
 package away3d.animators;
 
+import flash.Lib;
+import flash.Lib;
 import flash.Vector;
 import flash.display.Sprite;
 import flash.events.Event;
@@ -62,7 +64,7 @@ class AnimatorBase extends NamedAssetBase implements IAsset {
     private var _activeNode:AnimationNodeBase;
     private var _activeState:IAnimationState;
     private var _activeAnimationName:String;
-    private var _absoluteTime:Float;
+    private var _absoluteTime:Int;
     private var _animationStates:WeakMap<AnimationNodeBase, AnimationStateBase>;
 /**
 	 * Enables translation of the animated mesh from data returned per frame via the positionDelta property of the active animation node. Defaults to true.
@@ -73,13 +75,11 @@ class AnimatorBase extends NamedAssetBase implements IAsset {
 
     public function getAnimationState(node:AnimationNodeBase):AnimationStateBase {
       
+	var className:Class<IAnimationState> = node.stateClass;
 
-       if(_animationStates[node] !=null) return _animationStates[node] ;
-		
-		var className:Class<Dynamic> = node.stateClass;
-		_animationStates[node] = Type.createInstance(ClassName,[this, node]);
-		
-		 return _animationStates[node] ;
+		if (!_animationStates.exists(node))
+			_animationStates.set(node,cast(Type.createInstance(className, [this, node]),AnimationStateBase));
+		return _animationStates.get(node);
     }
 
     public function getAnimationStateByName(name:String):AnimationStateBase {
@@ -143,7 +143,7 @@ class AnimatorBase extends NamedAssetBase implements IAsset {
     }
 
     public function set_autoUpdate(value:Bool):Bool {
-        if (_autoUpdate == value) return;
+        if (_autoUpdate == value) return value;
         _autoUpdate = value;
         if (_autoUpdate) start()
         else stop();
@@ -159,7 +159,7 @@ class AnimatorBase extends NamedAssetBase implements IAsset {
     }
 
     public function set_time(value:Int):Int {
-        if (_time == value) return;
+        if (_time == value) return value;
         update(value);
         return value;
     }
@@ -189,6 +189,7 @@ class AnimatorBase extends NamedAssetBase implements IAsset {
         _animationStates = new WeakMap<AnimationNodeBase, AnimationStateBase>();
         updatePosition = true;
         _animationSet = animationSet;
+        super();
     }
 
 /**
@@ -210,7 +211,7 @@ class AnimatorBase extends NamedAssetBase implements IAsset {
 
     public function start():Void {
         if (_isPlaying || !_autoUpdate) return;
-        _time = _absoluteTime = getTimer();
+        _time = _absoluteTime = Lib.getTimer();
         _isPlaying = true;
         if (!_broadcaster.hasEventListener(Event.ENTER_FRAME)) _broadcaster.addEventListener(Event.ENTER_FRAME, onEnterFrame);
         if (!hasEventListener(AnimatorEvent.START)) return;
@@ -231,7 +232,8 @@ class AnimatorBase extends NamedAssetBase implements IAsset {
         _isPlaying = false;
         if (_broadcaster.hasEventListener(Event.ENTER_FRAME)) _broadcaster.removeEventListener(Event.ENTER_FRAME, onEnterFrame);
         if (!hasEventListener(AnimatorEvent.STOP)) return;
-        dispatchEvent(_stopEvent || (_stopEvent = new AnimatorEvent(AnimatorEvent.STOP, this)));
+        if(_stopEvent==null)_startEvent=(_stopEvent = new AnimatorEvent(AnimatorEvent.STOP, this));
+        dispatchEvent(_stopEvent );
     }
 
 /**
@@ -243,12 +245,12 @@ class AnimatorBase extends NamedAssetBase implements IAsset {
 	 */
 
     public function update(time:Int):Void {
-        var dt:Float = (time - _time) * playbackSpeed;
+        var dt:Int = Std.int((time - _time) * playbackSpeed);
         updateDeltaTime(dt);
         _time = time;
     }
 
-    public function reset(name:String, offset:Float = 0):Void {
+    public function reset(name:String, offset:Int = 0):Void {
         getAnimationState(_animationSet.getAnimation(name)).offset(offset + _absoluteTime);
     }
 
@@ -278,7 +280,7 @@ class AnimatorBase extends NamedAssetBase implements IAsset {
 	 * @private
 	 */
 
-    private function updateDeltaTime(dt:Float):Void {
+    private function updateDeltaTime(dt:Int):Void {
         _absoluteTime += dt;
         _activeState.update(_absoluteTime);
         if (updatePosition) applyPositionDelta();
@@ -289,7 +291,7 @@ class AnimatorBase extends NamedAssetBase implements IAsset {
 	 */
 
     private function onEnterFrame(event:Event = null):Void {
-        update(getTimer());
+        update(Lib.getTimer());
     }
 
     private function applyPositionDelta():Void {
@@ -313,7 +315,10 @@ class AnimatorBase extends NamedAssetBase implements IAsset {
 	 */
 
     public function dispatchCycleEvent():Void {
-        if (hasEventListener(AnimatorEvent.CYCLE_COMPLETE)) dispatchEvent(_cycleEvent || (_cycleEvent = new AnimatorEvent(AnimatorEvent.CYCLE_COMPLETE, this)));
+        if (hasEventListener(AnimatorEvent.CYCLE_COMPLETE)){
+          if(_cycleEvent==null)(_cycleEvent = new AnimatorEvent(AnimatorEvent.CYCLE_COMPLETE, this));
+            dispatchEvent(_cycleEvent  );
+        }
     }
 
 /**

@@ -45,7 +45,7 @@ class ViewVolume extends NodeBase {
     private var _maxX:Float;
     private var _maxY:Float;
     private var _maxZ:Float;
-    private var _active:Bool;
+    public var _active:Bool;
     static private var _entityWorldBounds:Vector<Float>;
 /**
 	 * Creates a new ViewVolume with given dimensions. A ViewVolume is a region where the camera or a shadow casting light could reside in.
@@ -67,6 +67,7 @@ class ViewVolume extends NodeBase {
         _depth = _maxZ - _minZ;
         _cellSize = cellSize;
         initCells();
+        super();
     }
 
     public function get_minBound():Vector3D {
@@ -79,7 +80,7 @@ class ViewVolume extends NodeBase {
 
     override public function acceptTraverser(traverser:PartitionTraverser):Void {
         if (traverser.enterNode(this)) {
-            if (_debugPrimitive) traverser.applyRenderable(_debugPrimitive);
+            if (_debugPrimitive!=null) traverser.applyRenderable(_debugPrimitive);
             if (!_active) return;
             var entryPoint:Vector3D = traverser.entryPoint;
             var cell:ViewCell = getCellContaining(entryPoint);
@@ -91,7 +92,7 @@ class ViewVolume extends NodeBase {
                 ++i;
             }
             var visibleDynamics:Vector<InvertedOctreeNode> = cell.visibleDynamics;
-            if (visibleDynamics) {
+            if (visibleDynamics!=null) {
                 numVisibles = visibleDynamics.length;
                 i = 0;
                 while (i < numVisibles) {
@@ -122,7 +123,7 @@ class ViewVolume extends NodeBase {
     public function removeVisibleStatic(entity:Entity, indexX:Int = 0, indexY:Int = 0, indexZ:Int = 0):Void {
         var index:Int = getCellIndex(indexX, indexY, indexZ);
         var statics:Vector<EntityNode> = _cells[index].visibleStatics;
-        if (!statics) return;
+        if (statics==null) return;
         index = statics.indexOf(entity.getEntityPartitionNode());
         if (index >= 0) statics.splice(index, 1);
         updateNumEntities(_numEntities - 1);
@@ -131,7 +132,7 @@ class ViewVolume extends NodeBase {
     public function removeVisibleDynamicCell(cell:InvertedOctreeNode, indexX:Int = 0, indexY:Int = 0, indexZ:Int = 0):Void {
         var index:Int = getCellIndex(indexX, indexY, indexZ);
         var dynamics:Vector<InvertedOctreeNode> = _cells[index].visibleDynamics;
-        if (!dynamics) return;
+        if (dynamics==null) return;
         index = dynamics.indexOf(cell);
         if (index >= 0) dynamics.splice(index, 1);
         updateNumEntities(_numEntities - 1);
@@ -236,9 +237,9 @@ class ViewVolume extends NodeBase {
         var cellIndex:Int;
         if (_cellSize == -1) cellIndex = 0
         else {
-            var indexX:Int = (entryPoint.x - _minX) / _cellSize;
-            var indexY:Int = (entryPoint.y - _minY) / _cellSize;
-            var indexZ:Int = (entryPoint.z - _minZ) / _cellSize;
+            var indexX:Int = Std.int((entryPoint.x - _minX) / _cellSize);
+            var indexY:Int = Std.int((entryPoint.y - _minY) / _cellSize);
+            var indexZ:Int = Std.int((entryPoint.z - _minZ) / _cellSize);
             cellIndex = indexX + (indexY + indexZ * _numCellsY) * _numCellsX;
         }
 
@@ -267,7 +268,7 @@ class ViewVolume extends NodeBase {
     public function addVisibleRegion(minBounds:Vector3D, maxBounds:Vector3D, scene:Scene3D, dynamicGrid:DynamicGrid = null, indexX:Int = 0, indexY:Int = 0, indexZ:Int = 0):Void {
         var cell:ViewCell = _cells[getCellIndex(indexX, indexY, indexZ)];
         addStaticsForRegion(scene, minBounds, maxBounds, cell);
-        if (dynamicGrid) addDynamicsForRegion(dynamicGrid, minBounds, maxBounds, cell);
+        if (dynamicGrid!=null) addDynamicsForRegion(dynamicGrid, minBounds, maxBounds, cell);
     }
 
 /**
@@ -303,9 +304,9 @@ class ViewVolume extends NodeBase {
         var numAdded:Int = 0;
         _entityWorldBounds = new Vector<Float>();
         object = iterator.next();
-        while (object) {
+        while (object!=null) {
             var entity:Entity = cast(object, Entity) ;
-            if (entity && staticIntersects(entity, minBounds, maxBounds)) {
+            if (entity!=null && staticIntersects(entity, minBounds, maxBounds)) {
                 var node:EntityNode = entity.getEntityPartitionNode();
                 if (visibleStatics.indexOf(node) == -1) {
                     visibleStatics.push(node);
@@ -365,5 +366,6 @@ class ViewCell {
 
     public var visibleStatics:Vector<EntityNode>;
     public var visibleDynamics:Vector<InvertedOctreeNode>;
+    public function new(){}
 }
 

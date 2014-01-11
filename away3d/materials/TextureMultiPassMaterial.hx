@@ -64,13 +64,13 @@ class TextureMultiPassMaterial extends MultiPassMaterialBase {
 
     public function set_ambientTexture(value:Texture2DBase):Texture2DBase {
         ambientMethod.texture = value;
-        diffuseMethod.useAmbientTexture = cast((value), Boolean);
+        diffuseMethod.useAmbientTexture = cast((value), Bool);
         return value;
     }
 
     override private function updateScreenPasses():Void {
         super.updateScreenPasses();
-        if (_effectsPass) _effectsPass.animateUVs = _animateUVs;
+        if (_effectsPass!=null) _effectsPass.animateUVs = _animateUVs;
     }
 
 }

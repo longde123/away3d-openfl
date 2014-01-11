@@ -38,6 +38,7 @@ class SkeletonPose extends NamedAssetBase implements IAsset {
 
     public function new() {
         jointPoses = new Vector<JointPose>();
+        super();
     }
 
 /**

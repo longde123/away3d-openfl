@@ -6,6 +6,8 @@
 package away3d.materials.methods;
 
 
+import flash.geom.Matrix3D;
+import flash.display3D.textures.Texture;
 import flash.Vector;
 import away3d.cameras.Camera3D;
 import away3d.core.base.IRenderable;
@@ -175,67 +177,73 @@ class SubsurfaceScatteringDiffuseMethod extends CompositeDiffuseMethod {
 /**
 	 * @inheritDoc
 	 */
-    override public function getFragmentPostLightingCode( vo:MethodVO, regCache:ShaderRegisterCache, targetReg:ShaderRegisterElement) : String {
-    var code : String = super.getFragmentPostLightingCode(vo, regCache, targetReg);
-    var temp : ShaderRegisterElement = regCache.getFreeFragmentVectorTemp();
-    code += "mul " + temp + ".xyz, " + _lightColorReg + ".xyz, " + _targetReg + ".w\n" + "mul " + temp + ".xyz, " + temp + ".xyz, " + _colorReg + ".xyz\n" + "add " + targetReg + ".xyz, " + targetReg + ".xyz, " + temp + ".xyz\n";
-    if(_targetReg != _sharedRegisters.viewDirFragment) regCache.removeFragmentTempUsage(targetReg);
-    return code;
+
+    override public function getFragmentPostLightingCode(vo:MethodVO, regCache:ShaderRegisterCache, targetReg:ShaderRegisterElement):String {
+        var code:String = super.getFragmentPostLightingCode(vo, regCache, targetReg);
+        var temp:ShaderRegisterElement = regCache.getFreeFragmentVectorTemp();
+        code += "mul " + temp + ".xyz, " + _lightColorReg + ".xyz, " + _targetReg + ".w\n" + "mul " + temp + ".xyz, " + temp + ".xyz, " + _colorReg + ".xyz\n" + "add " + targetReg + ".xyz, " + targetReg + ".xyz, " + temp + ".xyz\n";
+        if (_targetReg != _sharedRegisters.viewDirFragment) regCache.removeFragmentTempUsage(targetReg);
+        return code;
     }
 
 /**
 	 * @inheritDoc
 	 */
-    override public function activate(vo : MethodVO, stage3DProxy:Stage3DProxy) : Void {
-    super.activate(vo, stage3DProxy);
-    var index : Int = vo.secondaryFragmentConstantsIndex;
-    var data : Vector<Float> = vo.fragmentData;
-    data[index] = _scatterR;
-    data[index + 1] = _scatterG;
-    data[index + 2] = _scatterB;
-    data[index + 8] = _scattering;
-    data[index + 9] = _translucency;
+
+    override public function activate(vo:MethodVO, stage3DProxy:Stage3DProxy):Void {
+        super.activate(vo, stage3DProxy);
+        var index:Int = vo.secondaryFragmentConstantsIndex;
+        var data:Vector<Float> = vo.fragmentData;
+        data[index] = _scatterR;
+        data[index + 1] = _scatterG;
+        data[index + 2] = _scatterB;
+        data[index + 8] = _scattering;
+        data[index + 9] = _translucency;
     }
 
 /**
 	 * @inheritDoc
 	 */
-    override public function setRenderState(vo : MethodVO, renderable:IRenderable, stage3DProxy:Stage3DProxy, camera:Camera3D) : Void {
-    var depthMap : Texture = _depthPass.getDepthMap(renderable, stage3DProxy);
-    var projection : Matrix3D = _depthPass.getProjection(renderable);
-    stage3DProxy._context3D.setTextureAt(vo.secondaryTexturesIndex, depthMap);
-    projection.copyRawDataTo(vo.vertexData, vo.secondaryVertexConstantsIndex + 4, true);
+
+    override public function setRenderState(vo:MethodVO, renderable:IRenderable, stage3DProxy:Stage3DProxy, camera:Camera3D):Void {
+        var depthMap:Texture = _depthPass.getDepthMap(renderable, stage3DProxy);
+        var projection:Matrix3D = _depthPass.getProjection(renderable);
+        stage3DProxy._context3D.setTextureAt(vo.secondaryTexturesIndex, depthMap);
+        projection.copyRawDataTo(vo.vertexData, vo.secondaryVertexConstantsIndex + 4, true);
     }
 
 /**
 	 * Generates the code for this method
 	 */
-    private function scatterLight(vo : MethodVO, targetReg:ShaderRegisterElement, regCache:ShaderRegisterCache, sharedRegisters:ShaderRegisterData) : String {
+
+    private function scatterLight(vo:MethodVO, targetReg:ShaderRegisterElement, regCache:ShaderRegisterCache, sharedRegisters:ShaderRegisterData):String {
 // only scatter first light
-    if(!_isFirstLight) return "";
-    _isFirstLight = false;
-    var code : String = "";
-    var depthReg : ShaderRegisterElement = regCache.getFreeTextureReg();
-    if(sharedRegisters.viewDirFragment) _targetReg = sharedRegisters.viewDirFragment
-    else {
-    _targetReg = regCache.getFreeFragmentVectorTemp();
-    regCache.addFragmentTempUsages(_targetReg, 1);
-    }
+        if (!_isFirstLight) return "";
+        _isFirstLight = false;
+        var code:String = "";
+        var depthReg:ShaderRegisterElement = regCache.getFreeTextureReg();
+        if (sharedRegisters.viewDirFragment == null) {
+            _targetReg = sharedRegisters.viewDirFragment;
+        }
+        else {
+            _targetReg = regCache.getFreeFragmentVectorTemp();
+            regCache.addFragmentTempUsages(_targetReg, 1);
+        }
 
-    vo.secondaryTexturesIndex = depthReg.index;
-    var temp : ShaderRegisterElement = regCache.getFreeFragmentVectorTemp();
-    code += "tex " + temp + ", " + _lightProjVarying + ", " + depthReg + " <2d,nearest,clamp>\n" + // reencode RGBA
+        vo.secondaryTexturesIndex = depthReg.index;
+        var temp:ShaderRegisterElement = regCache.getFreeFragmentVectorTemp();
+        code += "tex " + temp + ", " + _lightProjVarying + ", " + depthReg + " <2d,nearest,clamp>\n" + // reencode RGBA
 
-    "dp4 " + targetReg + ".z, " + temp + ", " + _decReg + "\n";
+        "dp4 " + targetReg + ".z, " + temp + ", " + _decReg + "\n";
 // currentDistanceToLight - closestDistanceToLight
-    code += "sub " + targetReg + ".z, " + _lightProjVarying + ".z, " + targetReg + ".z\n" + "sub " + targetReg + ".z, " + _propReg + ".x, " + targetReg + ".z\n" + "mul " + targetReg + ".z, " + _propReg + ".y, " + targetReg + ".z\n" + "sat " + targetReg + ".z, " + targetReg + ".z\n" + // targetReg.x contains dot(lightDir, normal)
+        code += "sub " + targetReg + ".z, " + _lightProjVarying + ".z, " + targetReg + ".z\n" + "sub " + targetReg + ".z, " + _propReg + ".x, " + targetReg + ".z\n" + "mul " + targetReg + ".z, " + _propReg + ".y, " + targetReg + ".z\n" + "sat " + targetReg + ".z, " + targetReg + ".z\n" + // targetReg.x contains dot(lightDir, normal)
 
 // modulate according to incident light angle (scatter = scatter*(-.5*dot(light, normal) + .5)
-    "neg " + targetReg + ".y, " + targetReg + ".x\n" + "mul " + targetReg + ".y, " + targetReg + ".y, " + _propReg + ".z\n" + "add " + targetReg + ".y, " + targetReg + ".y, " + _propReg + ".z\n" + "mul " + _targetReg + ".w, " + targetReg + ".z, " + targetReg + ".y\n" + // blend diffuse: d' = (1-s)*d + s*1
+        "neg " + targetReg + ".y, " + targetReg + ".x\n" + "mul " + targetReg + ".y, " + targetReg + ".y, " + _propReg + ".z\n" + "add " + targetReg + ".y, " + targetReg + ".y, " + _propReg + ".z\n" + "mul " + _targetReg + ".w, " + targetReg + ".z, " + targetReg + ".y\n" + // blend diffuse: d' = (1-s)*d + s*1
 
-    "sub " + targetReg + ".y, " + _colorReg + ".w, " + _targetReg + ".w\n" + "mul " + targetReg + ".w, " + targetReg + ".w, " + targetReg + ".y\n";
-    return code;
+        "sub " + targetReg + ".y, " + _colorReg + ".w, " + _targetReg + ".w\n" + "mul " + targetReg + ".w, " + targetReg + ".w, " + targetReg + ".y\n";
+        return code;
     }
 
-    }
+}
 

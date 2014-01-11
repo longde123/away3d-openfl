@@ -9,7 +9,7 @@ class ATFData {
     static public var TYPE_NORMAL:Int = 0x0;
     static public var TYPE_CUBE:Int = 0x1;
     public var type:Int;
-    public var format:String;
+    public var format:Context3DTextureFormat;
     public var width:Int;
     public var height:Int;
     public var numTextures:Int;
@@ -33,8 +33,8 @@ class ATFData {
             case 2, 3:
                 format = Context3DTextureFormat.COMPRESSED;
             case 4, 5:
-                format = "compressedAlpha";
-                break;
+                format = Context3DTextureFormat.COMPRESSED_ALPHA;
+
 // explicit string to stay compatible
 // with older versions
                 throw new Error("Invalid ATF format");
@@ -49,8 +49,8 @@ class ATFData {
             default:
                 throw new Error("Invalid ATF type");
         }
-        this.width = Math.pow(2, data.readUnsignedByte());
-        this.height = Math.pow(2, data.readUnsignedByte());
+        this.width = Std.int(Math.pow(2, data.readUnsignedByte()));
+        this.height =  Std.int(Math.pow(2, data.readUnsignedByte()));
         this.numTextures = data.readUnsignedByte();
         this.data = data;
     }

@@ -145,8 +145,8 @@ class VertexAnimationSet extends AnimationSetBase implements IAnimationSet {
             var j:Int = 1;
             while (j < _numPoses) {
                 code += "mul " + temp2 + ", va" + streamIndex + ", " + constantReg + "." + regs[j] + "\n";
-                if (j < _numPoses - 1) code += "add " + temp1 + ", " + temp1 + ", " + temp2 + "\n"++;
-                streamIndex;
+                if (j < _numPoses - 1) code += "add " + temp1 + ", " + temp1 + ", " + temp2 + "\n";
+                ++streamIndex;
                 ++j;
             }
             code += "add " + targetRegisters[i] + ", " + temp1 + ", " + temp2 + "\n";

@@ -77,7 +77,7 @@ class ProjectiveTextureMethod extends EffectMethodBase {
     }
 
     public function set_mode(value:String):String {
-        if (_mode == value) return;
+        if (_mode == value) return value;
         _mode = value;
         invalidateShaderProgram();
         return value;

@@ -4,6 +4,7 @@
  */
 package away3d.cameras.lenses;
 
+import flash.Vector;
 import away3d.core.math.Matrix3DUtils;
 import flash.geom.Vector3D;
 
@@ -31,7 +32,7 @@ class OrthographicLens extends LensBase {
     }
 
     public function set_projectionHeight(value:Float):Float {
-        if (value == _projectionHeight) return;
+        if (value == _projectionHeight) return value;
         _projectionHeight = value;
         invalidateMatrix();
         return value;

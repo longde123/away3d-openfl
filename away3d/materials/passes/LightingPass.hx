@@ -109,7 +109,7 @@ class LightingPass extends CompiledPass {
     }
 
     public function set_includeCasters(value:Bool):Bool {
-        if (_includeCasters == value) return;
+        if (_includeCasters == value) return value;
         _includeCasters = value;
         invalidateShaderProgram();
         return value;
@@ -124,7 +124,7 @@ class LightingPass extends CompiledPass {
         var numDirectionalLights:Int;
         var numPointLights:Int;
         var numLightProbes:Int;
-        if (_lightPicker) {
+        if (_lightPicker!=null) {
             numDirectionalLights = calculateNumDirectionalLights(_lightPicker.numDirectionalLights);
             numPointLights = calculateNumPointLights(_lightPicker.numPointLights);
             numLightProbes = calculateNumProbes(_lightPicker.numLightProbes);
@@ -155,7 +155,7 @@ class LightingPass extends CompiledPass {
 	 */
 
     private function calculateNumDirectionalLights(numDirectionalLights:Int):Int {
-        return Math.min(numDirectionalLights - _directionalLightsOffset, _maxLights);
+        return Std.int(Math.min(numDirectionalLights - _directionalLightsOffset, _maxLights));
     }
 
 /**
@@ -166,7 +166,7 @@ class LightingPass extends CompiledPass {
 
     private function calculateNumPointLights(numPointLights:Int):Int {
         var numFree:Int = _maxLights - _numDirectionalLights;
-        return Math.min(numPointLights - _pointLightsOffset, numFree);
+        return Std.int(Math.min(numPointLights - _pointLightsOffset, numFree));
     }
 
 /**
@@ -179,7 +179,7 @@ class LightingPass extends CompiledPass {
         var numChannels:Int;
         if ((_specularLightSources & LightSources.PROBES) != 0) ++numChannels;
         if ((_diffuseLightSources & LightSources.PROBES) != 0) ++numChannels;
-        return Math.min(numLightProbes - _lightProbesOffset, int(4 / numChannels));
+        return Std.int( Math.min(numLightProbes - _lightProbesOffset, Std.int(4 / numChannels)));
     }
 
 /**
@@ -265,125 +265,128 @@ class LightingPass extends CompiledPass {
         var offset:Int;
         l = _lightVertexConstantIndex;
         k = _lightFragmentConstantIndex;
-        var __cast : Int = 0;
-        var dirLights : Vector<DirectionalLight> = _lightPicker.directionalLights;
+        var __cast:Int = 0;
+        var dirLights:Vector<DirectionalLight> = _lightPicker.directionalLights;
         offset = _directionalLightsOffset;
         len = _lightPicker.directionalLights.length;
-        if(offset > len) {
-        __cast = 1;
-        offset -= len;
+        if (offset > len) {
+            __cast = 1;
+            offset -= len;
         }
-        while(__cast < numLightTypes) {
-        if(__cast>0) dirLights = _lightPicker.castingDirectionalLights;
-        len = dirLights.length;
-        if(len > _numDirectionalLights) len = _numDirectionalLights;
-        i = 0;
-        while(i < len) {
-        dirLight = dirLights[offset + i];
-        dirPos = dirLight.sceneDirection;
-        _ambientLightR += dirLight._ambientR;
-        _ambientLightG += dirLight._ambientG;
-        _ambientLightB += dirLight._ambientB;
-        if(_tangentSpace) {
-        var x : Float = - dirPos.x;
-        var y : Float = - dirPos.y;
-        var z : Float = - dirPos.z;
-        _vertexConstantData[l++] = _inverseSceneMatrix[0] * x + _inverseSceneMatrix[4] * y + _inverseSceneMatrix[8] * z;
-        _vertexConstantData[l++] = _inverseSceneMatrix[1] * x + _inverseSceneMatrix[5] * y + _inverseSceneMatrix[9] * z;
-        _vertexConstantData[l++] = _inverseSceneMatrix[2] * x + _inverseSceneMatrix[6] * y + _inverseSceneMatrix[10] * z;
-        _vertexConstantData[l++] = 1;
-        }
+        var x:Float;
+        var y:Float;
+        var z:Float;
+        while (__cast < numLightTypes) {
+            if (__cast > 0) dirLights = _lightPicker.castingDirectionalLights;
+            len = dirLights.length;
+            if (len > _numDirectionalLights) len = _numDirectionalLights;
+            i = 0;
+            while (i < len) {
+                dirLight = dirLights[offset + i];
+                dirPos = dirLight.sceneDirection;
+                _ambientLightR += dirLight._ambientR;
+                _ambientLightG += dirLight._ambientG;
+                _ambientLightB += dirLight._ambientB;
+                if (_tangentSpace) {
+                    x = -dirPos.x;
+                    y = -dirPos.y;
+                    z = -dirPos.z;
+                    _vertexConstantData[l++] = _inverseSceneMatrix[0] * x + _inverseSceneMatrix[4] * y + _inverseSceneMatrix[8] * z;
+                    _vertexConstantData[l++] = _inverseSceneMatrix[1] * x + _inverseSceneMatrix[5] * y + _inverseSceneMatrix[9] * z;
+                    _vertexConstantData[l++] = _inverseSceneMatrix[2] * x + _inverseSceneMatrix[6] * y + _inverseSceneMatrix[10] * z;
+                    _vertexConstantData[l++] = 1;
+                }
 
-        else {
-        _fragmentConstantData[k++] = - dirPos.x;
-        _fragmentConstantData[k++] = - dirPos.y;
-        _fragmentConstantData[k++] = - dirPos.z;
-        _fragmentConstantData[k++] = 1;
-        }
+                else {
+                    _fragmentConstantData[k++] = -dirPos.x;
+                    _fragmentConstantData[k++] = -dirPos.y;
+                    _fragmentConstantData[k++] = -dirPos.z;
+                    _fragmentConstantData[k++] = 1;
+                }
 
-        _fragmentConstantData[k++] = dirLight._diffuseR;
-        _fragmentConstantData[k++] = dirLight._diffuseG;
-        _fragmentConstantData[k++] = dirLight._diffuseB;
-        _fragmentConstantData[k++] = 1;
-        _fragmentConstantData[k++] = dirLight._specularR;
-        _fragmentConstantData[k++] = dirLight._specularG;
-        _fragmentConstantData[k++] = dirLight._specularB;
-        _fragmentConstantData[k++] = 1;
-        if(++total == _numDirectionalLights) {
+                _fragmentConstantData[k++] = dirLight._diffuseR;
+                _fragmentConstantData[k++] = dirLight._diffuseG;
+                _fragmentConstantData[k++] = dirLight._diffuseB;
+                _fragmentConstantData[k++] = 1;
+                _fragmentConstantData[k++] = dirLight._specularR;
+                _fragmentConstantData[k++] = dirLight._specularG;
+                _fragmentConstantData[k++] = dirLight._specularB;
+                _fragmentConstantData[k++] = 1;
+                if (++total == _numDirectionalLights) {
 // break loop
-        i = len;
-        __cast = numLightTypes;
-        }
-        ++i;
-        }
-        ++__cast;
+                    i = len;
+                    __cast = numLightTypes;
+                }
+                ++i;
+            }
+            ++__cast;
         }
 // more directional supported than currently picked, need to clamp all to 0
-        if(_numDirectionalLights > total) {
-        i = k + (_numDirectionalLights - total) * 12;
-        while(k < i)_fragmentConstantData[k++] = 0;
+        if (_numDirectionalLights > total) {
+            i = k + (_numDirectionalLights - total) * 12;
+            while (k < i)_fragmentConstantData[k++] = 0;
         }
         total = 0;
-        var pointLights : Vector<PointLight> = _lightPicker.pointLights;
+        var pointLights:Vector<PointLight> = _lightPicker.pointLights;
         offset = _pointLightsOffset;
         len = _lightPicker.pointLights.length;
-        if(offset > len) {
-        __cast = 1;
-        offset -= len;
+        if (offset > len) {
+            __cast = 1;
+            offset -= len;
         }
 
         else __cast = 0;
-        while(__cast < numLightTypes) {
-        if(__cast>0) pointLights = _lightPicker.castingPointLights;
-        len = pointLights.length;
-        i = 0;
-        while(i < len) {
-        pointLight = pointLights[offset + i];
-        dirPos = pointLight.scenePosition;
-        _ambientLightR += pointLight._ambientR;
-        _ambientLightG += pointLight._ambientG;
-        _ambientLightB += pointLight._ambientB;
-        if(_tangentSpace) {
-        x = dirPos.x;
-        y = dirPos.y;
-        z = dirPos.z;
-        _vertexConstantData[l++] = _inverseSceneMatrix[0] * x + _inverseSceneMatrix[4] * y + _inverseSceneMatrix[8] * z + _inverseSceneMatrix[12];
-        _vertexConstantData[l++] = _inverseSceneMatrix[1] * x + _inverseSceneMatrix[5] * y + _inverseSceneMatrix[9] * z + _inverseSceneMatrix[13];
-        _vertexConstantData[l++] = _inverseSceneMatrix[2] * x + _inverseSceneMatrix[6] * y + _inverseSceneMatrix[10] * z + _inverseSceneMatrix[14];
-        }
+        while (__cast < numLightTypes) {
+            if (__cast > 0) pointLights = _lightPicker.castingPointLights;
+            len = pointLights.length;
+            i = 0;
+            while (i < len) {
+                pointLight = pointLights[offset + i];
+                dirPos = pointLight.scenePosition;
+                _ambientLightR += pointLight._ambientR;
+                _ambientLightG += pointLight._ambientG;
+                _ambientLightB += pointLight._ambientB;
+                if (_tangentSpace) {
+                    x = dirPos.x;
+                    y = dirPos.y;
+                    z = dirPos.z;
+                    _vertexConstantData[l++] = _inverseSceneMatrix[0] * x + _inverseSceneMatrix[4] * y + _inverseSceneMatrix[8] * z + _inverseSceneMatrix[12];
+                    _vertexConstantData[l++] = _inverseSceneMatrix[1] * x + _inverseSceneMatrix[5] * y + _inverseSceneMatrix[9] * z + _inverseSceneMatrix[13];
+                    _vertexConstantData[l++] = _inverseSceneMatrix[2] * x + _inverseSceneMatrix[6] * y + _inverseSceneMatrix[10] * z + _inverseSceneMatrix[14];
+                }
 
-        else {
-        _vertexConstantData[l++] = dirPos.x;
-        _vertexConstantData[l++] = dirPos.y;
-        _vertexConstantData[l++] = dirPos.z;
-        }
+                else {
+                    _vertexConstantData[l++] = dirPos.x;
+                    _vertexConstantData[l++] = dirPos.y;
+                    _vertexConstantData[l++] = dirPos.z;
+                }
 
-        _vertexConstantData[l++] = 1;
-        _fragmentConstantData[k++] = pointLight._diffuseR;
-        _fragmentConstantData[k++] = pointLight._diffuseG;
-        _fragmentConstantData[k++] = pointLight._diffuseB;
-        var radius : Float = pointLight._radius;
-        _fragmentConstantData[k++] = radius * radius;
-        _fragmentConstantData[k++] = pointLight._specularR;
-        _fragmentConstantData[k++] = pointLight._specularG;
-        _fragmentConstantData[k++] = pointLight._specularB;
-        _fragmentConstantData[k++] = pointLight._fallOffFactor;
-        if(++total == _numPointLights) {
+                _vertexConstantData[l++] = 1;
+                _fragmentConstantData[k++] = pointLight._diffuseR;
+                _fragmentConstantData[k++] = pointLight._diffuseG;
+                _fragmentConstantData[k++] = pointLight._diffuseB;
+                var radius:Float = pointLight._radius;
+                _fragmentConstantData[k++] = radius * radius;
+                _fragmentConstantData[k++] = pointLight._specularR;
+                _fragmentConstantData[k++] = pointLight._specularG;
+                _fragmentConstantData[k++] = pointLight._specularB;
+                _fragmentConstantData[k++] = pointLight._fallOffFactor;
+                if (++total == _numPointLights) {
 // break loop
-        i = len;
-        __cast = numLightTypes;
-        }
-        ++i;
-        }
-        ++__cast;
+                    i = len;
+                    __cast = numLightTypes;
+                }
+                ++i;
+            }
+            ++__cast;
         }
 // more directional supported than currently picked, need to clamp all to 0
-        if(_numPointLights > total) {
-        i = k + (total - _numPointLights) * 12;
-        while(k < i) {
-        _fragmentConstantData[k] = 0;
-        ++k;
-        }
+        if (_numPointLights > total) {
+            i = k + (total - _numPointLights) * 12;
+            while (k < i) {
+                _fragmentConstantData[k] = 0;
+                ++k;
+            }
         }
     }
 
@@ -398,7 +401,7 @@ class LightingPass extends CompiledPass {
         var weights:Vector<Float> = _lightPicker.lightProbeWeights;
         var len:Int = lightProbes.length - _lightProbesOffset;
         var addDiff:Bool = usesProbesForDiffuse();
-        var addSpec:Bool = cast((_methodSetup._specularMethod && usesProbesForSpecular()), Boolean);
+        var addSpec:Bool = cast((_methodSetup._specularMethod!=null && usesProbesForSpecular()), Bool);
         if (!(addDiff || addSpec)) return;
         if (len > _numLightProbes) len = _numLightProbes;
         var i:Int = 0;

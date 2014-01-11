@@ -38,7 +38,7 @@ class Parsers {
 	 *
 	 * @see away3d.loading.AssetLibrary.enableParser
 	 */
-    static public var ALL_BUNDLED:Vector<Class<Dynamic>> = Vector.ofArray(cast [AC3DParser, AWD1Parser, AWD2Parser, AWDParser, Max3DSParser, DXFParser, MD2Parser, MD5AnimParser, MD5MeshParser, OBJParser, DAEParser]);
+    static public var ALL_BUNDLED:Array<Class<ParserBase>> =  [AC3DParser, AWD1Parser, AWD2Parser, AWDParser, Max3DSParser, DXFParser, MD2Parser, MD5AnimParser, MD5MeshParser, OBJParser, DAEParser];
 /**
 	 * Short-hand function to enable all bundled parsers for auto-detection. In practice,
 	 * this is the same as invoking enableParsers(Parsers.ALL_BUNDLED) on any of the

@@ -25,7 +25,7 @@ class AnisotropicSpecularMethod extends BasicSpecularMethod {
 	 * @inheritDoc
 	 */
 
-    override private function initVO(vo:MethodVO):Void {
+    override public function initVO(vo:MethodVO):Void {
         vo.needsTangents = true;
         vo.needsView = true;
     }

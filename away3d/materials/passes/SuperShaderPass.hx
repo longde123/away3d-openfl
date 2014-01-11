@@ -29,7 +29,7 @@ class SuperShaderPass extends CompiledPass {
     public var colorTransform(get_colorTransform, set_colorTransform):ColorTransform;
     public var colorTransformMethod(get_colorTransformMethod, set_colorTransformMethod):ColorTransformMethod;
     public var numMethods(get_numMethods, never):Int;
-    var ignoreLights(get_ignoreLights, set_ignoreLights):Bool;
+    public var ignoreLights(get_ignoreLights, set_ignoreLights):Bool;
 
     private var _includeCasters:Bool;
     private var _ignoreLights:Bool;

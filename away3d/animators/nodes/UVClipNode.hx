@@ -25,6 +25,7 @@ class UVClipNode extends AnimationClipNodeBase {
     public function new() {
         _frames = new Vector<UVAnimationFrame>();
         _stateClass = UVClipState;
+		super();
     }
 
 /**
@@ -50,7 +51,7 @@ class UVClipNode extends AnimationClipNodeBase {
         var i:Int;
         if (_durations.length > 0) {
             i = _numFrames - 1;
-            while (i--)_totalDuration += _durations[i];
+            while (i-- >0)_totalDuration += _durations[i];
             if (_stitchFinalFrame || !_looping) _totalDuration += _durations[_numFrames - 1];
         }
     }

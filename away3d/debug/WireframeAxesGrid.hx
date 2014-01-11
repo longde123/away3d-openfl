@@ -15,9 +15,9 @@ import flash.geom.Vector3D;
 
 class WireframeAxesGrid extends SegmentSet {
 
-    static private var PLANE_ZY:String = "zy";
-    static private var PLANE_XY:String = "xy";
-    static private var PLANE_XZ:String = "xz";
+    static public var PLANE_ZY:String = "zy";
+    static public var PLANE_XY:String = "xy";
+    static public var PLANE_XZ:String = "xz";
 
     public function new(subDivision:Int = 10, gridSize:Int = 100, thickness:Float = 1, colorXY:Int = 0x0000FF, colorZY:Int = 0xFF0000, colorXZ:Int = 0x00FF00) {
         super();
@@ -37,7 +37,7 @@ class WireframeAxesGrid extends SegmentSet {
         var inc:Float = -bound;
         while (inc <= bound) {
             switch(plane) {
-                case PLANE_ZY:
+                case WireframeAxesGrid.PLANE_ZY:
                     v0.x = 0;
                     v0.y = inc;
                     v0.z = bound;
@@ -52,7 +52,7 @@ class WireframeAxesGrid extends SegmentSet {
                     v1.y = -bound;
                     v1.z = inc;
                     addSegment(new LineSegment(v0, v1, color, color, thickness));
-                case PLANE_XY:
+                case WireframeAxesGrid.PLANE_XY:
                     v0.x = bound;
                     v0.y = inc;
                     v0.z = 0;

@@ -28,6 +28,7 @@ class AnimationSetBase extends NamedAssetBase implements IAsset {
         _animations = new Vector<AnimationNodeBase>();
         _animationNames = new Vector<String>();
         _animationDictionary = new WeakMap<String, AnimationNodeBase>();
+        super();
     }
 
 /**
@@ -43,8 +44,8 @@ class AnimationSetBase extends NamedAssetBase implements IAsset {
         var reg:String;
         while (true) {
             reg = "vt" + i;
-            if (exclude.indexOf(reg) == -1 && excludeAnother != reg) return reg++;
-            i;
+            if (exclude.indexOf(reg) == -1 && excludeAnother != reg) return reg;
+            ++i;
         }
 
 // can't be reached

@@ -53,7 +53,7 @@ class FresnelSpecularMethod extends CompositeSpecularMethod {
     }
 
     public function set_basedOnSurface(value:Bool):Bool {
-        if (_incidentLight != value) return;
+        if (_incidentLight != value) return value;
         _incidentLight = !value;
         invalidateShaderProgram();
         return value;

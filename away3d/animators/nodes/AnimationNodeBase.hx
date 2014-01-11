@@ -3,17 +3,18 @@
  */
 package away3d.animators.nodes;
 
+import away3d.animators.states.IAnimationState;
 import away3d.library.assets.AssetType;
 import away3d.library.assets.NamedAssetBase;
 import away3d.library.assets.IAsset;
 
 class AnimationNodeBase extends NamedAssetBase implements IAsset {
-    public var stateClass(get_stateClass, never):Class<Dynamic>;
+    public var stateClass(get_stateClass, never):Class<IAnimationState>;
     public var assetType(get_assetType, never):String;
 
-    private var _stateClass:Class<Dynamic>;
+    private var _stateClass:Class<IAnimationState>;
 
-    public function get_stateClass():Class<Dynamic> {
+    public function get_stateClass():Class<IAnimationState> {  
         return _stateClass;
     }
 

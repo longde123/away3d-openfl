@@ -22,7 +22,7 @@ class NodeBase {
     public var parent(get_parent, never):NodeBase;
     var numEntities(get_numEntities, never):Int;
 
-    private var _parent:NodeBase;
+    public var _parent:NodeBase;
     private var _childNodes:Vector<NodeBase>;
     private var _numChildNodes:Int;
     private var _debugPrimitive:WireframePrimitiveBase;

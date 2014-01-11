@@ -4,6 +4,10 @@
 package away3d.tools.utils;
 
 import away3d.core.math.MathConsts;
+import away3d.core.math.MathConsts;
+import away3d.core.math.MathConsts;
+import away3d.core.math.MathConsts;
+import away3d.core.math.MathConsts;
 import flash.Vector;
 import away3d.lights.LightBase;
 import haxe.ds.ObjectMap;
@@ -56,7 +60,7 @@ class Bounds {
             return;
         }
         if (worldBased) {
-            var b:Vector<Float> = Vector.ofArray(cast [Infinity, Infinity, Infinity, -Infinity, -Infinity, -Infinity]);
+            var b:Vector<Float> = Vector.ofArray(cast [MathConsts.Infinity, MathConsts.Infinity, MathConsts.Infinity, -MathConsts.Infinity, -MathConsts.Infinity, -MathConsts.Infinity]);
             var c:Vector<Float> = getBoundsCorners(_minX, _minY, _minZ, _maxX, _maxY, _maxZ);
             transformContainer(b, c, container.sceneTransform);
             _minX = b[0];
@@ -102,7 +106,8 @@ class Bounds {
 	 */
 
     static public function getCenter(outCenter:Vector3D = null):Vector3D {
-        var center:Vector3D = outCenter || new Vector3D();
+        var center:Vector3D = outCenter;
+        if(center==null)center= new Vector3D();
         center.x = _minX + (_maxX - _minX) * .5;
         center.y = _minY + (_maxY - _minY) * .5;
         center.z = _minZ + (_maxZ - _minZ) * .5;
@@ -183,8 +188,8 @@ class Bounds {
 
     static private function reset():Void {
         _containers = new ObjectMap<ObjectContainer3D, Vector<Float>>();
-        _minX = _minY = _minZ = Infinity;
-        _maxX = _maxY = _maxZ = -Infinity;
+        _minX = _minY = _minZ = MathConsts.Infinity;
+        _maxX = _maxY = _maxZ = - MathConsts.Infinity;
         _defaultPosition.x = 0.0;
         _defaultPosition.y = 0.0;
         _defaultPosition.z = 0.0;
@@ -199,13 +204,13 @@ class Bounds {
         var child:ObjectContainer3D;
         var isEntity:Entity = cast(obj, Entity);
         var containerTransform:Matrix3D = new Matrix3D();
-        if (isEntity && parentTransform) {
+        if (isEntity!=null && parentTransform!=null) {
             parseObjectBounds(obj, parentTransform);
             containerTransform = obj.transform.clone();
-            if (parentTransform) containerTransform.append(parentTransform);
+            if (parentTransform!=null) containerTransform.append(parentTransform);
         }
 
-        else if (isEntity && !parentTransform) {
+        else if (isEntity!=null && parentTransform==null) {
             var mat:Matrix3D = obj.transform.clone();
             mat.invert();
             parseObjectBounds(obj, mat);
@@ -217,8 +222,8 @@ class Bounds {
             ++i;
         }
         var parentBounds:Vector<Float> = _containers.get(obj.parent);
-        if (!isEntity && parentTransform) parseObjectBounds(obj, parentTransform, true);
-        if (parentBounds) {
+        if (isEntity==null && parentTransform!=null) parseObjectBounds(obj, parentTransform, true);
+        if (parentBounds!=null) {
             parentBounds[0] = Math.min(parentBounds[0], containerBounds[0]);
             parentBounds[1] = Math.min(parentBounds[1], containerBounds[1]);
             parentBounds[2] = Math.min(parentBounds[2], containerBounds[2]);
@@ -248,22 +253,22 @@ class Bounds {
         var corners:Vector<Float>;
         var mat:Matrix3D = oC.transform.clone();
         var cB:Vector<Float> = _containers.get(oC);
-        if (e) {
+        if (e!=null) {
             if (isInfinite(e.minX) || isInfinite(e.minY) || isInfinite(e.minZ) || isInfinite(e.maxX) || isInfinite(e.maxY) || isInfinite(e.maxZ)) {
                 return;
             }
             corners = getBoundsCorners(e.minX, e.minY, e.minZ, e.maxX, e.maxY, e.maxZ);
-            if (parentTransform) mat.append(parentTransform);
+            if (parentTransform!=null) mat.append(parentTransform);
         }
 
         else {
             corners = getBoundsCorners(cB[0], cB[1], cB[2], cB[3], cB[4], cB[5]);
-            if (parentTransform) mat.prepend(parentTransform);
+            if (parentTransform!=null) mat.prepend(parentTransform);
         }
 
         if (resetBounds) {
-            cB[0] = cB[1] = cB[2] = Infinity;
-            cB[3] = cB[4] = cB[5] = -Infinity;
+            cB[0] = cB[1] = cB[2] = MathConsts.Infinity;
+            cB[3] = cB[4] = cB[5] = -MathConsts.Infinity;
         }
         transformContainer(cB, corners, mat);
     }

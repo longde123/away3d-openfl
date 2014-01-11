@@ -11,7 +11,7 @@ class AssetLibraryIterator {
     private var _filtered:Vector<IAsset>;
     private var _idx:Int;
 
-    public function new(assets:Vector<IAsset>, assetTypeFilter:String, namespaceFilter:String, filterFunc:Dynamic -> Void) {
+    public function new(assets:Vector<IAsset>, assetTypeFilter:String, namespaceFilter:String, filterFunc:Dynamic -> Dynamic) {
         _assets = assets;
         filter(assetTypeFilter, namespaceFilter, filterFunc);
     }
@@ -40,17 +40,17 @@ class AssetLibraryIterator {
         _idx = index;
     }
 
-    private function filter(assetTypeFilter:String, namespaceFilter:String, filterFunc:Dynamic -> Void):Void {
-        if (assetTypeFilter || namespaceFilter || filterFunc != null) {
+    private function filter(assetTypeFilter:String, namespaceFilter:String, filterFunc:Dynamic -> Dynamic):Void {
+        if (assetTypeFilter != null || namespaceFilter != null || filterFunc != null) {
             var idx:Int;
             var asset:IAsset;
             idx = 0;
             _filtered = new Vector<IAsset>();
             for (asset in _assets) {
 // Skip this assets if filtering on type and this is wrong type
-                if (assetTypeFilter && asset.assetType != assetTypeFilter) continue;
-                if (namespaceFilter && asset.assetNamespace != namespaceFilter) continue;
-                if (filterFunc != null && !filterFunc(asset)) continue;
+                if (assetTypeFilter!=null && asset.assetType != assetTypeFilter) continue;
+                if (namespaceFilter!=null && asset.assetNamespace != namespaceFilter) continue;
+                if (filterFunc != null && filterFunc(asset)==null) continue;
                 _filtered[idx++] = asset;
             }
 

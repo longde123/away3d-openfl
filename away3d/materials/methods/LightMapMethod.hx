@@ -45,7 +45,7 @@ class LightMapMethod extends EffectMethodBase {
 	 * @inheritDoc
 	 */
 
-    override private function initVO(vo:MethodVO):Void {
+    override public function initVO(vo:MethodVO):Void {
         vo.needsUV = !_useSecondaryUV;
         vo.needsSecondaryUV = _useSecondaryUV;
     }
@@ -63,7 +63,7 @@ class LightMapMethod extends EffectMethodBase {
 
     public function set_blendMode(value:String):String {
         if (value != ADD && value != MULTIPLY) throw new Error("Unknown blendmode!");
-        if (_blendMode == value) return;
+        if (_blendMode == value) return value;
         _blendMode = value;
         invalidateShaderProgram();
         return value;
@@ -103,9 +103,9 @@ class LightMapMethod extends EffectMethodBase {
         vo.texturesIndex = lightMapReg.index;
         code = getTex2DSampleCode(vo, temp, lightMapReg, _texture, (_useSecondaryUV) ? _sharedRegisters.secondaryUVVarying : _sharedRegisters.uvVarying);
         switch(_blendMode) {
-            case MULTIPLY:
+            case LightMapMethod.MULTIPLY:
                 code += "mul " + targetReg + ", " + targetReg + ", " + temp + "\n";
-            case ADD:
+            case LightMapMethod.ADD:
                 code += "add " + targetReg + ", " + targetReg + ", " + temp + "\n";
         }
         return code;

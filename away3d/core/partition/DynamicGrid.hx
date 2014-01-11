@@ -85,7 +85,7 @@ class DynamicGrid {
                 var x:Int = 0;
                 while (x < numCellsX) {
                     node = new InvertedOctreeNode(new Vector3D(minX, minY, minZ), new Vector3D(minX + cellWidth, minY + cellHeight, minZ + cellDepth));
-                    if (parents) {
+                    if (parents!=null) {
                         var index:Int = (x >> 1) + ((y >> 1) + (z >> 1) * numParentsY) * numParentsX;
                         node.setParent(parents[index]);
                     }
@@ -112,12 +112,12 @@ class DynamicGrid {
         var maxX:Float = max.x;
         var maxY:Float = max.y;
         var maxZ:Float = max.z;
-        var minIndexX:Int = (minX - _minX) / _cellWidth;
-        var maxIndexX:Int = (maxX - _minX) / _cellWidth;
-        var minIndexY:Int = (minY - _minY) / _cellHeight;
-        var maxIndexY:Int = (maxY - _minY) / _cellHeight;
-        var minIndexZ:Int = (minZ - _minZ) / _cellDepth;
-        var maxIndexZ:Int = (maxZ - _minZ) / _cellDepth;
+        var minIndexX:Int = Std.int((minX - _minX) / _cellWidth);
+        var maxIndexX:Int = Std.int((maxX - _minX) / _cellWidth);
+        var minIndexY:Int = Std.int((minY - _minY) / _cellHeight);
+        var maxIndexY:Int = Std.int((maxY - _minY) / _cellHeight);
+        var minIndexZ:Int = Std.int((minZ - _minZ) / _cellDepth);
+        var maxIndexZ:Int = Std.int((maxZ - _minZ) / _cellDepth);
         if (minIndexX < 0) minIndexX = 0
         else if (minIndexX >= _numCellsX) minIndexX = _numCellsX - 1;
         if (minIndexY < 0) minIndexY = 0
@@ -162,12 +162,12 @@ class DynamicGrid {
 
     public function getCellsIntersecting(minBounds:Vector3D, maxBounds:Vector3D):Vector<InvertedOctreeNode> {
         var cells:Vector<InvertedOctreeNode> = new Vector<InvertedOctreeNode>();
-        var minIndexX:Int = (minBounds.x - _minX) / _cellWidth;
-        var maxIndexX:Int = (maxBounds.x - _minX) / _cellWidth;
-        var minIndexY:Int = (minBounds.y - _minY) / _cellHeight;
-        var maxIndexY:Int = (maxBounds.y - _minY) / _cellHeight;
-        var minIndexZ:Int = (minBounds.z - _minZ) / _cellDepth;
-        var maxIndexZ:Int = (maxBounds.z - _minZ) / _cellDepth;
+        var minIndexX:Int = Std.int((minBounds.x - _minX) / _cellWidth);
+        var maxIndexX:Int = Std.int((maxBounds.x - _minX) / _cellWidth);
+        var minIndexY:Int = Std.int((minBounds.y - _minY) / _cellHeight);
+        var maxIndexY:Int = Std.int((maxBounds.y - _minY) / _cellHeight);
+        var minIndexZ:Int = Std.int((minBounds.z - _minZ) / _cellDepth);
+        var maxIndexZ:Int = Std.int((maxBounds.z - _minZ) / _cellDepth);
         if (minIndexX < 0) minIndexX = 0
         else if (minIndexX >= _numCellsX) minIndexX = _numCellsX - 1;
         if (maxIndexX < 0) maxIndexX = 0

@@ -39,7 +39,7 @@ class SingleObjectDepthPass extends MaterialPassBase {
         _textureSize = textureSize;
         _numUsedStreams = 2;
         _numUsedVertexConstants = 7;
-        _polyOffset = new Vector<Float>([polyOffset, 0, 0, 0]);
+        _polyOffset = Vector.ofArray([polyOffset, 0, 0, 0]);
         _enc = Vector.ofArray(cast [1.0, 255.0, 65025.0, 16581375.0, 1.0 / 255.0, 1.0 / 255.0, 1.0 / 255.0, 0.0]);
         _animatableAttributes = Vector.ofArray(cast ["va0", "va1"]);
         _animationTargetRegisters = Vector.ofArray(cast ["vt0", "vt1"]);
@@ -134,7 +134,7 @@ class SingleObjectDepthPass extends MaterialPassBase {
     override public function render(renderable:IRenderable, stage3DProxy:Stage3DProxy, camera:Camera3D, viewProjection:Matrix3D):Void {
         var matrix:Matrix3D;
         var contextIndex:Int = stage3DProxy.stage3DIndex;
-        var context:Context3DProxy = stage3DProxy.context3D;
+        var context:Context3D = stage3DProxy.context3D;
         var len:Int;
         var light:LightBase;
         var lights:Vector<LightBase> = _lightPicker.allPickedLights;

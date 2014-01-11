@@ -37,6 +37,7 @@ class QuadTreeNode extends NodeBase {
             addNode(_leftFar = new QuadTreeNode(maxDepth, hs, height, centerX - hhs, centerZ + hhs, depth + 1));
             addNode(_rightFar = new QuadTreeNode(maxDepth, hs, height, centerX + hhs, centerZ + hhs, depth + 1));
         }
+        super();
     }
 
 // todo: fix to infinite height so that height needn't be passed in constructor

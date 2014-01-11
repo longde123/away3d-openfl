@@ -186,7 +186,7 @@ class LightBase extends Entity {
 	 * @return A Matrix3D object containing the projection transformation.
 	 */
 
-    private function getObjectProjectionMatrix(renderable:IRenderable, target:Matrix3D = null):Matrix3D {
+    public function getObjectProjectionMatrix(renderable:IRenderable, target:Matrix3D = null):Matrix3D {
         throw new AbstractMethodError();
         return null;
     }

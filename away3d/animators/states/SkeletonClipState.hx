@@ -90,7 +90,7 @@ class SkeletonClipState extends AnimationClipState implements ISkeletonAnimation
 
     private function updateSkeletonPose(skeleton:Skeleton):Void {
         _skeletonPoseDirty = false;
-        if (!_skeletonClipNode.totalDuration) return;
+        if (_skeletonClipNode.totalDuration==null) return;
         if (_framesDirty) updateFrames();
         var currentPose:Vector<JointPose> = _currentPose.jointPoses;
         var nextPose:Vector<JointPose> = _nextPose.jointPoses;

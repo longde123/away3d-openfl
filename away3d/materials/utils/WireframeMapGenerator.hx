@@ -47,7 +47,7 @@ class WireframeMapGenerator {
         var bitmapData:BitmapData;
         if (fillAlpha > 1) fillAlpha = 1
         else if (fillAlpha < 0) fillAlpha = 0;
-        bitmapData = new BitmapData(width, height, fillAlpha == (1) ? false : true, (fillAlpha << 24) | (fillColor & 0xffffff));
+        bitmapData = new BitmapData(width, height, fillAlpha == (1) ? false : true, Std.int(fillAlpha << 24) | Std.int(fillColor & 0xffffff));
         var i:Int = 0;
         while (i < mesh.subMeshes.length) {
             drawLines(lineColor, lineThickness, bitmapData, mesh.subMeshes[i].subGeometry);

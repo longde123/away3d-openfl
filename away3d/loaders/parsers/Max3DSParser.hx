@@ -534,6 +534,10 @@ class Max3DSParser extends ParserBase {
         var len:Int;
         var numVerts:Int = vertices.length;
         var numFaces:Int = faces.length;
+        var face:FaceVO ;
+        var groups:Vector<UInt>;
+        var group:Int ;
+        var clones:Vector<UInt>;
 // extract groups data for vertices
         var vGroups:Vector<Vector<UInt>> = new Vector<Vector<UInt>>(numVerts, true);
         i = 0;
@@ -543,11 +547,11 @@ class Max3DSParser extends ParserBase {
         }
         i = 0;
         while (i < numFaces) {
-            var face:FaceVO = cast((faces[i]), FaceVO);
+            face = cast((faces[i]), FaceVO);
             j = 0;
             while (j < 3) {
-                var groups:Vector<UInt> = vGroups[((j == 0)) ? face.a : (((j == 1)) ? face.b : face.c)];
-                var group:Int = face.smoothGroup;
+                groups = vGroups[((j == 0)) ? face.a : (((j == 1)) ? face.b : face.c)];
+                group = face.smoothGroup;
                 k = groups.length - 1;
                 while (k >= 0) {
                     if ((group & groups[k]) > 0) {
@@ -570,8 +574,7 @@ class Max3DSParser extends ParserBase {
                 i++;
                 continue;
             }
-            ;
-            var clones:Vector<UInt> = new Vector<UInt>(len, true);
+            clones = new Vector<UInt>(len, true);
             vClones[i] = clones;
             clones[0] = i;
             var v0:VertexVO = vertices[i];

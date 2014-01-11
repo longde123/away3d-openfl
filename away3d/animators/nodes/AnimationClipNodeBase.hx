@@ -34,7 +34,7 @@ class AnimationClipNodeBase extends AnimationNodeBase {
     }
 
     public function set_looping(value:Bool):Bool {
-        if (_looping == value) return;
+        if (_looping == value) return value;
         _looping = value;
         _stitchDirty = true;
         return value;
@@ -50,7 +50,7 @@ class AnimationClipNodeBase extends AnimationNodeBase {
     }
 
     public function set_stitchFinalFrame(value:Bool):Bool {
-        if (_stitchFinalFrame == value) return;
+        if (_stitchFinalFrame == value) return value;
         _stitchFinalFrame = value;
         _stitchDirty = true;
         return value;

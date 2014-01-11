@@ -181,7 +181,7 @@ class SkinnedSubGeometry extends CompactSubGeometry {
 /**
 	 */
 
-    private function condenseIndexData():Void {
+    public function condenseIndexData():Void {
         var len:Int = _jointIndexData.length;
         var oldIndex:Int;
         var newIndex:Int = 0;

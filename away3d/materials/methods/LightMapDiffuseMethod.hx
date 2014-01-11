@@ -48,7 +48,7 @@ class LightMapDiffuseMethod extends CompositeDiffuseMethod {
 	 * @inheritDoc
 	 */
 
-    override private function initVO(vo:MethodVO):Void {
+    override public function initVO(vo:MethodVO):Void {
         vo.needsSecondaryUV = _useSecondaryUV;
         vo.needsUV = !_useSecondaryUV;
     }
@@ -66,7 +66,7 @@ class LightMapDiffuseMethod extends CompositeDiffuseMethod {
 
     public function set_blendMode(value:String):String {
         if (value != ADD && value != MULTIPLY) throw new Error("Unknown blendmode!");
-        if (_blendMode == value) return;
+        if (_blendMode == value) return value;
         _blendMode = value;
         invalidateShaderProgram();
         return value;
@@ -104,9 +104,9 @@ class LightMapDiffuseMethod extends CompositeDiffuseMethod {
     vo.secondaryTexturesIndex = lightMapReg.index;
     code = getTex2DSampleCode(vo, temp, lightMapReg, _texture, _sharedRegisters.secondaryUVVarying);
     switch(_blendMode) {
-    case MULTIPLY:
+    case LightMapDiffuseMethod.MULTIPLY:
     code += "mul " + _totalLightColorReg + ", " + _totalLightColorReg + ", " + temp + "\n";
-    case ADD:
+    case LightMapDiffuseMethod.ADD:
     code += "add " + _totalLightColorReg + ", " + _totalLightColorReg + ", " + temp + "\n";
     }
     code += super.getFragmentPostLightingCode(vo, regCache, targetReg);

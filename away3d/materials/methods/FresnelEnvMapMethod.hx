@@ -43,7 +43,7 @@ class FresnelEnvMapMethod extends EffectMethodBase {
 	 * @inheritDoc
 	 */
 
-    override private function initVO(vo:MethodVO):Void {
+    override public function initVO(vo:MethodVO):Void {
         vo.needsNormals = true;
         vo.needsView = true;
         vo.needsUV = _mask != null;
@@ -66,7 +66,7 @@ class FresnelEnvMapMethod extends EffectMethodBase {
     }
 
     public function set_mask(value:Texture2DBase):Texture2DBase {
-        if (cast((value), Boolean) != cast((_mask), Boolean) || (value && _mask && (value.hasMipMaps != _mask.hasMipMaps || value.format != _mask.format))) {
+        if (cast((value!=null), Bool) != cast((_mask!=null), Bool) || (value!=null && _mask!=null && (value.hasMipMaps != _mask.hasMipMaps || value.format != _mask.format))) {
             invalidateShaderProgram();
         }
         _mask = value;
@@ -144,7 +144,7 @@ class FresnelEnvMapMethod extends EffectMethodBase {
         data[index + 1] = _normalReflectance;
         data[index + 2] = _fresnelPower;
         context.setTextureAt(vo.texturesIndex, _cubeTexture.getTextureForStage3D(stage3DProxy));
-        if (_mask) context.setTextureAt(vo.texturesIndex + 1, _mask.getTextureForStage3D(stage3DProxy));
+        if (_mask!=null) context.setTextureAt(vo.texturesIndex + 1, _mask.getTextureForStage3D(stage3DProxy));
     }
 
 /**
@@ -182,7 +182,7 @@ class FresnelEnvMapMethod extends EffectMethodBase {
 
 // total alpha
         "mul " + viewDirReg + ".w, " + dataRegister + ".x, " + viewDirReg + ".w\n";
-        if (_mask) {
+        if (_mask!=null) {
             var maskReg:ShaderRegisterElement = regCache.getFreeTextureReg();
             code += getTex2DSampleCode(vo, temp2, maskReg, _mask, _sharedRegisters.uvVarying) + "mul " + viewDirReg + ".w, " + temp2 + ".x, " + viewDirReg + ".w\n";
         }

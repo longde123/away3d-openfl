@@ -52,7 +52,7 @@ class ShadowCasterPass extends CompiledPass {
         super.updateLights();
         var numPointLights:Int;
         var numDirectionalLights:Int;
-        if (_lightPicker) {
+        if (_lightPicker!=null) {
             numPointLights = _lightPicker.numCastingPointLights > (0) ? 1 : 0;
             numDirectionalLights = _lightPicker.numCastingDirectionalLights > (0) ? 1 : 0;
         }
@@ -132,6 +132,9 @@ class ShadowCasterPass extends CompiledPass {
         var k:Int = 0;
         var l:Int;
         var dirPos:Vector3D;
+		var x:Float ;
+		var y:Float;
+		var z:Float;
         l = _lightVertexConstantIndex;
         k = _lightFragmentConstantIndex;
         if (_numDirectionalLights > 0) {
@@ -141,9 +144,9 @@ class ShadowCasterPass extends CompiledPass {
             _ambientLightG += dirLight._ambientG;
             _ambientLightB += dirLight._ambientB;
             if (_tangentSpace) {
-                var x:Float = -dirPos.x;
-                var y:Float = -dirPos.y;
-                var z:Float = -dirPos.z;
+                x = -dirPos.x;
+                y = -dirPos.y;
+                z = -dirPos.z;
                 _vertexConstantData[l++] = _inverseSceneMatrix[0] * x + _inverseSceneMatrix[4] * y + _inverseSceneMatrix[8] * z;
                 _vertexConstantData[l++] = _inverseSceneMatrix[1] * x + _inverseSceneMatrix[5] * y + _inverseSceneMatrix[9] * z;
                 _vertexConstantData[l++] = _inverseSceneMatrix[2] * x + _inverseSceneMatrix[6] * y + _inverseSceneMatrix[10] * z;

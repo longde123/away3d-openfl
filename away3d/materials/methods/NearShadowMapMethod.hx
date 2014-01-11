@@ -36,7 +36,7 @@ class NearShadowMapMethod extends SimpleShadowMapMethodBase {
         _baseMethod = baseMethod;
         _fadeRatio = fadeRatio;
         _nearShadowMapper = cast(_castingLight.shadowMapper, NearDirectionalShadowMapper) ;
-        if (!_nearShadowMapper) throw new Error("NearShadowMapMethod requires a light that has a NearDirectionalShadowMapper instance assigned to shadowMapper.");
+        if (_nearShadowMapper==null) throw new Error("NearShadowMapMethod requires a light that has a NearDirectionalShadowMapper instance assigned to shadowMapper.");
         _baseMethod.addEventListener(ShadingMethodEvent.SHADER_INVALIDATED, onShaderInvalidated);
     }
 
@@ -49,7 +49,7 @@ class NearShadowMapMethod extends SimpleShadowMapMethodBase {
     }
 
     public function set_baseMethod(value:SimpleShadowMapMethodBase):SimpleShadowMapMethodBase {
-        if (_baseMethod == value) return;
+        if (_baseMethod == value) return value;
         _baseMethod.removeEventListener(ShadingMethodEvent.SHADER_INVALIDATED, onShaderInvalidated);
         _baseMethod = value;
         _baseMethod.addEventListener(ShadingMethodEvent.SHADER_INVALIDATED, onShaderInvalidated, false, 0, true);
@@ -74,7 +74,7 @@ class NearShadowMapMethod extends SimpleShadowMapMethodBase {
 	 * @inheritDoc
 	 */
 
-    override private function initVO(vo:MethodVO):Void {
+    override public function initVO(vo:MethodVO):Void {
         _baseMethod.initVO(vo);
         vo.needsProjection = true;
     }

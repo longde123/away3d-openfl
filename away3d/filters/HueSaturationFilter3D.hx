@@ -25,7 +25,7 @@ class HueSaturationFilter3D extends Filter3DBase {
     }
 
     public function set_saturation(value:Float):Float {
-        if (_hslTask.saturation == value) return;
+        if (_hslTask.saturation == value) return value;
         _hslTask.saturation = value;
         return value;
     }
@@ -35,7 +35,7 @@ class HueSaturationFilter3D extends Filter3DBase {
     }
 
     public function set_r(value:Float):Float {
-        if (_hslTask.r == value) return;
+        if (_hslTask.r == value) return value;
         _hslTask.r = value;
         return value;
     }
@@ -45,7 +45,7 @@ class HueSaturationFilter3D extends Filter3DBase {
     }
 
     public function set_b(value:Float):Float {
-        if (_hslTask.b == value) return;
+        if (_hslTask.b == value) return value;
         _hslTask.b = value;
         return value;
     }
@@ -55,7 +55,7 @@ class HueSaturationFilter3D extends Filter3DBase {
     }
 
     public function set_g(value:Float):Float {
-        if (_hslTask.g == value) return;
+        if (_hslTask.g == value) return value;
         _hslTask.g = value;
         return value;
     }

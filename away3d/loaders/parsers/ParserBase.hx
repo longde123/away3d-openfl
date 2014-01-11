@@ -162,6 +162,7 @@
 package away3d.loaders.parsers;
 
 
+import flash.Lib;
 import flash.errors.Error;
 import flash.Vector;
 import away3d.errors.AbstractMethodError;
@@ -187,7 +188,7 @@ class ParserBase extends EventDispatcher {
     public var dataFormat(get_dataFormat, never):String;
     public var dependencies(get_dependencies, never):Vector<ResourceDependency>;
 
-    private var _fileName:String;
+    public var _fileName:String;
     private var _dataFormat:String;
     private var _data:Dynamic;
     private var _frameLimit:Float;
@@ -210,11 +211,11 @@ class ParserBase extends EventDispatcher {
 /**
 	 * Returned by <code>proceedParsing</code> to indicate no more parsing is needed.
 	 */
-    static private var PARSING_DONE:Bool = true;
+    static public var PARSING_DONE:Bool = true;
 /**
 	 * Returned by <code>proceedParsing</code> to indicate more parsing is needed, allowing asynchronous parsing.
 	 */
-    static private var MORE_TO_PARSE:Bool = false;
+    static public var MORE_TO_PARSE:Bool = false;
 /**
 	 * Creates a new ParserBase object
 	 * @param format The data format of the file data to be parsed. Can be either <code>ParserDataFormat.BINARY</code> or <code>ParserDataFormat.PLAIN_TEXT</code>, and should be provided by the concrete subtype.
@@ -226,6 +227,7 @@ class ParserBase extends EventDispatcher {
         _materialMode = 0;
         _dataFormat = format;
         _dependencies = new Vector<ResourceDependency>();
+        super();
     }
 
 /**
@@ -318,7 +320,7 @@ class ParserBase extends EventDispatcher {
 	 * @param resourceDependency The dependency to be resolved.
 	 */
 
-    private function resolveDependency(resourceDependency:ResourceDependency):Void {
+    public function resolveDependency(resourceDependency:ResourceDependency):Void {
         throw new AbstractMethodError();
     }
 
@@ -328,7 +330,7 @@ class ParserBase extends EventDispatcher {
 	 * @param resourceDependency The dependency to be resolved.
 	 */
 
-    private function resolveDependencyFailure(resourceDependency:ResourceDependency):Void {
+    public function resolveDependencyFailure(resourceDependency:ResourceDependency):Void {
         throw new AbstractMethodError();
     }
 
@@ -338,7 +340,7 @@ class ParserBase extends EventDispatcher {
 	 * @param resourceDependency The dependency to be resolved.
 	 */
 
-    private function resolveDependencyName(resourceDependency:ResourceDependency, asset:IAsset):String {
+    public function resolveDependencyName(resourceDependency:ResourceDependency, asset:IAsset):String {
         return asset.name;
     }
 
@@ -346,9 +348,9 @@ class ParserBase extends EventDispatcher {
 	 * After Dependencys has been loaded and parsed, continue to parse
 	 */
 
-    private function resumeParsingAfterDependencies():Void {
+    public function resumeParsingAfterDependencies():Void {
         _parsingPaused = false;
-        if (_timer) _timer.start();
+        if (_timer!=null) _timer.start();
     }
 
 /**
@@ -433,7 +435,7 @@ class ParserBase extends EventDispatcher {
         }
 // If the asset has no name, give it
 // a per-type default name.
-        if (!asset.name) asset.name = type_name;
+        if (asset.name==null) asset.name = type_name;
         dispatchEvent(new AssetEvent(AssetEvent.ASSET_COMPLETE, asset));
         dispatchEvent(new AssetEvent(type_event, asset));
     }
@@ -456,7 +458,7 @@ class ParserBase extends EventDispatcher {
 	 */
 
     private function dieWithError(message:String = "Unknown parsing error"):Void {
-        if (_timer) {
+        if (_timer!=null) {
             _timer.removeEventListener(TimerEvent.TIMER, onInterval);
             _timer.stop();
             _timer = null;
@@ -473,7 +475,7 @@ class ParserBase extends EventDispatcher {
 	 */
 
     private function pauseAndRetrieveDependencies():Void {
-        if (_timer) _timer.stop();
+        if (_timer!=null) _timer.stop();
         _parsingPaused = true;
         dispatchEvent(new ParserEvent(ParserEvent.READY_FOR_DEPENDENCIES));
     }
@@ -484,7 +486,7 @@ class ParserBase extends EventDispatcher {
 	 */
 
     private function hasTime():Bool {
-        return ((getTimer() - _lastFrameTime) < _frameLimit);
+        return ((Lib.getTimer() - _lastFrameTime) < _frameLimit);
     }
 
 /**
@@ -492,7 +494,7 @@ class ParserBase extends EventDispatcher {
 	 */
 
     private function onInterval(event:TimerEvent = null):Void {
-        _lastFrameTime = getTimer();
+        _lastFrameTime = flash.Lib.getTimer();
         if (proceedParsing() && !_parsingFailure) finishParsing();
     }
 
@@ -513,7 +515,7 @@ class ParserBase extends EventDispatcher {
 	 */
 
     private function finishParsing():Void {
-        if (_timer) {
+        if (_timer!=null) {
             _timer.removeEventListener(TimerEvent.TIMER, onInterval);
             _timer.stop();
         }

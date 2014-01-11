@@ -5,6 +5,7 @@ package away3d.materials.passes;
 
 
 import flash.Vector;
+import flash.Vector;
 import away3d.cameras.Camera3D;
 import away3d.core.base.IRenderable;
 import away3d.core.managers.Stage3DProxy;
@@ -29,7 +30,8 @@ class SkyBoxPass extends MaterialPassBase {
         super();
         mipmap = false;
         _numUsedTextures = 1;
-        _vertexData = new Vector<Float>([0, 0, 0, 0, 1, 1, 1, 1]);
+        var tmp: Array<Float>=[0, 0, 0, 0, 1, 1, 1, 1];
+        _vertexData = Vector.ofArray(tmp);
     }
 
 /**
@@ -63,7 +65,7 @@ class SkyBoxPass extends MaterialPassBase {
         switch(_sw2_) {
             case Context3DTextureFormat.COMPRESSED:
                 format = "dxt1,";
-            case "compressedAlpha":
+            case Context3DTextureFormat.COMPRESSED_ALPHA:
                 format = "dxt5,";
             default:
                 format = "";

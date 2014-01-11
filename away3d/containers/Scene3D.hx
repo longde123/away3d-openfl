@@ -21,7 +21,7 @@ class Scene3D extends EventDispatcher {
     public var partition(get_partition, set_partition):Partition3D;
     public var numChildren(get_numChildren, never):Int;
 
-    private var _sceneGraphRoot:ObjectContainer3D;
+    public var _sceneGraphRoot:ObjectContainer3D;
     private var _partitions:Vector<Partition3D>;
 /**
 	 * Creates a new Scene3D object.

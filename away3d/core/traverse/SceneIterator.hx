@@ -33,25 +33,25 @@ class SceneIterator {
     public function next():ObjectContainer3D {
         do {
             switch(_traverseState) {
-                case PRE, IN:
+                case SceneIterator.PRE, SceneIterator.IN:
                     switch(_traverseState) {
-                        case PRE:
+                        case SceneIterator.PRE:
 // just entered a node
                             _childIndexStack[_stackPos++] = _childIndex;
                             _childIndex = 0;
-                            _traverseState = IN;
+                            _traverseState = SceneIterator.IN;
                             return _node;
                     }
-                    if (_childIndex == _node.numChildren) _traverseState = POST
+                    if (_childIndex == _node.numChildren) _traverseState = SceneIterator.POST
                     else {
                         _node = _node.getChildAt(_childIndex);
-                        _traverseState = PRE;
+                        _traverseState = SceneIterator.PRE;
                     }
 
-                case POST:
+                case SceneIterator.POST:
                     _node = _node.parent;
                     _childIndex = _childIndexStack[--_stackPos] + 1;
-                    _traverseState = IN;
+                    _traverseState = SceneIterator.IN;
             }
         }
         while ((!(_node == _scene._sceneGraphRoot && _traverseState == POST)));

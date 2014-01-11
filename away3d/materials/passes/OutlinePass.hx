@@ -6,6 +6,7 @@
 package away3d.materials.passes;
 
 
+import haxe.ds.StringMap;
 import flash.Vector;
 import away3d.cameras.Camera3D;
 import away3d.core.base.Geometry;
@@ -201,7 +202,7 @@ class OutlinePass extends MaterialPassBase {
         matrix3D.append(viewProjection);
         if (_dedicatedMeshes) {
             if (!_outlineMeshes.exists(renderable))
-                _outlineMeshes.set(renderable, createDedicatedMesh(Std.instance(renderable, SubMesh).subGeometry));
+                _outlineMeshes.set(renderable, createDedicatedMesh(cast(renderable, SubMesh).subGeometry));
             dedicatedRenderable = mesh.subMeshes[0];
             context.setProgramConstantsFromMatrix(Context3DProgramType.VERTEX, 0, matrix3D, true);
             dedicatedRenderable.activateVertexBuffer(0, stage3DProxy);
@@ -225,51 +226,56 @@ class OutlinePass extends MaterialPassBase {
 	 * @param source The ISubGeometry object for which to generate a dedicated mesh.
 	 */
 
-    private function createDedicatedMesh(source:ISubGeometry):Mesh {
+    private function createDedicatedMesh(source:ISubGeometry):Mesh
+    {
         var mesh:Mesh = new Mesh(new Geometry(), null);
         var dest:SubGeometry = new SubGeometry();
-        var indexLookUp:Array<Dynamic> = [];
+        var indexLookUp:StringMap<Int> = new StringMap<Int>();
         var srcIndices:Vector<UInt> = source.indexData;
         var srcVertices:Vector<Float> = source.vertexData;
         var dstIndices:Vector<UInt> = new Vector<UInt>();
         var dstVertices:Vector<Float> = new Vector<Float>();
         var index:Int;
-        var x:Float;
-        var y:Float;
-        var z:Float;
+        var x:Float, y:Float, z:Float;
         var key:String;
-        var indexCount:Int;
-        var vertexCount:Int;
+        var indexCount:Int = 0;
+        var vertexCount:Int = 0;
         var len:Int = srcIndices.length;
-        var maxIndex:Int;
+        var maxIndex:Int = 0;
         var stride:Int = source.vertexStride;
         var offset:Int = source.vertexOffset;
-        var i:Int = 0;
-        while (i < len) {
+
+        for (i in 0...len)
+        {
             index = offset + srcIndices[i] * stride;
             x = srcVertices[index];
             y = srcVertices[index + 1];
             z = srcVertices[index + 2];
-            key = x.toPrecision(5) + "/" + y.toPrecision(5) + "/" + z.toPrecision(5);
-            if (indexLookUp[key]) index = indexLookUp[key] - 1
-            else {
-                index = vertexCount / 3;
-                indexLookUp[key] = index + 1;
+            key = x + "/" + y + "/" + z;
+
+            if (indexLookUp.exists(key))
+            {
+                index = indexLookUp.get(key) - 1;
+            }
+            else
+            {
+                index = Std.int(vertexCount / 3);
+                indexLookUp.set(key, index + 1);
                 dstVertices[vertexCount++] = x;
                 dstVertices[vertexCount++] = y;
                 dstVertices[vertexCount++] = z;
             }
 
-            if (index > maxIndex) maxIndex = index;
+            if (index > maxIndex)
+                maxIndex = index;
             dstIndices[indexCount++] = index;
-            ++i;
         }
+
         dest.autoDeriveVertexNormals = true;
         dest.updateVertexData(dstVertices);
         dest.updateIndexData(dstIndices);
         mesh.geometry.addSubGeometry(dest);
         return mesh;
     }
-
 }
 

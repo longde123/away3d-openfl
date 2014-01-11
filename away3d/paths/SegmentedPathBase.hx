@@ -15,7 +15,7 @@ class SegmentedPathBase implements IPath {
 
     public function new(pointsPerSegment:Int, data:Vector<Vector3D> = null) {
         _pointsPerSegment = pointsPerSegment;
-        if (data) pointData = data;
+        if (data!=null) pointData = data;
     }
 
     public function set_pointData(data:Vector<Vector3D>):Vector<Vector3D> {
@@ -35,6 +35,7 @@ class SegmentedPathBase implements IPath {
 
     private function createSegmentFromArrayEntry(data:Vector<Vector3D>, offset:Int):IPathSegment {
         throw new AbstractMethodError();
+        return nulll;
     }
 
 /**
@@ -107,7 +108,7 @@ class SegmentedPathBase implements IPath {
     public function getPointOnCurve(t:Float, target:Vector3D = null):Vector3D {
         var numSegments:Int = _segments.length;
         t *= numSegments;
-        var segment:Int = int(t);
+        var segment:Int = Std.int(t);
         if (segment == numSegments) {
             segment = numSegments - 1;
             t = 1;

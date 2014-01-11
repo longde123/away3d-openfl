@@ -169,7 +169,7 @@ class SoftShadowMapMethod extends SimpleShadowMapMethodBase {
     private function getSampleCode(regCache:ShaderRegisterCache, depthTexture:ShaderRegisterElement, decodeRegister:ShaderRegisterElement, targetRegister:ShaderRegisterElement, dataReg:ShaderRegisterElement):String {
         var uvReg:ShaderRegisterElement;
         var code:String;
-        var offsets:Vector<String> = new Vector<String>([dataReg + ".zw"]);
+        var offsets:Vector<String> =  Vector.ofArray([dataReg + ".zw"]);
         uvReg = regCache.getFreeFragmentVectorTemp();
         regCache.addFragmentTempUsages(uvReg, 1);
         var temp:ShaderRegisterElement = regCache.getFreeFragmentVectorTemp();

@@ -42,9 +42,10 @@ class InvertedOctreeNode extends NodeBase {
         _halfExtentX = (_maxX - _minX) * .5;
         _halfExtentY = (_maxY - _minY) * .5;
         _halfExtentZ = (_maxZ - _minZ) * .5;
+        super();
     }
 
-    private function setParent(value:InvertedOctreeNode):Void {
+    public function setParent(value:InvertedOctreeNode):Void {
         _parent = value;
     }
 
@@ -72,7 +73,7 @@ class InvertedOctreeNode extends NodeBase {
 
     override public function acceptTraverser(traverser:PartitionTraverser):Void {
         super.acceptTraverser(traverser);
-        if (_parent) _parent.acceptTraverser(traverser);
+        if (_parent!=null) _parent.acceptTraverser(traverser);
     }
 
 }

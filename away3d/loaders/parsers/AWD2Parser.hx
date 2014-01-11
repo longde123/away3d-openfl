@@ -2,6 +2,8 @@
  * AWDParser provides a parser for the AWD data type.
  */
 package away3d.loaders.parsers;
+import flash.Lib;
+import flash.utils.CompressionAlgorithm;
 import haxe.ds.IntMap;
 import flash.display.BitmapData;
 import flash.display.BitmapData;
@@ -263,7 +265,7 @@ class AWD2Parser extends ParserBase
 			var block:AWDBlock;
 			if (isCubeTextureArray.length == 1)
 			{
-				asset = Std.instance(resourceDependency.assets[0],Texture2DBase);
+				asset = cast(resourceDependency.assets[0],Texture2DBase);
 				if (asset != null)
 				{
 					var mat:TextureMaterial;
@@ -286,8 +288,8 @@ class AWD2Parser extends ParserBase
 			}
 			if (isCubeTextureArray.length > 1)
 			{
-				thisBitmapTexture = Std.instance(resourceDependency.assets[0],BitmapTexture);
-				_cubeTextures[Std.parseInt(isCubeTextureArray[1])] = Std.instance(thisBitmapTexture,BitmapTexture).bitmapData;
+				thisBitmapTexture = cast(resourceDependency.assets[0],BitmapTexture);
+				_cubeTextures[Std.parseInt(isCubeTextureArray[1])] = cast(thisBitmapTexture,BitmapTexture).bitmapData;
 				_texture_users.get(ressourceID).push(1);
 
 				if (_debug)
@@ -828,11 +830,11 @@ class AWD2Parser extends ParserBase
 			case 4:
 				geom = new CylinderGeometry(props.getValue(101, 50), props.getValue(102, 50), props.getValue(103, 100), props.getValue(301, 16), props.getValue(302, 1), true, true, true); // bool701, bool702, bool703, bool704);
 				if (!props.getValue(701, true))
-					Std.instance(geom,CylinderGeometry).topClosed = false;
+					cast(geom,CylinderGeometry).topClosed = false;
 				if (!props.getValue(702, true))
-					Std.instance(geom,CylinderGeometry).bottomClosed = false;
+					cast(geom,CylinderGeometry).bottomClosed = false;
 				if (!props.getValue(703, true))
-					Std.instance(geom,CylinderGeometry).yUp = false;
+					cast(geom,CylinderGeometry).yUp = false;
 
 			case 5:
 				geom = new ConeGeometry(props.getValue(101, 50), props.getValue(102, 100), props.getValue(301, 16), props.getValue(302, 1), props.getValue(701, true), props.getValue(702, true));
@@ -882,8 +884,8 @@ class AWD2Parser extends ParserBase
 		var assetVO:AssetVO = getAssetByID(par_id, [AssetType.CONTAINER, AssetType.LIGHT, AssetType.MESH, AssetType.ENTITY, AssetType.SEGMENT_SET]);
 		if (assetVO.enable)
 		{
-			Std.instance(assetVO.data,ObjectContainer3D).addChild(ctr);
-			parentName = Std.instance(assetVO.data,ObjectContainer3D).name;
+			cast(assetVO.data,ObjectContainer3D).addChild(ctr);
+			parentName = cast(assetVO.data,ObjectContainer3D).name;
 		}
 		else if (par_id > 0)
 			_blocks[blockID].addError("Could not find a parent for this ObjectContainer3D");
@@ -928,7 +930,7 @@ class AWD2Parser extends ParserBase
 		var geometryAssetVO:AssetVO = getAssetByID(data_id, [AssetType.GEOMETRY]);
 		if (geometryAssetVO.enable)
 		{
-			geom = Std.instance(geometryAssetVO.data,Geometry);
+			geom = cast(geometryAssetVO.data,Geometry);
 		}
 		else
 		{
@@ -949,8 +951,8 @@ class AWD2Parser extends ParserBase
 			materialAssetVO = getAssetByID(mat_id, [AssetType.MATERIAL]);
 			if (!materialAssetVO.enable && (mat_id > 0))
 				_blocks[blockID].addError("Could not find Material Nr " + materials_parsed + " (ID = " + mat_id + " ) for this Mesh");
-			materials.push(Std.instance(materialAssetVO.data,MaterialBase));
-			materialNames.push(Std.instance(materialAssetVO.data,MaterialBase).name);
+			materials.push(cast(materialAssetVO.data,MaterialBase));
+			materialNames.push(cast(materialAssetVO.data,MaterialBase).name);
 
 			materials_parsed++;
 		}
@@ -962,8 +964,8 @@ class AWD2Parser extends ParserBase
 		var parentAssetVO:AssetVO = getAssetByID(par_id, [AssetType.CONTAINER, AssetType.LIGHT, AssetType.MESH, AssetType.ENTITY, AssetType.SEGMENT_SET]);
 		if (parentAssetVO.enable)
 		{
-			Std.instance(parentAssetVO.data,ObjectContainer3D).addChild(mesh);
-			parentName = Std.instance(parentAssetVO.data,ObjectContainer3D).name;
+			cast(parentAssetVO.data,ObjectContainer3D).addChild(mesh);
+			parentName = cast(parentAssetVO.data,ObjectContainer3D).name;
 		}
 		else if (par_id > 0)
 			_blocks[blockID].addError("Could not find a parent for this Mesh");
@@ -1019,14 +1021,14 @@ class AWD2Parser extends ParserBase
 		var cubeTexAssetVO:AssetVO = getAssetByID(cubeTexAddr, [AssetType.TEXTURE], "CubeTexture");
 		if (!cubeTexAssetVO.enable && (cubeTexAddr != 0))
 			_blocks[blockID].addError("Could not find the Cubetexture (ID = " + cubeTexAddr + " ) for this SkyBox");
-		var asset:SkyBox = new SkyBox(Std.instance(cubeTexAssetVO.data,BitmapCubeTexture));
+		var asset:SkyBox = new SkyBox(cast(cubeTexAssetVO.data,BitmapCubeTexture));
 
 		parseProperties(null);
 		asset.extra = parseUserAttributes();
 		finalizeAsset(asset, name);
 		_blocks[blockID].data = asset;
 		if (_debug)
-			trace("Parsed a SkyBox: Name = '" + name + "' | CubeTexture-Name = " + Std.instance(cubeTexAssetVO.data,BitmapCubeTexture).name);
+			trace("Parsed a SkyBox: Name = '" + name + "' | CubeTexture-Name = " + cast(cubeTexAssetVO.data,BitmapCubeTexture).name);
 
 	}
 
@@ -1061,8 +1063,8 @@ class AWD2Parser extends ParserBase
 		if (lightType == 1)
 		{
 			light = new PointLight();
-			Std.instance(light,PointLight).radius = props.getValue(1, 90000);
-			Std.instance(light,PointLight).fallOff = props.getValue(2, 100000);
+			cast(light,PointLight).radius = props.getValue(1, 90000);
+			cast(light,PointLight).fallOff = props.getValue(2, 100000);
 			if (shadowMapperType > 0)
 			{
 				if (shadowMapperType == 4)
@@ -1117,8 +1119,8 @@ class AWD2Parser extends ParserBase
 			var parentAssetVO:AssetVO = getAssetByID(par_id, [AssetType.CONTAINER, AssetType.LIGHT, AssetType.MESH, AssetType.ENTITY, AssetType.SEGMENT_SET]);
 			if (parentAssetVO.enable)
 			{
-				Std.instance(parentAssetVO.data,ObjectContainer3D).addChild(light);
-				parentName = Std.instance(parentAssetVO.data,ObjectContainer3D).name;
+				cast(parentAssetVO.data,ObjectContainer3D).addChild(light);
+				parentName = cast(parentAssetVO.data,ObjectContainer3D).name;
 			}
 			else
 				_blocks[blockID].addError("Could not find a parent for this Light");
@@ -1170,8 +1172,8 @@ class AWD2Parser extends ParserBase
 		var parentAssetVO:AssetVO = getAssetByID(par_id, [AssetType.CONTAINER, AssetType.LIGHT, AssetType.MESH, AssetType.ENTITY, AssetType.SEGMENT_SET]);
 		if (parentAssetVO.enable)
 		{
-			Std.instance(parentAssetVO.data,ObjectContainer3D).addChild(camera);
-			parentName = Std.instance(parentAssetVO.data,ObjectContainer3D).name;
+			cast(parentAssetVO.data,ObjectContainer3D).addChild(camera);
+			parentName = cast(parentAssetVO.data,ObjectContainer3D).name;
 		}
 		else if (par_id > 0)
 		{
@@ -1225,7 +1227,7 @@ class AWD2Parser extends ParserBase
 
 		_blocks[blockID].data = textureProjector;
 		if (_debug)
-			trace("Parsed a TextureProjector: Name = '" + name + "' | Texture-Name = " + Std.instance(geometryAssetVO.data,Texture2DBase).name + " | Parent-Name = " + parentName);
+			trace("Parsed a TextureProjector: Name = '" + name + "' | Texture-Name = " + cast(geometryAssetVO.data,Texture2DBase).name + " | Parent-Name = " + parentName);
 
 	}
 
@@ -1245,8 +1247,8 @@ class AWD2Parser extends ParserBase
 			lightAssetVO = getAssetByID(lightID, [AssetType.LIGHT]);
 			if (lightAssetVO.enable)
 			{
-				lightsArray.push(Std.instance(lightAssetVO.data,LightBase));
-				lightsArrayNames.push(Std.instance(lightAssetVO.data,LightBase).name);
+				lightsArray.push(cast(lightAssetVO.data,LightBase));
+				lightsArrayNames.push(cast(lightAssetVO.data,LightBase).name);
 			}
 			else
 				_blocks[blockID].addError("Could not find a Light Nr " + k + " (ID = " + lightID + " ) for this LightPicker");
@@ -1330,8 +1332,8 @@ class AWD2Parser extends ParserBase
 			if (materialMode < 2)
 			{
 				mat = new TextureMaterial(assetVO.data);
-				Std.instance(mat,TextureMaterial).alphaBlending = props.getValue(11, false);
-				Std.instance(mat,TextureMaterial).alpha = props.getValue(10, 1.0);
+				cast(mat,TextureMaterial).alphaBlending = props.getValue(11, false);
+				cast(mat,TextureMaterial).alpha = props.getValue(10, 1.0);
 				debugString += "Parsed a TextureMaterial(SinglePass): Name = '" + name + "' | Texture-Name = " + mat.name;
 			}
 			else
@@ -1343,9 +1345,9 @@ class AWD2Parser extends ParserBase
 
 		mat.extra = attributes;
 		if (materialMode < 2)
-			Std.instance(mat,SinglePassMaterialBase).alphaThreshold = props.getValue(12, 0.0);
+			cast(mat,SinglePassMaterialBase).alphaThreshold = props.getValue(12, 0.0);
 		else
-			Std.instance(mat,MultiPassMaterialBase).alphaThreshold = props.getValue(12, 0.0);
+			cast(mat,MultiPassMaterialBase).alphaThreshold = props.getValue(12, 0.0);
 		mat.repeat = props.getValue(13, false);
 
 		finalizeAsset(mat, name);
@@ -1415,7 +1417,7 @@ class AWD2Parser extends ParserBase
 				{ 
 					//	SinglePassMaterial
 					mat = new ColorMaterial(color, props.getValue(10, 1.0));
-					Std.instance(mat,ColorMaterial).alphaBlending = props.getValue(11, false);
+					cast(mat,ColorMaterial).alphaBlending = props.getValue(11, false);
 					debugString += "Parsed a ColorMaterial(SinglePass): Name = '" + name + "' | ";
 				}
 			}
@@ -1443,7 +1445,7 @@ class AWD2Parser extends ParserBase
 					debugString += "Parsed a TextureMaterial(MultiPass): Name = '" + name + "' | Texture-Name = " + texture.name;
 					if (ambientTexture != null)
 					{
-						Std.instance(mat,TextureMultiPassMaterial).ambientTexture = ambientTexture;
+						cast(mat,TextureMultiPassMaterial).ambientTexture = ambientTexture;
 						debugString += " | AmbientTexture-Name = " + ambientTexture.name;
 					}
 				}
@@ -1454,11 +1456,11 @@ class AWD2Parser extends ParserBase
 					debugString += "Parsed a TextureMaterial(SinglePass): Name = '" + name + "' | Texture-Name = " + texture.name;
 					if (ambientTexture != null)
 					{
-						Std.instance(mat,TextureMaterial).ambientTexture = ambientTexture;
+						cast(mat,TextureMaterial).ambientTexture = ambientTexture;
 						debugString += " | AmbientTexture-Name = " + ambientTexture.name;
 					}
-					Std.instance(mat,TextureMaterial).alpha = props.getValue(10, 1.0);
-					Std.instance(mat,TextureMaterial).alphaBlending = props.getValue(11, false);
+					cast(mat,TextureMaterial).alpha = props.getValue(10, 1.0);
+					cast(mat,TextureMaterial).alphaBlending = props.getValue(11, false);
 				}
 
 			}
@@ -1487,43 +1489,43 @@ class AWD2Parser extends ParserBase
 				_blocks[blockID].addError("Could not find the LightPicker (ID = " + lightPickerAddr + " ) for this TextureMaterial");
 			else
 			{
-				Std.instance(mat,MaterialBase).lightPicker = Std.instance(assetVO.data,LightPickerBase);
+				cast(mat,MaterialBase).lightPicker = cast(assetVO.data,LightPickerBase);
 					//debugString+=" | Lightpicker-Name = "+LightPickerBase(returnedArray[1]).name; 
 			}
 
-			Std.instance(mat,MaterialBase).smooth = props.getValue(5, true);
-			Std.instance(mat,MaterialBase).mipmap = props.getValue(6, true);
-			Std.instance(mat,MaterialBase).bothSides = props.getValue(7, false);
-			Std.instance(mat,MaterialBase).alphaPremultiplied = props.getValue(8, false);
-			Std.instance(mat,MaterialBase).blendMode = blendModeDic[props.getValue(9, 0)];
-			Std.instance(mat,MaterialBase).repeat = props.getValue(13, false);
+			cast(mat,MaterialBase).smooth = props.getValue(5, true);
+			cast(mat,MaterialBase).mipmap = props.getValue(6, true);
+			cast(mat,MaterialBase).bothSides = props.getValue(7, false);
+			cast(mat,MaterialBase).alphaPremultiplied = props.getValue(8, false);
+			cast(mat,MaterialBase).blendMode = blendModeDic[props.getValue(9, 0)];
+			cast(mat,MaterialBase).repeat = props.getValue(13, false);
 
 			if (spezialType == 0)
 			{ // this is a SinglePassMaterial					
 				if (normalTexture != null)
-					Std.instance(mat,SinglePassMaterialBase).normalMap = normalTexture;
+					cast(mat,SinglePassMaterialBase).normalMap = normalTexture;
 				if (specTexture != null)
-					Std.instance(mat,SinglePassMaterialBase).specularMap = specTexture;
-				Std.instance(mat,SinglePassMaterialBase).alphaThreshold = props.getValue(12, 0.0);
-				Std.instance(mat,SinglePassMaterialBase).ambient = props.getValue(15, 1.0);
-				Std.instance(mat,SinglePassMaterialBase).ambientColor = props.getValue(16, 0xffffff);
-				Std.instance(mat,SinglePassMaterialBase).specular = props.getValue(18, 1.0);
-				Std.instance(mat,SinglePassMaterialBase).gloss = props.getValue(19, 50);
-				Std.instance(mat,SinglePassMaterialBase).specularColor = props.getValue(20, 0xffffff);
+					cast(mat,SinglePassMaterialBase).specularMap = specTexture;
+				cast(mat,SinglePassMaterialBase).alphaThreshold = props.getValue(12, 0.0);
+				cast(mat,SinglePassMaterialBase).ambient = props.getValue(15, 1.0);
+				cast(mat,SinglePassMaterialBase).ambientColor = props.getValue(16, 0xffffff);
+				cast(mat,SinglePassMaterialBase).specular = props.getValue(18, 1.0);
+				cast(mat,SinglePassMaterialBase).gloss = props.getValue(19, 50);
+				cast(mat,SinglePassMaterialBase).specularColor = props.getValue(20, 0xffffff);
 			}
 
 			else
 			{ // this is MultiPassMaterial					
 				if (normalTexture != null)
-					Std.instance(mat,MultiPassMaterialBase).normalMap = normalTexture;
+					cast(mat,MultiPassMaterialBase).normalMap = normalTexture;
 				if (specTexture != null)
-					Std.instance(mat,MultiPassMaterialBase).specularMap = specTexture;
-				Std.instance(mat,MultiPassMaterialBase).alphaThreshold = props.getValue(12, 0.0);
-				Std.instance(mat,MultiPassMaterialBase).ambient = props.getValue(15, 1.0);
-				Std.instance(mat,MultiPassMaterialBase).ambientColor = props.getValue(16, 0xffffff);
-				Std.instance(mat,MultiPassMaterialBase).specular = props.getValue(18, 1.0);
-				Std.instance(mat,MultiPassMaterialBase).gloss = props.getValue(19, 50);
-				Std.instance(mat,MultiPassMaterialBase).specularColor = props.getValue(20, 0xffffff);
+					cast(mat,MultiPassMaterialBase).specularMap = specTexture;
+				cast(mat,MultiPassMaterialBase).alphaThreshold = props.getValue(12, 0.0);
+				cast(mat,MultiPassMaterialBase).ambient = props.getValue(15, 1.0);
+				cast(mat,MultiPassMaterialBase).ambientColor = props.getValue(16, 0xffffff);
+				cast(mat,MultiPassMaterialBase).specular = props.getValue(18, 1.0);
+				cast(mat,MultiPassMaterialBase).gloss = props.getValue(19, 50);
+				cast(mat,MultiPassMaterialBase).specularColor = props.getValue(20, 0xffffff);
 			}
 
 			var methods_parsed:Int = 0;
@@ -1559,10 +1561,10 @@ class AWD2Parser extends ParserBase
 						else
 						{
 							if (spezialType == 0)
-								Std.instance(mat,SinglePassMaterialBase).addMethod(assetVO.data);
+								cast(mat,SinglePassMaterialBase).addMethod(assetVO.data);
 							if (spezialType == 1)
-								Std.instance(mat,MultiPassMaterialBase).addMethod(assetVO.data);
-							debugString += " | EffectMethod-Name = " + Std.instance(assetVO.data,EffectMethodBase).name;
+								cast(mat,MultiPassMaterialBase).addMethod(assetVO.data);
+							debugString += " | EffectMethod-Name = " + cast(assetVO.data,EffectMethodBase).name;
 						}
 
 					case 998: //wrapper-Methods that will load a previous parsed ShadowMapMethod 
@@ -1573,10 +1575,10 @@ class AWD2Parser extends ParserBase
 						else
 						{
 							if (spezialType == 0)
-								Std.instance(mat,SinglePassMaterialBase).shadowMethod = assetVO.data;
+								cast(mat,SinglePassMaterialBase).shadowMethod = assetVO.data;
 							if (spezialType == 1)
-								Std.instance(mat,MultiPassMaterialBase).shadowMethod = assetVO.data;
-							debugString += " | ShadowMethod-Name = " + Std.instance(assetVO.data,ShadowMapMethodBase).name;
+								cast(mat,MultiPassMaterialBase).shadowMethod = assetVO.data;
+							debugString += " | ShadowMethod-Name = " + cast(assetVO.data,ShadowMapMethodBase).name;
 						}
 
 					case 1: //EnvMapAmbientMethod                             
@@ -1585,16 +1587,16 @@ class AWD2Parser extends ParserBase
 						if (!assetVO.enable)
 							_blocks[blockID].addError("Could not find the EnvMap (ID = " + targetID + " ) for this EnvMapAmbientMethodMaterial");
 						if (spezialType == 0)
-							Std.instance(mat,SinglePassMaterialBase).ambientMethod = new EnvMapAmbientMethod(assetVO.data);
+							cast(mat,SinglePassMaterialBase).ambientMethod = new EnvMapAmbientMethod(assetVO.data);
 						if (spezialType == 1)
-							Std.instance(mat,MultiPassMaterialBase).ambientMethod = new EnvMapAmbientMethod(assetVO.data);
-						debugString += " | EnvMapAmbientMethod | EnvMap-Name =" + Std.instance(assetVO.data,CubeTextureBase).name;
+							cast(mat,MultiPassMaterialBase).ambientMethod = new EnvMapAmbientMethod(assetVO.data);
+						debugString += " | EnvMapAmbientMethod | EnvMap-Name =" + cast(assetVO.data,CubeTextureBase).name;
 
 					case 51: //DepthDiffuseMethod
 						if (spezialType == 0)
-							Std.instance(mat,SinglePassMaterialBase).diffuseMethod = new DepthDiffuseMethod();
+							cast(mat,SinglePassMaterialBase).diffuseMethod = new DepthDiffuseMethod();
 						if (spezialType == 1)
-							Std.instance(mat,MultiPassMaterialBase).diffuseMethod = new DepthDiffuseMethod();
+							cast(mat,MultiPassMaterialBase).diffuseMethod = new DepthDiffuseMethod();
 						debugString += " | DepthDiffuseMethod";
 
 					case 52: //GradientDiffuseMethod
@@ -1603,16 +1605,16 @@ class AWD2Parser extends ParserBase
 						if (!assetVO.enable)
 							_blocks[blockID].addError("Could not find the GradientDiffuseTexture (ID = " + targetID + " ) for this GradientDiffuseMethod");
 						if (spezialType == 0)
-							Std.instance(mat,SinglePassMaterialBase).diffuseMethod = new GradientDiffuseMethod(assetVO.data);
+							cast(mat,SinglePassMaterialBase).diffuseMethod = new GradientDiffuseMethod(assetVO.data);
 						if (spezialType == 1)
-							Std.instance(mat,MultiPassMaterialBase).diffuseMethod = new GradientDiffuseMethod(assetVO.data);
-						debugString += " | GradientDiffuseMethod | GradientDiffuseTexture-Name =" + Std.instance(assetVO.data,Texture2DBase).name;
+							cast(mat,MultiPassMaterialBase).diffuseMethod = new GradientDiffuseMethod(assetVO.data);
+						debugString += " | GradientDiffuseMethod | GradientDiffuseTexture-Name =" + cast(assetVO.data,Texture2DBase).name;
 
 					case 53: //WrapDiffuseMethod
 						if (spezialType == 0)
-							Std.instance(mat,SinglePassMaterialBase).diffuseMethod = new WrapDiffuseMethod(props.getValue(101, 5));
+							cast(mat,SinglePassMaterialBase).diffuseMethod = new WrapDiffuseMethod(props.getValue(101, 5));
 						if (spezialType == 1)
-							Std.instance(mat,MultiPassMaterialBase).diffuseMethod = new WrapDiffuseMethod(props.getValue(101, 5));
+							cast(mat,MultiPassMaterialBase).diffuseMethod = new WrapDiffuseMethod(props.getValue(101, 5));
 						debugString += " | WrapDiffuseMethod";
 
 					case 54: //LightMapDiffuseMethod
@@ -1621,80 +1623,80 @@ class AWD2Parser extends ParserBase
 						if (!assetVO.enable)
 							_blocks[blockID].addError("Could not find the LightMap (ID = " + targetID + " ) for this LightMapDiffuseMethod");
 						if (spezialType == 0)
-							Std.instance(mat,SinglePassMaterialBase).diffuseMethod = new LightMapDiffuseMethod(assetVO.data, blendModeDic[props.getValue(401, 10)], false, Std.instance(mat,SinglePassMaterialBase).diffuseMethod);
+							cast(mat,SinglePassMaterialBase).diffuseMethod = new LightMapDiffuseMethod(assetVO.data, blendModeDic[props.getValue(401, 10)], false, cast(mat,SinglePassMaterialBase).diffuseMethod);
 						if (spezialType == 1)
-							Std.instance(mat,MultiPassMaterialBase).diffuseMethod = new LightMapDiffuseMethod(assetVO.data, blendModeDic[props.getValue(401, 10)], false, Std.instance(mat,MultiPassMaterialBase).diffuseMethod);
-						debugString += " | LightMapDiffuseMethod | LightMapTexture-Name =" + Std.instance(assetVO.data,Texture2DBase).name;
+							cast(mat,MultiPassMaterialBase).diffuseMethod = new LightMapDiffuseMethod(assetVO.data, blendModeDic[props.getValue(401, 10)], false, cast(mat,MultiPassMaterialBase).diffuseMethod);
+						debugString += " | LightMapDiffuseMethod | LightMapTexture-Name =" + cast(assetVO.data,Texture2DBase).name;
 
 					case 55: //CelDiffuseMethod
 						if (spezialType == 0)
 						{
-							Std.instance(mat,SinglePassMaterialBase).diffuseMethod = new CelDiffuseMethod(props.getValue(401, 3), Std.instance(mat,SinglePassMaterialBase).diffuseMethod);
-							Std.instance(Std.instance(mat,SinglePassMaterialBase).diffuseMethod,CelDiffuseMethod).smoothness = props.getValue(101, 0.1);
+							cast(mat,SinglePassMaterialBase).diffuseMethod = new CelDiffuseMethod(props.getValue(401, 3), cast(mat,SinglePassMaterialBase).diffuseMethod);
+							cast(cast(mat,SinglePassMaterialBase).diffuseMethod,CelDiffuseMethod).smoothness = props.getValue(101, 0.1);
 						}
 						if (spezialType == 1)
 						{
-							Std.instance(mat,MultiPassMaterialBase).diffuseMethod = new CelDiffuseMethod(props.getValue(401, 3), Std.instance(mat,MultiPassMaterialBase).diffuseMethod);
-							Std.instance(Std.instance(mat,MultiPassMaterialBase).diffuseMethod,CelDiffuseMethod).smoothness = props.getValue(101, 0.1);
+							cast(mat,MultiPassMaterialBase).diffuseMethod = new CelDiffuseMethod(props.getValue(401, 3), cast(mat,MultiPassMaterialBase).diffuseMethod);
+							cast(cast(mat,MultiPassMaterialBase).diffuseMethod,CelDiffuseMethod).smoothness = props.getValue(101, 0.1);
 						}
 						debugString += " | CelDiffuseMethod";
 
 					case 56: //SubSurfaceScatteringMethod
 						if (spezialType == 0)
 						{
-							Std.instance(mat,SinglePassMaterialBase).diffuseMethod = new SubsurfaceScatteringDiffuseMethod(); //depthMapSize and depthMapOffset ?
-							Std.instance(Std.instance(mat,SinglePassMaterialBase).diffuseMethod,SubsurfaceScatteringDiffuseMethod).scattering = props.getValue(101, 0.2);
-							Std.instance(Std.instance(mat,SinglePassMaterialBase).diffuseMethod,SubsurfaceScatteringDiffuseMethod).translucency = props.getValue(102, 1);
-							Std.instance(Std.instance(mat,SinglePassMaterialBase).diffuseMethod,SubsurfaceScatteringDiffuseMethod).scatterColor = props.getValue(601, 0xffffff);
+							cast(mat,SinglePassMaterialBase).diffuseMethod = new SubsurfaceScatteringDiffuseMethod(); //depthMapSize and depthMapOffset ?
+							cast(cast(mat,SinglePassMaterialBase).diffuseMethod,SubsurfaceScatteringDiffuseMethod).scattering = props.getValue(101, 0.2);
+							cast(cast(mat,SinglePassMaterialBase).diffuseMethod,SubsurfaceScatteringDiffuseMethod).translucency = props.getValue(102, 1);
+							cast(cast(mat,SinglePassMaterialBase).diffuseMethod,SubsurfaceScatteringDiffuseMethod).scatterColor = props.getValue(601, 0xffffff);
 						}
 						if (spezialType == 1)
 						{
-							Std.instance(mat,MultiPassMaterialBase).diffuseMethod = new SubsurfaceScatteringDiffuseMethod(); //depthMapSize and depthMapOffset ?
-							Std.instance(Std.instance(mat,MultiPassMaterialBase).diffuseMethod,SubsurfaceScatteringDiffuseMethod).scattering = props.getValue(101, 0.2);
-							Std.instance(Std.instance(mat,MultiPassMaterialBase).diffuseMethod,SubsurfaceScatteringDiffuseMethod).translucency = props.getValue(102, 1);
-							Std.instance(Std.instance(mat,MultiPassMaterialBase).diffuseMethod,SubsurfaceScatteringDiffuseMethod).scatterColor = props.getValue(601, 0xffffff);
+							cast(mat,MultiPassMaterialBase).diffuseMethod = new SubsurfaceScatteringDiffuseMethod(); //depthMapSize and depthMapOffset ?
+							cast(cast(mat,MultiPassMaterialBase).diffuseMethod,SubsurfaceScatteringDiffuseMethod).scattering = props.getValue(101, 0.2);
+							cast(cast(mat,MultiPassMaterialBase).diffuseMethod,SubsurfaceScatteringDiffuseMethod).translucency = props.getValue(102, 1);
+							cast(cast(mat,MultiPassMaterialBase).diffuseMethod,SubsurfaceScatteringDiffuseMethod).scatterColor = props.getValue(601, 0xffffff);
 						}
 						debugString += " | SubSurfaceScatteringMethod";
 
 					case 101: //AnisotropicSpecularMethod 
 						if (spezialType == 0)
-							Std.instance(mat,SinglePassMaterialBase).specularMethod = new AnisotropicSpecularMethod();
+							cast(mat,SinglePassMaterialBase).specularMethod = new AnisotropicSpecularMethod();
 						if (spezialType == 1)
-							Std.instance(mat,MultiPassMaterialBase).specularMethod = new AnisotropicSpecularMethod();
+							cast(mat,MultiPassMaterialBase).specularMethod = new AnisotropicSpecularMethod();
 						debugString += " | AnisotropicSpecularMethod";
 
 					case 102: //PhongSpecularMethod
 						if (spezialType == 0)
-							Std.instance(mat,SinglePassMaterialBase).specularMethod = new PhongSpecularMethod();
+							cast(mat,SinglePassMaterialBase).specularMethod = new PhongSpecularMethod();
 						if (spezialType == 1)
-							Std.instance(mat,MultiPassMaterialBase).specularMethod = new PhongSpecularMethod();
+							cast(mat,MultiPassMaterialBase).specularMethod = new PhongSpecularMethod();
 						debugString += " | PhongSpecularMethod";
 
 					case 103: //CellSpecularMethod
 						if (spezialType == 0)
 						{
-							Std.instance(mat,SinglePassMaterialBase).specularMethod = new CelSpecularMethod(props.getValue(101, 0.5), Std.instance(mat,SinglePassMaterialBase).specularMethod);
-							Std.instance(Std.instance(mat,SinglePassMaterialBase).specularMethod,CelSpecularMethod).smoothness = props.getValue(102, 0.1);
+							cast(mat,SinglePassMaterialBase).specularMethod = new CelSpecularMethod(props.getValue(101, 0.5), cast(mat,SinglePassMaterialBase).specularMethod);
+							cast(cast(mat,SinglePassMaterialBase).specularMethod,CelSpecularMethod).smoothness = props.getValue(102, 0.1);
 						}
 						if (spezialType == 1)
 						{
-							Std.instance(mat,MultiPassMaterialBase).specularMethod = new CelSpecularMethod(props.getValue(101, 0.5), Std.instance(mat,MultiPassMaterialBase).specularMethod);
-							Std.instance(Std.instance(mat,MultiPassMaterialBase).specularMethod,CelSpecularMethod).smoothness = props.getValue(102, 0.1);
+							cast(mat,MultiPassMaterialBase).specularMethod = new CelSpecularMethod(props.getValue(101, 0.5), cast(mat,MultiPassMaterialBase).specularMethod);
+							cast(cast(mat,MultiPassMaterialBase).specularMethod,CelSpecularMethod).smoothness = props.getValue(102, 0.1);
 						}
 						debugString += " | CellSpecularMethod";
 
 					case 104: //FresnelSpecularMethod
 						if (spezialType == 0)
 						{
-							Std.instance(mat,SinglePassMaterialBase).specularMethod = new FresnelSpecularMethod(props.getValue(701, true), Std.instance(mat,SinglePassMaterialBase).specularMethod);
-							Std.instance(Std.instance(mat,SinglePassMaterialBase).specularMethod,FresnelSpecularMethod).fresnelPower = props.getValue(101, 5);
-							Std.instance(Std.instance(mat,SinglePassMaterialBase).specularMethod,FresnelSpecularMethod).normalReflectance = props.getValue(102, 0.1);
+							cast(mat,SinglePassMaterialBase).specularMethod = new FresnelSpecularMethod(props.getValue(701, true), cast(mat,SinglePassMaterialBase).specularMethod);
+							cast(cast(mat,SinglePassMaterialBase).specularMethod,FresnelSpecularMethod).fresnelPower = props.getValue(101, 5);
+							cast(cast(mat,SinglePassMaterialBase).specularMethod,FresnelSpecularMethod).normalReflectance = props.getValue(102, 0.1);
 						}
 						if (spezialType == 1)
 						{
-							Std.instance(mat,MultiPassMaterialBase).specularMethod = new FresnelSpecularMethod(props.getValue(701, true), Std.instance(mat,MultiPassMaterialBase).specularMethod);
-							Std.instance(Std.instance(mat,MultiPassMaterialBase).specularMethod,FresnelSpecularMethod).fresnelPower = props.getValue(101, 5);
-							Std.instance(Std.instance(mat,MultiPassMaterialBase).specularMethod,FresnelSpecularMethod).normalReflectance = props.getValue(102, 0.1);
+							cast(mat,MultiPassMaterialBase).specularMethod = new FresnelSpecularMethod(props.getValue(701, true), cast(mat,MultiPassMaterialBase).specularMethod);
+							cast(cast(mat,MultiPassMaterialBase).specularMethod,FresnelSpecularMethod).fresnelPower = props.getValue(101, 5);
+							cast(cast(mat,MultiPassMaterialBase).specularMethod,FresnelSpecularMethod).normalReflectance = props.getValue(102, 0.1);
 						}
 						debugString += " | FresnelSpecularMethod";
 
@@ -1707,25 +1709,25 @@ class AWD2Parser extends ParserBase
 							_blocks[blockID].addError("Could not find the SecoundNormalMap (ID = " + targetID + " ) for this SimpleWaterNormalMethod");
 						if (spezialType == 0)
 						{
-							if (Std.instance(mat,SinglePassMaterialBase).normalMap == null)
+							if (cast(mat,SinglePassMaterialBase).normalMap == null)
 								_blocks[blockID].addError("Could not find a normal Map on this Material to use with this SimpleWaterNormalMethod");
-							Std.instance(mat,SinglePassMaterialBase).normalMap = assetVO.data;
-							Std.instance(mat,SinglePassMaterialBase).normalMethod = new SimpleWaterNormalMethod(Std.instance(mat,SinglePassMaterialBase).normalMap, assetVO.data);
+							cast(mat,SinglePassMaterialBase).normalMap = assetVO.data;
+							cast(mat,SinglePassMaterialBase).normalMethod = new SimpleWaterNormalMethod(cast(mat,SinglePassMaterialBase).normalMap, assetVO.data);
 						}
 						if (spezialType == 1)
 						{
-							if (Std.instance(mat,MultiPassMaterialBase).normalMap == null)
+							if (cast(mat,MultiPassMaterialBase).normalMap == null)
 								_blocks[blockID].addError("Could not find a normal Map on this Material to use with this SimpleWaterNormalMethod");
-							Std.instance(mat,MultiPassMaterialBase).normalMap = assetVO.data;
-							Std.instance(mat,MultiPassMaterialBase).normalMethod = new SimpleWaterNormalMethod(Std.instance(mat,MultiPassMaterialBase).normalMap, assetVO.data);
+							cast(mat,MultiPassMaterialBase).normalMap = assetVO.data;
+							cast(mat,MultiPassMaterialBase).normalMethod = new SimpleWaterNormalMethod(cast(mat,MultiPassMaterialBase).normalMap, assetVO.data);
 						}
-						debugString += " | SimpleWaterNormalMethod | Second-NormalTexture-Name = " + Std.instance(assetVO.data,Texture2DBase).name;
+						debugString += " | SimpleWaterNormalMethod | Second-NormalTexture-Name = " + cast(assetVO.data,Texture2DBase).name;
 				}
 				parseUserAttributes();
 				methods_parsed += 1;
 			}
 		}
-		Std.instance(mat,MaterialBase).extra = parseUserAttributes();
+		cast(mat,MaterialBase).extra = parseUserAttributes();
 		finalizeAsset(mat, name);
 		_blocks[blockID].data = mat;
 		if (_debug)
@@ -1868,7 +1870,7 @@ class AWD2Parser extends ParserBase
 				var offCol:UInt = props.getValue(601, 0x00000000);
 				var newColorTransform:ColorTransform = new ColorTransform(props.getValue(102, 1), props.getValue(103, 1), props.getValue(104, 1), props.getValue(101, 1), ((offCol >> 16) & 0xFF), ((offCol >> 8) & 0xFF),
 					(offCol & 0xFF), ((offCol >> 24) & 0xFF));
-				Std.instance(effectMethodReturn,ColorTransformMethod).colorTransform = newColorTransform;
+				cast(effectMethodReturn,ColorTransformMethod).colorTransform = newColorTransform;
 			case 403: //EnvMap
 				targetID = props.getValue(1, 0);
 				assetVO = getAssetByID(targetID, [AssetType.TEXTURE], "CubeTexture");
@@ -1881,7 +1883,7 @@ class AWD2Parser extends ParserBase
 					assetVO = getAssetByID(targetID, [AssetType.TEXTURE]);
 					if (!assetVO.enable)
 						_blocks[blockID].addError("Could not find the Mask-texture (ID = " + targetID + " ) for this EnvMapMethod");
-					Std.instance(effectMethodReturn,EnvMapMethod).mask = assetVO.data;
+					cast(effectMethodReturn,EnvMapMethod).mask = assetVO.data;
 				}
 			case 404: //LightMapMethod
 				targetID = props.getValue(1, 0);
@@ -1911,7 +1913,7 @@ class AWD2Parser extends ParserBase
 				if (!assetVO.enable)
 					_blocks[blockID].addError("Could not find the EnvMap (ID = " + targetID + " ) for this RefractionEnvMapMethod");
 				effectMethodReturn = new RefractionEnvMapMethod(assetVO.data, props.getValue(101, 0.1), props.getValue(102, 0.01), props.getValue(103, 0.01), props.getValue(104, 0.01));
-				Std.instance(effectMethodReturn,RefractionEnvMapMethod).alpha = props.getValue(104, 1);
+				cast(effectMethodReturn,RefractionEnvMapMethod).alpha = props.getValue(104, 1);
 
 			case 409: //OutlineMethod
 				effectMethodReturn = new OutlineMethod(props.getValue(601, 0x00000000), props.getValue(101, 1), props.getValue(701, true), props.getValue(702, false));
@@ -1946,7 +1948,7 @@ class AWD2Parser extends ParserBase
 			_blocks[blockID].addError("Could not find the TargetLight (ID = " + shadowLightID + " ) for this ShadowMethod - ShadowMethod not created");
 			return;
 		}
-		asset = parseShadowMethodList(Std.instance(assetVO.data,LightBase), blockID);
+		asset = parseShadowMethodList(cast(assetVO.data,LightBase), blockID);
 		if (asset == null)
 		{
 			return;
@@ -1955,7 +1957,7 @@ class AWD2Parser extends ParserBase
 		finalizeAsset(asset, _blocks[blockID].name);
 		_blocks[blockID].data = asset;
 		if (_debug)
-			trace("Parsed a ShadowMapMethodMethod: Name = " + asset.name + " | Type = " + asset + " | Light-Name = " + Std.instance(assetVO.data,LightBase));
+			trace("Parsed a ShadowMapMethodMethod: Name = " + asset.name + " | Type = " + asset + " | Light-Name = " + cast(assetVO.data,LightBase));
 	}
 
 	// this functions reads and creates a ShadowMethodMethod
@@ -2005,23 +2007,23 @@ class AWD2Parser extends ParserBase
 				}
 				shadowMethod = new NearShadowMapMethod(assetVO.data);
 			case 1101: //FilteredShadowMapMethod					
-				shadowMethod = new FilteredShadowMapMethod(Std.instance(light,DirectionalLight));
-				Std.instance(shadowMethod,FilteredShadowMapMethod).alpha = props.getValue(101, 1);
-				Std.instance(shadowMethod,FilteredShadowMapMethod).epsilon = props.getValue(102, 0.002);
+				shadowMethod = new FilteredShadowMapMethod(cast(light,DirectionalLight));
+				cast(shadowMethod,FilteredShadowMapMethod).alpha = props.getValue(101, 1);
+				cast(shadowMethod,FilteredShadowMapMethod).epsilon = props.getValue(102, 0.002);
 			case 1102: //DitheredShadowMapMethod
-				shadowMethod = new DitheredShadowMapMethod(Std.instance(light,DirectionalLight), props.getValue(201, 5));
-				Std.instance(shadowMethod,DitheredShadowMapMethod).alpha = props.getValue(101, 1);
-				Std.instance(shadowMethod,DitheredShadowMapMethod).epsilon = props.getValue(102, 0.002);
-				Std.instance(shadowMethod,DitheredShadowMapMethod).range = props.getValue(103, 1);
+				shadowMethod = new DitheredShadowMapMethod(cast(light,DirectionalLight), props.getValue(201, 5));
+				cast(shadowMethod,DitheredShadowMapMethod).alpha = props.getValue(101, 1);
+				cast(shadowMethod,DitheredShadowMapMethod).epsilon = props.getValue(102, 0.002);
+				cast(shadowMethod,DitheredShadowMapMethod).range = props.getValue(103, 1);
 			case 1103: //SoftShadowMapMethod
-				shadowMethod = new SoftShadowMapMethod(Std.instance(light,DirectionalLight), props.getValue(201, 5));
-				Std.instance(shadowMethod,SoftShadowMapMethod).alpha = props.getValue(101, 1);
-				Std.instance(shadowMethod,SoftShadowMapMethod).epsilon = props.getValue(102, 0.002);
-				Std.instance(shadowMethod,SoftShadowMapMethod).range = props.getValue(103, 1);
+				shadowMethod = new SoftShadowMapMethod(cast(light,DirectionalLight), props.getValue(201, 5));
+				cast(shadowMethod,SoftShadowMapMethod).alpha = props.getValue(101, 1);
+				cast(shadowMethod,SoftShadowMapMethod).epsilon = props.getValue(102, 0.002);
+				cast(shadowMethod,SoftShadowMapMethod).range = props.getValue(103, 1);
 			case 1104: //HardShadowMapMethod
 				shadowMethod = new HardShadowMapMethod(light);
-				Std.instance(shadowMethod,HardShadowMapMethod).alpha = props.getValue(101, 1);
-				Std.instance(shadowMethod,HardShadowMapMethod).epsilon = props.getValue(102, 0.002);
+				cast(shadowMethod,HardShadowMapMethod).alpha = props.getValue(101, 1);
+				cast(shadowMethod,HardShadowMapMethod).epsilon = props.getValue(102, 0.002);
 
 		}
 		parseUserAttributes();
@@ -2120,7 +2122,7 @@ class AWD2Parser extends ParserBase
 			if (!assetVO.enable)
 				_blocks[blockID].addError("Could not find the SkeletonPose Frame # " + frames_parsed + " (ID = " + pose_addr + " ) for this SkeletonClipNode");
 			else
-				clip.addFrame(Std.instance(_blocks[pose_addr].data,SkeletonPose), frame_dur);
+				clip.addFrame(cast(_blocks[pose_addr].data,SkeletonPose), frame_dur);
 			frames_parsed++;
 		}
 		if (clip.frames.length == 0)
@@ -2237,7 +2239,7 @@ class AWD2Parser extends ParserBase
 
 		_blocks[blockID].data = clip;
 		if (_debug)
-			trace("Parsed a VertexClipNode: Name = " + clip.name + " | Target-Geometry-Name = " + Std.instance(assetVO.data,Geometry).name + " | Number of Frames = " + clip.frames.length);
+			trace("Parsed a VertexClipNode: Name = " + clip.name + " | Target-Geometry-Name = " + cast(assetVO.data,Geometry).name + " | Number of Frames = " + clip.frames.length);
 	}
 
 
@@ -2365,7 +2367,7 @@ class AWD2Parser extends ParserBase
 		{
 			assetVO = getAssetByID(meshAdresses[i], [AssetType.MESH]);
 			if (assetVO.enable)
-				targetMeshes.push(Std.instance(assetVO.data,Mesh));
+				targetMeshes.push(cast(assetVO.data,Mesh));
 		}
 		assetVO = getAssetByID(animSetBlockAdress, [AssetType.ANIMATION_SET]);
 		if (!assetVO.enable)
@@ -2373,7 +2375,7 @@ class AWD2Parser extends ParserBase
 			_blocks[blockID].addError("Could not find the AnimationSet ( " + animSetBlockAdress + " ) for this Animator");
 			return;
 		}
-		targetAnimationSet = Std.instance(assetVO.data,AnimationSetBase);
+		targetAnimationSet = cast(assetVO.data,AnimationSetBase);
 		var thisAnimator:AnimatorBase = null;
 		if (type == 1)
 		{
@@ -2384,12 +2386,12 @@ class AWD2Parser extends ParserBase
 				_blocks[blockID].addError("Could not find the Skeleton ( " + props.getValue(1, 0) + " ) for this Animator");
 				return;
 			}
-			thisAnimator = new SkeletonAnimator(Std.instance(targetAnimationSet,SkeletonAnimationSet), Std.instance(assetVO.data,Skeleton));
+			thisAnimator = new SkeletonAnimator(cast(targetAnimationSet,SkeletonAnimationSet), cast(assetVO.data,Skeleton));
 
 		}
 		else if (type == 2)
 		{
-			thisAnimator = new VertexAnimator(Std.instance(targetAnimationSet,VertexAnimationSet));
+			thisAnimator = new VertexAnimator(cast(targetAnimationSet,VertexAnimationSet));
 		}
 
 		finalizeAsset(thisAnimator, name);
@@ -2397,9 +2399,9 @@ class AWD2Parser extends ParserBase
 		for (i in 0...targetMeshes.length)
 		{
 			if (type == 1)
-				targetMeshes[i].animator = Std.instance(thisAnimator,SkeletonAnimator);
+				targetMeshes[i].animator = cast(thisAnimator,SkeletonAnimator);
 			if (type == 2)
-				targetMeshes[i].animator = Std.instance(thisAnimator,VertexAnimator);
+				targetMeshes[i].animator = cast(thisAnimator,VertexAnimator);
 
 		}
 		if (_debug)
@@ -2418,7 +2420,7 @@ class AWD2Parser extends ParserBase
 		var targetObject:ObjectContainer3D = null;
 		var assetVO:AssetVO = getAssetByID(par_id, [AssetType.CONTAINER, AssetType.LIGHT, AssetType.MESH, AssetType.ENTITY, AssetType.SEGMENT_SET]);
 		if (assetVO.enable)
-			parentObject = Std.instance(assetVO.data,ObjectContainer3D);
+			parentObject = cast(assetVO.data,ObjectContainer3D);
 
 		var numCommands:Int = _newBlockBytes.readShort();
 		var typeCommand:Int = _newBlockBytes.readShort();
@@ -2486,7 +2488,7 @@ class AWD2Parser extends ParserBase
 		{
 			return _blocks[meshID].uvsForVertexAnimation;
 		}
-		var geometry:Geometry = Std.instance(_blocks[meshID].data,Geometry);
+		var geometry:Geometry = cast(_blocks[meshID].data,Geometry);
 		var geoCnt:Int = 0;
 		var ud:Vector<Float>;
 		var uStride:UInt;
@@ -2703,7 +2705,7 @@ class AWD2Parser extends ParserBase
 				{
 					while (typeCnt < assetTypesToGet.length)
 					{
-						if (Std.instance(_blocks[assetID].data,IAsset).assetType == assetTypesToGet[typeCnt])
+						if (cast(_blocks[assetID].data,IAsset).assetType == assetTypesToGet[typeCnt])
 						{
 							//if the right assetType was found 
 							if ((assetTypesToGet[typeCnt] == AssetType.TEXTURE) && (extraTypeInfo == "CubeTexture"))
@@ -2732,10 +2734,10 @@ class AWD2Parser extends ParserBase
 
 							}
 						}
-						if ((assetTypesToGet[typeCnt] == AssetType.GEOMETRY) && (Std.instance(_blocks[assetID].data,IAsset).assetType == AssetType.MESH))
+						if ((assetTypesToGet[typeCnt] == AssetType.GEOMETRY) && (cast(_blocks[assetID].data,IAsset).assetType == AssetType.MESH))
 						{
 							assetVO.enable = true;
-							assetVO.data = Std.instance(_blocks[assetID].data,Mesh).geometry;
+							assetVO.data = cast(_blocks[assetID].data,Mesh).geometry;
 							return assetVO;
 						}
 						typeCnt++;

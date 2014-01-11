@@ -1,6 +1,8 @@
 package away3d.loaders.misc;
 
 
+import haxe.ds.StringMap;
+import haxe.ds.IntMap;
 class AssetLoaderContext {
     public var includeDependencies(get_includeDependencies, set_includeDependencies):Bool;
     public var materialMode(get_materialMode, set_materialMode):Int;
@@ -13,8 +15,8 @@ class AssetLoaderContext {
     static public var MULTIPASS_MATERIALS:Int = 2;
     private var _includeDependencies:Bool;
     private var _dependencyBaseUrl:String;
-    private var _embeddedDataByUrl:Dynamic;
-    private var _remappedUrls:Dynamic;
+    private var _embeddedDataByUrl:StringMap<Dynamic>;
+    private var _remappedUrls:StringMap<String>;
     private var _materialMode:Int;
     private var _overrideAbsPath:Bool;
     private var _overrideFullUrls:Bool;
@@ -28,9 +30,10 @@ class AssetLoaderContext {
 
     public function new(includeDependencies:Bool = true, dependencyBaseUrl:String = null) {
         _includeDependencies = includeDependencies;
-        _dependencyBaseUrl = dependencyBaseUrl || "";
-        _embeddedDataByUrl = { };
-        _remappedUrls = { };
+        _dependencyBaseUrl = dependencyBaseUrl ;
+        if(_dependencyBaseUrl==null)_dependencyBaseUrl="";
+        _embeddedDataByUrl =new StringMap<Dynamic>();
+        _remappedUrls =new StringMap<String>();
         _materialMode = UNDEFINED;
     }
 
@@ -122,7 +125,7 @@ class AssetLoaderContext {
 	 */
 
     public function mapUrl(originalUrl:String, newUrl:String):Void {
-        _remappedUrls[originalUrl] = newUrl;
+        _remappedUrls.set(originalUrl, newUrl);
     }
 
 /**
@@ -134,7 +137,7 @@ class AssetLoaderContext {
 	 */
 
     public function mapUrlToData(originalUrl:String, data:Dynamic):Void {
-        _embeddedDataByUrl[originalUrl] = data;
+        _embeddedDataByUrl.set(originalUrl, data);
     }
 
 /**
@@ -142,8 +145,8 @@ class AssetLoaderContext {
 	 * Defines whether embedded data has been mapped to a particular URL.
 	 */
 
-    private function hasDataForUrl(url:String):Bool {
-        return _embeddedDataByUrl.hasOwnProperty(url);
+    public function hasDataForUrl(url:String):Bool {
+        return _embeddedDataByUrl.exists(url);
     }
 
 /**
@@ -151,8 +154,8 @@ class AssetLoaderContext {
 	 * Returns embedded data for a particular URL.
 	 */
 
-    private function getDataForUrl(url:String):Dynamic {
-        return _embeddedDataByUrl[url];
+    public function getDataForUrl(url:String):Dynamic {
+        return _embeddedDataByUrl.get(url);
     }
 
 /**
@@ -160,8 +163,8 @@ class AssetLoaderContext {
 	 * Defines whether a replacement URL has been mapped to a particular URL.
 	 */
 
-    private function hasMappingForUrl(url:String):Bool {
-        return _remappedUrls.hasOwnProperty(url);
+    public function hasMappingForUrl(url:String):Bool {
+        return _remappedUrls.exists(url);
     }
 
 /**
@@ -169,8 +172,8 @@ class AssetLoaderContext {
 	 * Returns new (replacement) URL for a particular original URL.
 	 */
 
-    private function getRemappedUrl(originalUrl:String):String {
-        return _remappedUrls[originalUrl];
+    public function getRemappedUrl(originalUrl:String):String {
+        return _remappedUrls.get(originalUrl);
     }
 
 }

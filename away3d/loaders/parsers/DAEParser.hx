@@ -1,5 +1,6 @@
 package away3d.loaders.parsers;
 
+import away3d.core.math.MathConsts;
 import away3d.containers.ObjectContainer3D;
 import away3d.debug.Debug;
 import away3d.animators.data.JointPose;
@@ -139,14 +140,14 @@ class DAEParser extends ParserBase {
         if (resourceDependency.assets.length != 1)
             return;
 
-        var resource:Texture2DBase = Std.instance(resourceDependency.assets[0], Texture2DBase);
+        var resource:Texture2DBase = cast(resourceDependency.assets[0], Texture2DBase);
         _dependencyCount--;
 
-        if (resource != null && Std.instance(resource, BitmapTexture).bitmapData != null) {
+        if (resource != null && cast(resource, BitmapTexture).bitmapData != null) {
             var image:DAEImage = _libImages.get(resourceDependency.id);
 
             if (image != null)
-                image.resource = Std.instance(resource, BitmapTexture);
+                image.resource = cast(resource, BitmapTexture);
         }
 
         if (_dependencyCount == 0)
@@ -291,7 +292,7 @@ class DAEParser extends ParserBase {
 
                 i += sub.vertexStride;
             }
-            Std.instance(sub, CompactSubGeometry).updateData(vertexData);
+            cast(sub, CompactSubGeometry).updateData(vertexData);
         }
     }
 
@@ -304,7 +305,7 @@ class DAEParser extends ParserBase {
         var i:Int, j:Int, k:Int, l:Int;
 
         for (i in 0...geometry.subGeometries.length) {
-            sub = Std.instance(geometry.subGeometries[i], CompactSubGeometry);
+            sub = cast(geometry.subGeometries[i], CompactSubGeometry);
             primitive = mesh.primitives[i];
             jointIndices = new Vector<Float>(skin.maxBones * primitive.vertices.length, true);
             jointWeights = new Vector<Float>(skin.maxBones * primitive.vertices.length, true);
@@ -338,7 +339,7 @@ class DAEParser extends ParserBase {
 
     private function parseAnimationInfo():DAEAnimationInfo {
         var info:DAEAnimationInfo = new DAEAnimationInfo();
-        info.minTime = FMath.FLOAT_MAX_VALUE();
+        info.minTime = MathConsts.NEGATIVE_INFINITY;
         info.maxTime = -info.minTime;
         info.numFrames = 0;
 
@@ -351,7 +352,7 @@ class DAEParser extends ParserBase {
                     node.channels.push(channel);
                     info.minTime = Math.min(info.minTime, channel.sampler.minTime);
                     info.maxTime = Math.max(info.maxTime, channel.sampler.maxTime);
-                    info.numFrames = FMath.max(info.numFrames, channel.sampler.input.length);
+                    info.numFrames = Std.int(Math.max(info.numFrames, channel.sampler.input.length));
                 }
             }
         }
@@ -443,7 +444,7 @@ class DAEParser extends ParserBase {
         }
 
         for (i in 0...base.subGeometries.length) {
-            sub = Std.instance(base.subGeometries[i], CompactSubGeometry);
+            sub = cast(base.subGeometries[i], CompactSubGeometry);
             vertexData = sub.vertexData.concat();
             for (v in 0...Std.int(vertexData.length / 13)) {
                 j = sub.vertexOffset + v * sub.vertexStride;
@@ -533,12 +534,12 @@ class DAEParser extends ParserBase {
                 if (animationSet == null)
                     animationSet = new SkeletonAnimationSet(controller.skin.maxBones);
 
-                skeleton = Std.instance(controller.skin.userData, Skeleton);
+                skeleton = cast(controller.skin.userData, Skeleton);
 
                 clip = processSkinAnimation(controller.skin, mesh, skeleton);
                 clip.looping = true;
 
-                weights = Std.instance(mesh.geometry.subGeometries[0], SkinnedSubGeometry).jointIndexData.length;
+                weights = cast(mesh.geometry.subGeometries[0], SkinnedSubGeometry).jointIndexData.length;
                 jpv = Std.int(weights / (mesh.geometry.subGeometries[0].vertexData.length / 3));
 //anim = new SkeletonAnimation(skeleton, jpv);
 
@@ -568,7 +569,7 @@ class DAEParser extends ParserBase {
 //var animation : SkeletonAnimation = new SkeletonAnimation(skeleton, skin.maxBones, useGPU);
         var animated:Bool = isAnimatedSkeleton(skeleton);
         var duration:Float = _animationInfo.numFrames == 0 ? 1.0 : _animationInfo.maxTime - _animationInfo.minTime;
-        var numFrames:Int = FMath.max(_animationInfo.numFrames, (animated ? 50 : 2));
+        var numFrames:Int =  Std.int(Math.max(_animationInfo.numFrames, (animated ? 50 : 2)));
         var frameDuration:Float = duration / numFrames;
 
         var t:Float = 0;
@@ -787,7 +788,7 @@ class DAEParser extends ParserBase {
             if (image.resource != null && isBitmapDataValid(image.resource.bitmapData)) {
                 mat = buildDefaultMaterial(image.resource.bitmapData);
                 if (materialMode < 2)
-                    Std.instance(mat, TextureMaterial).alpha = transparency;
+                    cast(mat, TextureMaterial).alpha = transparency;
             }
             else {
                 mat = buildDefaultMaterial();
@@ -804,24 +805,24 @@ class DAEParser extends ParserBase {
         Debug.trace("mat = " + materialMode);
         if (mat != null) {
             if (materialMode < 2) {
-                Std.instance(mat, SinglePassMaterialBase).ambientMethod = new BasicAmbientMethod();
-                Std.instance(mat, SinglePassMaterialBase).diffuseMethod = new BasicDiffuseMethod();
-                Std.instance(mat, SinglePassMaterialBase).specularMethod = new BasicSpecularMethod();
-                Std.instance(mat, SinglePassMaterialBase).ambientColor = (ambient != null && ambient.color != null) ? ambient.color.rgb : 0x303030;
-                Std.instance(mat, SinglePassMaterialBase).specularColor = (specular != null && specular.color != null) ? specular.color.rgb : 0x202020;
-                Std.instance(mat, SinglePassMaterialBase).gloss = shininess;
-                Std.instance(mat, SinglePassMaterialBase).ambient = 1;
-                Std.instance(mat, SinglePassMaterialBase).specular = 1;
+                cast(mat, SinglePassMaterialBase).ambientMethod = new BasicAmbientMethod();
+                cast(mat, SinglePassMaterialBase).diffuseMethod = new BasicDiffuseMethod();
+                cast(mat, SinglePassMaterialBase).specularMethod = new BasicSpecularMethod();
+                cast(mat, SinglePassMaterialBase).ambientColor = (ambient != null && ambient.color != null) ? ambient.color.rgb : 0x303030;
+                cast(mat, SinglePassMaterialBase).specularColor = (specular != null && specular.color != null) ? specular.color.rgb : 0x202020;
+                cast(mat, SinglePassMaterialBase).gloss = shininess;
+                cast(mat, SinglePassMaterialBase).ambient = 1;
+                cast(mat, SinglePassMaterialBase).specular = 1;
             }
             else {
-                Std.instance(mat, MultiPassMaterialBase).ambientMethod = new BasicAmbientMethod();
-                Std.instance(mat, MultiPassMaterialBase).diffuseMethod = new BasicDiffuseMethod();
-                Std.instance(mat, MultiPassMaterialBase).specularMethod = new BasicSpecularMethod();
-                Std.instance(mat, MultiPassMaterialBase).ambientColor = (ambient != null && ambient.color != null) ? ambient.color.rgb : 0x303030;
-                Std.instance(mat, MultiPassMaterialBase).specularColor = (specular != null && specular.color != null) ? specular.color.rgb : 0x202020;
-                Std.instance(mat, MultiPassMaterialBase).gloss = shininess;
-                Std.instance(mat, MultiPassMaterialBase).ambient = 1;
-                Std.instance(mat, MultiPassMaterialBase).specular = 1;
+                cast(mat, MultiPassMaterialBase).ambientMethod = new BasicAmbientMethod();
+                cast(mat, MultiPassMaterialBase).diffuseMethod = new BasicDiffuseMethod();
+                cast(mat, MultiPassMaterialBase).specularMethod = new BasicSpecularMethod();
+                cast(mat, MultiPassMaterialBase).ambientColor = (ambient != null && ambient.color != null) ? ambient.color.rgb : 0x303030;
+                cast(mat, MultiPassMaterialBase).specularColor = (specular != null && specular.color != null) ? specular.color.rgb : 0x202020;
+                cast(mat, MultiPassMaterialBase).gloss = shininess;
+                cast(mat, MultiPassMaterialBase).ambient = 1;
+                cast(mat, MultiPassMaterialBase).specular = 1;
 
             }
         }
@@ -1992,7 +1993,7 @@ class DAENode extends DAEElement {
         var channelsBySID:StringMap<DAEChannel> = new StringMap();
         var transform:DAETransform;
         var channel:DAEChannel;
-        var minTime:Float = FMath.FLOAT_MAX_VALUE();
+        var minTime:Float = MathConsts.NEGATIVE_INFINITY;
         var maxTime:Float = -minTime;
 
         for (i in 0...this.channels.length) {
@@ -2405,7 +2406,7 @@ class DAESkin extends DAEElement {
             var numBones:Int = vcount[i];
             var vertex_weights:Vector<DAEVertexWeight> = new Vector<DAEVertexWeight>();
 
-            this.maxBones = FMath.max(this.maxBones, numBones);
+            this.maxBones =  Std.int(Math.max(this.maxBones, numBones));
 
             for (j in 0...numBones) {
                 var influence:DAEVertexWeight = new DAEVertexWeight();

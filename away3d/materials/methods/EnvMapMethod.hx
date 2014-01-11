@@ -40,7 +40,7 @@ class EnvMapMethod extends EffectMethodBase {
     }
 
     public function set_mask(value:Texture2DBase):Texture2DBase {
-        if (cast((value), Boolean) != cast((_mask), Boolean) || (value && _mask && (value.hasMipMaps != _mask.hasMipMaps || value.format != _mask.format))) {
+        if (cast((value!=null), Bool) != cast((_mask!=null), Bool) || (value!=null && _mask!=null && (value.hasMipMaps != _mask.hasMipMaps || value.format != _mask.format))) {
             invalidateShaderProgram();
         }
         _mask = value;
@@ -51,7 +51,7 @@ class EnvMapMethod extends EffectMethodBase {
 	 * @inheritDoc
 	 */
 
-    override private function initVO(vo:MethodVO):Void {
+    override public function initVO(vo:MethodVO):Void {
         vo.needsNormals = true;
         vo.needsView = true;
         vo.needsUV = _mask != null;
@@ -98,7 +98,7 @@ class EnvMapMethod extends EffectMethodBase {
         var context:Context3D = stage3DProxy._context3D;
         vo.fragmentData[vo.fragmentConstantsIndex] = _alpha;
         context.setTextureAt(vo.texturesIndex, _cubeTexture.getTextureForStage3D(stage3DProxy));
-        if (_mask) context.setTextureAt(vo.texturesIndex + 1, _mask.getTextureForStage3D(stage3DProxy));
+        if (_mask!=null) context.setTextureAt(vo.texturesIndex + 1, _mask.getTextureForStage3D(stage3DProxy));
     }
 
 /**
@@ -120,7 +120,7 @@ class EnvMapMethod extends EffectMethodBase {
         "kil " + temp2 + ".w\n" + // used for real time reflection mapping - if alpha is not 1 (mock texture) kil output
 
         "sub " + temp + ", " + temp + ", " + targetReg + "											\n";
-        if (_mask) {
+        if (_mask!=null) {
             var maskReg:ShaderRegisterElement = regCache.getFreeTextureReg();
             code += getTex2DSampleCode(vo, temp2, maskReg, _mask, _sharedRegisters.uvVarying) + "mul " + temp + ", " + temp2 + ", " + temp + "\n";
         }

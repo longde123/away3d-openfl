@@ -27,8 +27,8 @@ class PlanarReflectionTexture extends RenderTexture {
     public var plane(get_plane, set_plane):Plane3D;
     public var renderer(get_renderer, set_renderer):RendererBase;
     public var scale(get_scale, set_scale):Float;
-    var textureRatioX(get_textureRatioX, never):Float;
-    var textureRatioY(get_textureRatioY, never):Float;
+    public var textureRatioX(get_textureRatioX, never):Float;
+    public var textureRatioY(get_textureRatioY, never):Float;
 
     private var _mockTexture:BitmapTexture;
     private var _mockBitmapData:BitmapData;

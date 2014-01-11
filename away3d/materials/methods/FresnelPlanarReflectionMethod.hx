@@ -86,7 +86,7 @@ class FresnelPlanarReflectionMethod extends EffectMethodBase {
 	 * @inheritDoc
 	 */
 
-    override private function initVO(vo:MethodVO):Void {
+    override public function initVO(vo:MethodVO):Void {
         vo.needsProjection = true;
         vo.needsNormals = true;
         vo.needsView = true;

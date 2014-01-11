@@ -41,6 +41,7 @@ class TextureProjector extends ObjectContainer3D {
         _texture = texture;
         _lens.aspectRatio = texture.width / texture.height;
         rotationX = -90;
+        super();
     }
 
 /**
@@ -87,7 +88,7 @@ class TextureProjector extends ObjectContainer3D {
     }
 
     public function set_texture(value:Texture2DBase):Texture2DBase {
-        if (value == _texture) return;
+        if (value == _texture) return value;
         _texture = value;
         return value;
     }

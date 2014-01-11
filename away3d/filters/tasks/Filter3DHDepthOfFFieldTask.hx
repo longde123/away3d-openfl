@@ -40,7 +40,7 @@ class Filter3DHDepthOfFFieldTask extends Filter3DTaskBase {
     }
 
     public function set_stepSize(value:Int):Int {
-        if (value == _stepSize) return;
+        if (value == _stepSize) return value;
         _stepSize = value;
         calculateStepSize();
         invalidateProgram3D();
@@ -72,7 +72,7 @@ class Filter3DHDepthOfFFieldTask extends Filter3DTaskBase {
     }
 
     public function set_maxBlur(value:Int):Int {
-        if (_maxBlur == value) return;
+        if (_maxBlur == value) return value;
         _maxBlur = value;
         invalidateProgram3D();
         updateBlurData();

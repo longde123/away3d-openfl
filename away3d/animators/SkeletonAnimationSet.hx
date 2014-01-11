@@ -32,6 +32,7 @@ class SkeletonAnimationSet extends AnimationSetBase implements IAnimationSet {
 
     public function new(jointsPerVertex:Int = 4) {
         _jointsPerVertex = jointsPerVertex;
+        super();
     }
 
 /**

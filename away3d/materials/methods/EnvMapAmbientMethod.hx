@@ -29,7 +29,7 @@ class EnvMapAmbientMethod extends BasicAmbientMethod {
 	 * @inheritDoc
 	 */
 
-    override private function initVO(vo:MethodVO):Void {
+    override public function initVO(vo:MethodVO):Void {
         super.initVO(vo);
         vo.needsNormals = true;
     }

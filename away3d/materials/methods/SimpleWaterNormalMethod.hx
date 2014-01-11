@@ -56,7 +56,7 @@ class SimpleWaterNormalMethod extends BasicNormalMethod {
 	 * @inheritDoc
 	 */
 
-    override private function initVO(vo:MethodVO):Void {
+    override public function initVO(vo:MethodVO):Void {
         super.initVO(vo);
         _useSecondNormalMap = normalMap != secondaryNormalMap;
     }
@@ -118,7 +118,7 @@ class SimpleWaterNormalMethod extends BasicNormalMethod {
 	 */
 
     override public function set_normalMap(value:Texture2DBase):Texture2DBase {
-        if (!value) return;
+        if (value==null) return value;
         super.normalMap = value;
         return value;
     }
@@ -166,7 +166,7 @@ class SimpleWaterNormalMethod extends BasicNormalMethod {
         data[index + 5] = _water1OffsetY;
         data[index + 6] = _water2OffsetX;
         data[index + 7] = _water2OffsetY;
-        if (_useSecondNormalMap >= 0) stage3DProxy._context3D.setTextureAt(vo.texturesIndex + 1, _texture2.getTextureForStage3D(stage3DProxy));
+        if (_useSecondNormalMap ) stage3DProxy._context3D.setTextureAt(vo.texturesIndex + 1, _texture2.getTextureForStage3D(stage3DProxy));
     }
 
 /**

@@ -4,6 +4,7 @@
  */
 package away3d.cameras.lenses;
 
+import flash.Vector;
 import away3d.core.math.Matrix3DUtils;
 import flash.geom.Vector3D;
 
@@ -100,7 +101,7 @@ class OrthographicOffCenterLens extends LensBase {
 	 */
 
     override private function updateMatrix():Void {
-        var raw:Vector<Float> = Matrix3DUtils.RAW_DATA_CONTAINER;
+        var raw:Vector<Float> = Matrix3DUtils.RAW_DATA_CONTAINER;  
         var w:Float = 1 / (_maxX - _minX);
         var h:Float = 1 / (_maxY - _minY);
         var d:Float = 1 / (_far - _near);

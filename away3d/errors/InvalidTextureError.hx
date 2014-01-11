@@ -11,7 +11,10 @@ class InvalidTextureError extends Error {
 	 * @param id The id of the error.
 	 */
     public function new(message:String = null, id:Int = 0) {
-        super(message || "Invalid bitmapData! Must be power of 2 and not exceeding 2048.", id);
+        if(message==null){
+            message = "Invalid bitmapData! Must be power of 2 and not exceeding 2048.";
+        }
+        super(message, id);
     }
 
 }

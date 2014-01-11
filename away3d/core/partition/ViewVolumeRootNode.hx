@@ -16,16 +16,18 @@ class ViewVolumeRootNode extends NodeBase {
 
     public function new() {
         _viewVolumes = new Vector<ViewVolume>();
+        super();
+
     }
 
     override public function set_showDebugBounds(value:Bool):Bool {
         super.showDebugBounds = value;
-        if (_dynamicGrid) _dynamicGrid.showDebugBounds = true;
+        if (_dynamicGrid!=null) _dynamicGrid.showDebugBounds = true;
         return value;
     }
 
     override public function findPartitionForEntity(entity:Entity):NodeBase {
-        return (_dynamicGrid) ? _dynamicGrid.findPartitionForEntity(entity) : this;
+        return (_dynamicGrid!=null) ? _dynamicGrid.findPartitionForEntity(entity) : this;
     }
 
     public function get_dynamicGrid():DynamicGrid {
@@ -49,13 +51,13 @@ class ViewVolumeRootNode extends NodeBase {
     }
 
     override public function acceptTraverser(traverser:PartitionTraverser):Void {
-        if (!(_activeVolume && _activeVolume.contains(traverser.entryPoint))) {
+        if (!(_activeVolume!=null && _activeVolume.contains(traverser.entryPoint))) {
             var volume:ViewVolume = getVolumeContaining(traverser.entryPoint);
-            if (!volume) trace("WARNING: No view volume found for the current position.")
+            if (volume==null) trace("WARNING: No view volume found for the current position.")
             else if (volume != _activeVolume) {
-                if (_activeVolume) _activeVolume._active = false;
+                if (_activeVolume!=null) _activeVolume._active = false;
                 _activeVolume = volume;
-                if (_activeVolume) _activeVolume._active = true;
+                if (_activeVolume!=null) _activeVolume._active = true;
             }
         }
         super.acceptTraverser(traverser);

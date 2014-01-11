@@ -33,9 +33,9 @@ using OpenFLStage3D;
 class CompiledPass extends MaterialPassBase {
     public var enableLightFallOff(get_enableLightFallOff, set_enableLightFallOff):Bool;
     public var forceSeparateMVP(get_forceSeparateMVP, set_forceSeparateMVP):Bool;
-    var numPointLights(get_numPointLights, never):Int;
-    var numDirectionalLights(get_numDirectionalLights, never):Int;
-    var numLightProbes(get_numLightProbes, never):Int;
+    public var numPointLights(get_numPointLights, never):Int;
+    public var numDirectionalLights(get_numDirectionalLights, never):Int;
+    public var numLightProbes(get_numLightProbes, never):Int;
     public var preserveAlpha(get_preserveAlpha, set_preserveAlpha):Bool;
     public var animateUVs(get_animateUVs, set_animateUVs):Bool;
     public var normalMap(get_normalMap, set_normalMap):Texture2DBase;

@@ -44,10 +44,10 @@ class PositionRenderer extends RendererBase {
         var viewProjection:Matrix3D = entityCollector.camera.viewProjection;
         _context.setDepthTest(true, Context3DCompareMode.LESS);
         _context.setBlendFactors(Context3DBlendFactor.ONE, Context3DBlendFactor.ZERO);
-        if (!_program3D) initProgram3D(_context);
+        if (_program3D==null) initProgram3D(_context);
         _context.setProgram(_program3D);
         item = entityCollector.opaqueRenderableHead;
-        while (item) {
+        while (item!=null) {
             renderable = item.renderable;
             renderable.activateVertexBuffer(0, _stage3DProxy);
             matrix.copyFrom(item.renderSceneTransform);
@@ -59,7 +59,7 @@ class PositionRenderer extends RendererBase {
 
         if (!_renderBlended) return;
         item = entityCollector.blendedRenderableHead;
-        while (item) {
+        while (item!=null) {
             renderable = item.renderable;
             renderable.activateVertexBuffer(0, _stage3DProxy);
             matrix.copyFrom(item.renderSceneTransform);

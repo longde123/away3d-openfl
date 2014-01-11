@@ -17,6 +17,7 @@
  */
 package away3d.library.naming;
 
+import haxe.ds.StringMap;
 import away3d.errors.AbstractMethodError;
 import away3d.events.AssetEvent;
 import away3d.library.assets.IAsset;
@@ -43,6 +44,7 @@ class ConflictStrategyBase {
 
     public function create():ConflictStrategyBase {
         throw new AbstractMethodError();
+        return null;
     }
 
 /**
@@ -50,16 +52,20 @@ class ConflictStrategyBase {
 	 * the conflict resolution by applying the new names and dispatching the correct events.
 	 */
 
-    private function updateNames(ns:String, nonConflictingName:String, oldAsset:IAsset, newAsset:IAsset, assetsDictionary:Dynamic, precedence:String):Void {
+    private function updateNames(ns:String, nonConflictingName:String, oldAsset:IAsset, newAsset:IAsset, assetsDictionary:StringMap<IAsset>, precedence:String):Void
+    {
         var loser_prev_name:String;
-        var winner:IAsset;
-        var loser:IAsset;
-        winner = ((precedence == ConflictPrecedence.FAVOR_NEW)) ? newAsset : oldAsset;
-        loser = ((precedence == ConflictPrecedence.FAVOR_NEW)) ? oldAsset : newAsset;
+        var winner:IAsset, loser:IAsset;
+
+        winner = (precedence == ConflictPrecedence.FAVOR_NEW) ? newAsset : oldAsset;
+        loser = (precedence == ConflictPrecedence.FAVOR_NEW) ? oldAsset : newAsset;
+
         loser_prev_name = loser.name;
-        assetsDictionary[winner.name] = winner;
-        assetsDictionary[nonConflictingName] = loser;
+
+        assetsDictionary.set(winner.name,winner);
+        assetsDictionary.set(nonConflictingName,loser);
         loser.resetAssetPath(nonConflictingName, ns, false);
+
         loser.dispatchEvent(new AssetEvent(AssetEvent.ASSET_CONFLICT_RESOLVED, loser, loser_prev_name));
     }
 

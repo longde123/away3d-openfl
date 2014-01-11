@@ -46,7 +46,7 @@ class MultipleMaterials {
     }
 
     public function set_left(val:MaterialBase):MaterialBase {
-        if (_left == val) return;
+        if (_left == val) return val;
         _left = val;
         return val;
     }
@@ -60,7 +60,7 @@ class MultipleMaterials {
     }
 
     public function set_right(val:MaterialBase):MaterialBase {
-        if (_right == val) return;
+        if (_right == val) return val;
         _right = val;
         return val;
     }
@@ -74,7 +74,7 @@ class MultipleMaterials {
     }
 
     public function set_bottom(val:MaterialBase):MaterialBase {
-        if (_bottom == val) return;
+        if (_bottom == val) return val;
         _bottom = val;
         return val;
     }
@@ -88,7 +88,7 @@ class MultipleMaterials {
     }
 
     public function set_top(val:MaterialBase):MaterialBase {
-        if (_top == val) return;
+        if (_top == val) return val;
         _top = val;
         return val;
     }
@@ -102,7 +102,7 @@ class MultipleMaterials {
     }
 
     public function set_front(val:MaterialBase):MaterialBase {
-        if (_front == val) return;
+        if (_front == val) return val;
         _front = val;
         return val;
     }
@@ -116,7 +116,7 @@ class MultipleMaterials {
     }
 
     public function set_back(val:MaterialBase):MaterialBase {
-        if (_back == val) return;
+        if (_back == val) return val;
         _back = val;
         return val;
     }

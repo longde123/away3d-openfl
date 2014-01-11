@@ -34,7 +34,7 @@ class DitheredShadowMapMethod extends SimpleShadowMapMethodBase {
         _depthMapSize = _castingLight.shadowMapper.depthMapSize;
         this.numSamples = numSamples;
         ++_grainUsages;
-        if (!_grainTexture) initGrainTexture();
+        if (_grainTexture==null) initGrainTexture();
     }
 
 /**
@@ -58,7 +58,7 @@ class DitheredShadowMapMethod extends SimpleShadowMapMethodBase {
 	 * @inheritDoc
 	 */
 
-    override private function initVO(vo:MethodVO):Void {
+    override public function initVO(vo:MethodVO):Void {
         super.initVO(vo);
         vo.needsProjection = true;
     }
@@ -110,7 +110,7 @@ class DitheredShadowMapMethod extends SimpleShadowMapMethodBase {
             else if (r < -1) r = -1;
             if (g > 1) g = 1
             else if (g < -1) g = -1;
-            vec[i] = (int((r * .5 + .5) * 0xff) << 16) | (int((g * .5 + .5) * 0xff) << 8);
+            vec[i] = (Std.int((r * .5 + .5) * 0xff) << 16) | (Std.int((g * .5 + .5) * 0xff) << 8);
             ++i;
         }
         _grainBitmapData.setVector(_grainBitmapData.rect, vec);

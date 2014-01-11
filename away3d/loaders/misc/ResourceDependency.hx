@@ -29,8 +29,8 @@ class ResourceDependency {
     private var _retrieveAsRawData:Bool;
     private var _suppressAssetEvents:Bool;
     private var _dependencies:Vector<ResourceDependency>;
-    private var loader:SingleFileLoader;
-    private var success:Bool;
+    public var loader:SingleFileLoader;
+    public var success:Bool;
 
     public function new(id:String, req:URLRequest, data:Dynamic, parentParser:ParserBase, retrieveAsRawData:Bool = false, suppressAssetEvents:Bool = false) {
         _id = id;
@@ -80,7 +80,7 @@ class ResourceDependency {
 	 * Method to set data after having already created the dependency object, e.g. after load.
 	 */
 
-    private function setData(data:Dynamic):Void {
+    public function setData(data:Dynamic):Void {
         _data = data;
     }
 
@@ -99,7 +99,7 @@ class ResourceDependency {
 	 */
 
     public function resolve():Void {
-        if (_parentParser) _parentParser.resolveDependency(this);
+        if (_parentParser!=null) _parentParser.resolveDependency(this);
     }
 
 /**
@@ -107,7 +107,7 @@ class ResourceDependency {
 	 */
 
     public function resolveFailure():Void {
-        if (_parentParser) _parentParser.resolveDependencyFailure(this);
+        if (_parentParser!=null) _parentParser.resolveDependencyFailure(this);
     }
 
 /**
@@ -115,7 +115,7 @@ class ResourceDependency {
 	 */
 
     public function resolveName(asset:IAsset):String {
-        if (_parentParser) return _parentParser.resolveDependencyName(this, asset);
+        if (_parentParser!=null) return _parentParser.resolveDependencyName(this, asset);
         return asset.name;
     }
 

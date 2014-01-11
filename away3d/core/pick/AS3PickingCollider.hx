@@ -21,6 +21,7 @@ class AS3PickingCollider extends PickingColliderBase implements IPickingCollider
 
     public function new(findClosestCollision:Bool = false) {
         _findClosestCollision = findClosestCollision;
+        super();
     }
 
 /**
@@ -73,7 +74,7 @@ class AS3PickingCollider extends PickingColliderBase implements IPickingCollider
         var vertexData:Vector<Float> = subMesh.vertexData;
         var uvData:Vector<Float> = subMesh.UVData;
         var collisionTriangleIndex:Int = -1;
-        var bothSides:Bool = (subMesh.material && subMesh.material.bothSides);
+        var bothSides:Bool = (subMesh.material!=null && subMesh.material.bothSides);
         var vertexStride:Int = subMesh.vertexStride;
         var vertexOffset:Int = subMesh.vertexOffset;
         var uvStride:Int = subMesh.UVStride;
@@ -153,7 +154,7 @@ class AS3PickingCollider extends PickingColliderBase implements IPickingCollider
                 if (!(u < 0) && t > 0 && t < shortestCollisionDistance) {
 // all tests passed
                     shortestCollisionDistance = t;
-                    collisionTriangleIndex = index / 3;
+                    collisionTriangleIndex =Std.int( index / 3);
                     pickingCollisionVO.rayEntryDistance = t;
                     pickingCollisionVO.localPosition = new Vector3D(cx, cy, cz);
                     pickingCollisionVO.localNormal = new Vector3D(nx, ny, nz);

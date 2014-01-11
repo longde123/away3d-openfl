@@ -33,7 +33,7 @@ class AlphaMaskMethod extends EffectMethodBase {
 	 * @inheritDoc
 	 */
 
-    override private function initVO(vo:MethodVO):Void {
+    override public function initVO(vo:MethodVO):Void {
         vo.needsSecondaryUV = _useSecondaryUV;
         vo.needsUV = !_useSecondaryUV;
     }
@@ -49,7 +49,7 @@ class AlphaMaskMethod extends EffectMethodBase {
     }
 
     public function set_useSecondaryUV(value:Bool):Bool {
-        if (_useSecondaryUV == value) return;
+        if (_useSecondaryUV == value) return value;
         _useSecondaryUV = value;
         invalidateShaderProgram();
         return value;

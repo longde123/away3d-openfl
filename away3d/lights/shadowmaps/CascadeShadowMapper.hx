@@ -19,7 +19,7 @@ import flash.geom.Rectangle;
 
 class CascadeShadowMapper extends DirectionalShadowMapper implements IEventDispatcher {
     public var numCascades(get_numCascades, set_numCascades):Int;
-    var nearPlaneDistances(get_nearPlaneDistances, never):Vector<Float>;
+    public var nearPlaneDistances(get_nearPlaneDistances, never):Vector<Float>;
 
     private var _scissorRects:Vector<Rectangle>;
     private var _scissorRectsInvalid:Bool;
@@ -66,8 +66,8 @@ class CascadeShadowMapper extends DirectionalShadowMapper implements IEventDispa
             s *= .4;
             --i;
         }
-        _texOffsetsX = new Vector<Float>([-1, 1, -1, 1]);
-        _texOffsetsY = new Vector<Float>([1, 1, -1, -1]);
+        _texOffsetsX =Vector.ofArray([-1., 1, -1, 1]);
+        _texOffsetsY = Vector.ofArray([1., 1, -1, -1]);
         _scissorRects = new Vector<Rectangle>(4, true);
         _depthLenses = new Vector<FreeMatrixLens>();
         _depthCameras = new Vector<Camera3D>();
@@ -82,7 +82,7 @@ class CascadeShadowMapper extends DirectionalShadowMapper implements IEventDispa
 // will not be allowed
 
     override public function set_depthMapSize(value:Int):Int {
-        if (value == _depthMapSize) return;
+        if (value == _depthMapSize) return value;
         super.depthMapSize = value;
         invalidateScissorRects();
         return value;
@@ -97,7 +97,7 @@ class CascadeShadowMapper extends DirectionalShadowMapper implements IEventDispa
     }
 
     public function set_numCascades(value:Int):Int {
-        if (value == _numCascades) return;
+        if (value == _numCascades) return value;
         if (value < 1 || value > 4) throw new Error("numCascades must be an integer between 1 and 4");
         _numCascades = value;
         invalidateScissorRects();
@@ -186,11 +186,11 @@ class CascadeShadowMapper extends DirectionalShadowMapper implements IEventDispa
         var d:Float = 1 / (maxZ - minZ);
         if (minX < 0) minX -= _snap;
         if (minY < 0) minY -= _snap;
-        minX = int(minX / _snap) * _snap;
-        minY = int(minY / _snap) * _snap;
+        minX = Std.int(minX / _snap) * _snap;
+        minY = Std.int(minY / _snap) * _snap;
         var snap2:Float = 2 * _snap;
-        w = int(w / snap2 + 1) * snap2;
-        h = int(h / snap2 + 1) * snap2;
+        w = Std.int(w / snap2 + 1) * snap2;
+        h = Std.int(h / snap2 + 1) * snap2;
         maxX = minX + w;
         maxY = minY + h;
         w = 1 / w;
