@@ -3,6 +3,7 @@
  */
 package away3d.animators.nodes;
 
+import away3d.animators.states.SpriteSheetAnimationState;
 import away3d.animators.data.SpriteSheetAnimationFrame;
 import flash.Vector;
 
@@ -17,6 +18,7 @@ class SpriteSheetClipNode extends AnimationClipNodeBase {
     public function new() {
         _frames = new Vector<SpriteSheetAnimationFrame>();
         _stateClass = SpriteSheetAnimationState;
+        super();
     }
 
 /**

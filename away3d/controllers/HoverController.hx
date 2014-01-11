@@ -7,6 +7,7 @@ package away3d.controllers;
 
 
 import away3d.core.math.MathConsts;
+import away3d.core.math.MathConsts;
 import away3d.entities.Entity;
 import away3d.containers.ObjectContainer3D;
 import flash.geom.Vector3D;
@@ -50,7 +51,7 @@ class HoverController extends LookAtController {
 
     public function set_steps(val:Int):Int {
         val = ((val < 1)) ? 1 : val;
-        if (_steps == val) return;
+        if (_steps == val) return val;
         _steps = val;
         notifyUpdate();
         return val;
@@ -66,7 +67,7 @@ class HoverController extends LookAtController {
 
     public function set_panAngle(val:Float):Float {
         val = Math.max(_minPanAngle, Math.min(_maxPanAngle, val));
-        if (_panAngle == val) return;
+        if (_panAngle == val) return val;
         _panAngle = val;
         notifyUpdate();
         return val;
@@ -82,7 +83,7 @@ class HoverController extends LookAtController {
 
     public function set_tiltAngle(val:Float):Float {
         val = Math.max(_minTiltAngle, Math.min(_maxTiltAngle, val));
-        if (_tiltAngle == val) return;
+        if (_tiltAngle == val) return val;
         _tiltAngle = val;
         notifyUpdate();
         return val;
@@ -97,7 +98,7 @@ class HoverController extends LookAtController {
     }
 
     public function set_distance(val:Float):Float {
-        if (_distance == val) return;
+        if (_distance == val) return val;
         _distance = val;
         notifyUpdate();
         return val;
@@ -114,7 +115,7 @@ class HoverController extends LookAtController {
     }
 
     public function set_minPanAngle(val:Float):Float {
-        if (_minPanAngle == val) return;
+        if (_minPanAngle == val) return val;
         _minPanAngle = val;
         panAngle = Math.max(_minPanAngle, Math.min(_maxPanAngle, _panAngle));
         return val;
@@ -131,7 +132,7 @@ class HoverController extends LookAtController {
     }
 
     public function set_maxPanAngle(val:Float):Float {
-        if (_maxPanAngle == val) return;
+        if (_maxPanAngle == val) return val;
         _maxPanAngle = val;
         panAngle = Math.max(_minPanAngle, Math.min(_maxPanAngle, _panAngle));
         return val;
@@ -148,7 +149,7 @@ class HoverController extends LookAtController {
     }
 
     public function set_minTiltAngle(val:Float):Float {
-        if (_minTiltAngle == val) return;
+        if (_minTiltAngle == val) return val;
         _minTiltAngle = val;
         tiltAngle = Math.max(_minTiltAngle, Math.min(_maxTiltAngle, _tiltAngle));
         return val;
@@ -165,7 +166,7 @@ class HoverController extends LookAtController {
     }
 
     public function set_maxTiltAngle(val:Float):Float {
-        if (_maxTiltAngle == val) return;
+        if (_maxTiltAngle == val) return val;
         _maxTiltAngle = val;
         tiltAngle = Math.max(_minTiltAngle, Math.min(_maxTiltAngle, _tiltAngle));
         return val;
@@ -182,7 +183,7 @@ class HoverController extends LookAtController {
     }
 
     public function set_yFactor(val:Float):Float {
-        if (_yFactor == val) return;
+        if (_yFactor == val) return val;
         _yFactor = val;
         notifyUpdate();
         return val;
@@ -197,7 +198,7 @@ class HoverController extends LookAtController {
     }
 
     public function set_wrapPanAngle(val:Bool):Bool {
-        if (_wrapPanAngle == val) return;
+        if (_wrapPanAngle == val) return val;
         _wrapPanAngle = val;
         notifyUpdate();
         return val;
@@ -207,14 +208,14 @@ class HoverController extends LookAtController {
 	 * Creates a new <code>HoverController</code> object.
 	 */
 
-    public function new(targetObject:Entity = null, lookAtObject:ObjectContainer3D = null, panAngle:Float = 0, tiltAngle:Float = 90, distance:Float = 1000, minTiltAngle:Float = -90, maxTiltAngle:Float = 90, minPanAngle:Float = NaN, maxPanAngle:Float = NaN, steps:Int = 8, yFactor:Float = 2, wrapPanAngle:Bool = false) {
+    public function new(targetObject:Entity = null, lookAtObject:ObjectContainer3D = null, panAngle:Float = 0, tiltAngle:Float = 90, distance:Float = 1000, minTiltAngle:Float = -90, maxTiltAngle:Float = 90,? minPanAngle:Float = null,? maxPanAngle:Float = null, ?steps:Int = 8, ?yFactor:Float = 2, ?wrapPanAngle:Bool = false) {
         _currentPanAngle = 0;
         _currentTiltAngle = 90;
         _panAngle = 0;
         _tiltAngle = 90;
         _distance = 1000;
-        _minPanAngle = -Infinity;
-        _maxPanAngle = Infinity;
+        _minPanAngle = -MathConsts.Infinity;
+        _maxPanAngle = MathConsts.Infinity;
         _minTiltAngle = -90;
         _maxTiltAngle = 90;
         _steps = 8;
@@ -224,8 +225,10 @@ class HoverController extends LookAtController {
         this.distance = distance;
         this.panAngle = panAngle;
         this.tiltAngle = tiltAngle;
-        this.minPanAngle = minPanAngle || -Infinity;
-        this.maxPanAngle = maxPanAngle || Infinity;
+        this.minPanAngle = minPanAngle ;
+        if(Math.isNaN( this.minPanAngle)) this.minPanAngle= -MathConsts.Infinity;
+        this.maxPanAngle = maxPanAngle;
+        if(Math.isNaN( this.maxPanAngle)) this.maxPanAngle= MathConsts.Infinity;
         this.minTiltAngle = minTiltAngle;
         this.maxTiltAngle = maxTiltAngle;
         this.steps = steps;
@@ -281,7 +284,7 @@ class HoverController extends LookAtController {
                 _currentPanAngle = _panAngle;
             }
         }
-        var pos:Vector3D = ((lookAtObject)) ? lookAtObject.position : ((lookAtPosition)) ? lookAtPosition : _origin;
+        var pos:Vector3D = ((lookAtObject!=null)) ? lookAtObject.position : ((lookAtPosition!=null)) ? lookAtPosition : _origin;
         targetObject.x = pos.x + distance * Math.sin(_currentPanAngle * MathConsts.DEGREES_TO_RADIANS) * Math.cos(_currentTiltAngle * MathConsts.DEGREES_TO_RADIANS);
         targetObject.z = pos.z + distance * Math.cos(_currentPanAngle * MathConsts.DEGREES_TO_RADIANS) * Math.cos(_currentTiltAngle * MathConsts.DEGREES_TO_RADIANS);
         targetObject.y = pos.y + distance * Math.sin(_currentTiltAngle * MathConsts.DEGREES_TO_RADIANS) * yFactor;

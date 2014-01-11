@@ -5,6 +5,7 @@
  */
 package away3d.animators;
 
+import flash.Lib;
 import away3d.materials.passes.MaterialPassBase;
 import flash.errors.Error;
 import away3d.materials.SpriteSheetMaterial;
@@ -21,10 +22,7 @@ import away3d.animators.states.SpriteSheetAnimationState;
 import away3d.animators.transitions.IAnimationTransition;
 
 import away3d.cameras.Camera3D;
-import flash.display3D.Context3DProgramType;
-import flash.utils.GetTimer;
-import flash.utils.SetTimeout;
-
+import flash.display3D.Context3DProgramType;  
 class SpriteSheetAnimator extends AnimatorBase implements IAnimator {
     public var fps(get_fps, set_fps):Int;
     public var reverse(get_reverse, set_reverse):Bool;
@@ -60,7 +58,7 @@ class SpriteSheetAnimator extends AnimatorBase implements IAnimator {
 /* Set the playrate of the animation in frames per second (not depending on player fps)*/
 
     public function set_fps(val:Int):Int {
-        _ms = 1000 / val;
+        _ms = Std.int(1000 / val);
         _fps = val;
         return val;
     }
@@ -142,8 +140,7 @@ class SpriteSheetAnimator extends AnimatorBase implements IAnimator {
 	 */
 
     public function play(name:String, transition:IAnimationTransition = null, offset:Float = NaN):Void {
-        transition = transition;
-        offset = offset;
+
         if (_activeAnimationName == name) return;
         _activeAnimationName = name;
         if (!_animationSet.hasAnimation(name)) throw new Error("Animation root node " + name + " not found!");
@@ -184,7 +181,7 @@ class SpriteSheetAnimator extends AnimatorBase implements IAnimator {
     }
 
     private function gotoFrame(frameNumber:Int, doPlay:Bool):Void {
-        if (!_activeState) return;
+        if (_activeState==null) return;
         cast((_activeState), SpriteSheetAnimationState).currentFrameNumber = ((frameNumber == 0)) ? frameNumber : frameNumber - 1;
         var currentMapID:Int = _frame.mapID;
         _frame = cast((_activeSpriteSheetState), SpriteSheetAnimationState).currentFrameData;
@@ -192,6 +189,7 @@ class SpriteSheetAnimator extends AnimatorBase implements IAnimator {
         else {
             if (currentMapID != _frame.mapID) {
                 _mapDirty = true;
+
                 setTimeout(stop, _fps);
             }
 

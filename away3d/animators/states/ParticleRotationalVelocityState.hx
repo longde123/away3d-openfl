@@ -3,6 +3,7 @@
  */
 package away3d.animators.states;
 
+import flash.Vector;
 import haxe.ds.WeakMap;
 import away3d.animators.data.ParticlePropertiesMode;
 
@@ -40,7 +41,7 @@ class ParticleRotationalVelocityState extends ParticleStateBase {
 	 *
 	 */
 
-    public function getRotationalVelocities():Vector<Vector3D> {
+    public function getRotationalVelocities():Vector<Vector3D> {  
         return _dynamicProperties;
     }
 
@@ -64,7 +65,7 @@ class ParticleRotationalVelocityState extends ParticleStateBase {
 // TODO: not used
         renderable = renderable;
         camera = camera;
-        if (_particleRotationalVelocityNode.mode == ParticlePropertiesMode.LOCAL_DYNAMIC && !_dynamicPropertiesDirty[animationSubGeometry]) updateDynamicProperties(animationSubGeometry);
+        if (_particleRotationalVelocityNode.mode == ParticlePropertiesMode.LOCAL_DYNAMIC &&! _dynamicPropertiesDirty.exists(animationSubGeometry)) updateDynamicProperties(animationSubGeometry);
         var index:Int = animationRegisterCache.getRegisterIndex(_animationNode, ParticleRotationalVelocityNode.ROTATIONALVELOCITY_INDEX);
         if (_particleRotationalVelocityNode.mode == ParticlePropertiesMode.GLOBAL) animationRegisterCache.setVertexConst(index, _rotationalVelocityData.x, _rotationalVelocityData.y, _rotationalVelocityData.z, _rotationalVelocityData.w)
         else animationSubGeometry.activateVertexBuffer(index, _particleRotationalVelocityNode.dataOffset, stage3DProxy, Context3DVertexBufferFormat.FLOAT_4);

@@ -16,19 +16,19 @@ import flash.geom.Vector3D;
 class ParticleScaleNode extends ParticleNodeBase {
 
 /** @private */
-    static private var SCALE_INDEX:Int = 0;
+    static public var SCALE_INDEX:Int = 0;
 /** @private */
-    private var _usesCycle:Bool;
+    public var _usesCycle:Bool;
 /** @private */
-    private var _usesPhase:Bool;
+    public var _usesPhase:Bool;
 /** @private */
-    private var _minScale:Float;
+    public var _minScale:Float;
 /** @private */
-    private var _maxScale:Float;
+    public var _maxScale:Float;
 /** @private */
-    private var _cycleDuration:Float;
+    public var _cycleDuration:Float;
 /** @private */
-    private var _cyclePhase:Float;
+    public var _cyclePhase:Float;
 /**
 	 * Reference for scale node properties on a single particle (when in local property mode).
 	 * Expects a <code>Vector3D</code> representing the min scale (x), max scale(y), optional cycle speed (z) and phase offset (w) applied to the particle.
@@ -93,7 +93,7 @@ class ParticleScaleNode extends ParticleNodeBase {
 	 * @inheritDoc
 	 */
 
-    override private function generatePropertyOfOneParticle(param:ParticleProperties):Void {
+    override public function generatePropertyOfOneParticle(param:ParticleProperties):Void {
         var scale:Vector3D = param[SCALE_VECTOR3D];
         if (!scale) throw (new Error("there is no " + SCALE_VECTOR3D + " in param!"));
         if (_usesCycle) {

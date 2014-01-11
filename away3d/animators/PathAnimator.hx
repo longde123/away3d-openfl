@@ -53,7 +53,7 @@ class PathAnimator extends EventDispatcher {
 	 * @param                 [optional] rotations           A Vector.&lt;Vector3D&gt; to define rotations per pathsegments. If PathExtrude is used to simulate the "road", use the very same rotations vector.
 	 */
 
-    function new(path:IPath = null, target:Object3D = null, offset:Vector3D = null, alignToPath:Bool = true, lookAtTarget:Object3D = null, rotations:Vector<Vector3D> = null) {
+    public function new(path:IPath = null, target:Object3D = null, offset:Vector3D = null, alignToPath:Bool = true, lookAtTarget:Object3D = null, rotations:Vector<Vector3D> = null) {
         _index = 0;
         _position = new Vector3D();
         _lastSegment = 0;
@@ -65,9 +65,11 @@ class PathAnimator extends EventDispatcher {
         _target = target;
         _alignToPath = alignToPath;
         _lookAtTarget = lookAtTarget;
-        if (offset) setOffset(offset.x, offset.y, offset.z);
+        super();
+        if (offset!=null) setOffset(offset.x, offset.y, offset.z);
         this.rotations = rotations;
-        if (_lookAtTarget && _alignToPath) _alignToPath = false;
+        if (_lookAtTarget!=null && _alignToPath) _alignToPath = false;
+
     }
 
     public function get_upAxis():Vector3D {
@@ -97,7 +99,7 @@ class PathAnimator extends EventDispatcher {
 	 */
 
     public function updateProgress(t:Float):Void {
-        if (!_path) throw new Error("No Path object set for this class");
+        if (_path==null) throw new Error("No Path object set for this class");
         if (t <= 0) {
             t = 0;
             _lastSegment = 0;
@@ -110,14 +112,14 @@ class PathAnimator extends EventDispatcher {
         if (_bCycle && t <= 0.1 && _lastSegment == _path.numSegments - 1) dispatchEvent(new PathEvent(PathEvent.CYCLE));
         _lastTime = t;
         var multi:Float = _path.numSegments * t;
-        _index = multi;
+        _index = Std.int(multi);
         if (_index == _path.numSegments) index--;
         if (_offset != null) _target.position = _basePosition;
         var nT:Float = multi - _index;
         updatePosition(nT, _path.segments[_index]);
         var rotate:Bool;
-        if (_lookAtTarget) {
-            if (_offset) {
+        if (_lookAtTarget!=null) {
+            if (_offset!=null) {
                 _target.moveRight(_offset.x);
                 _target.moveUp(_offset.y);
                 _target.moveForward(_offset.z);
@@ -126,7 +128,7 @@ class PathAnimator extends EventDispatcher {
         }
 
         else if (_alignToPath) {
-            if (_rotations && _rotations.length > 0) {
+            if (_rotations!=null && _rotations.length > 0) {
                 if (_rotations[_index + 1] == null) {
                     _rot.x = _rotations[_rotations.length - 1].x * nT;
                     _rot.y = _rotations[_rotations.length - 1].y * nT;
@@ -165,10 +167,10 @@ class PathAnimator extends EventDispatcher {
 	 */
 
     public function getPositionOnPath(t:Float, out:Vector3D):Vector3D {
-        if (!_path) throw new Error("No Path object set for this class");
+        if (_path==null) throw new Error("No Path object set for this class");
         t = ((t < 0)) ? 0 : ((t > 1)) ? 1 : t;
         var m:Float = _path.numSegments * t;
-        var i:Int = m;
+        var i:Int = Std.int(m);
         var ps:IPathSegment = _path.segments[i];
         return ps.getPointOnSegment(m - i, out);
     }
@@ -188,11 +190,11 @@ class PathAnimator extends EventDispatcher {
 	 */
 
     public function getPositionOnPathMS(ms:Float, duration:Float, out:Vector3D):Vector3D {
-        if (!_path) throw new Error("No Path object set for this class");
+        if (_path==null) throw new Error("No Path object set for this class");
         var t:Float = Math.abs(ms) / duration;
         t = ((t < 0)) ? 0 : ((t > 1)) ? 1 : t;
         var m:Float = _path.numSegments * t;
-        var i:Int = m;
+        var i:Int = Std.int(m);
         var ps:IPathSegment = _path.segments[i];
         return ps.getPointOnSegment(m - i, out);
     }
@@ -241,7 +243,7 @@ class PathAnimator extends EventDispatcher {
     }
 
     public function set_progress(val:Float):Float {
-        if (_time == val) return;
+        if (_time == val) return val;
         updateProgress(val);
         return val;
     }
@@ -251,7 +253,7 @@ class PathAnimator extends EventDispatcher {
 	 * @param     t        [Number]. A Number between 0 and 1. If no params, actual pathanimator time segment index is returned.
 	 */
 
-    public function getTimeSegment(t:Float = NaN):Float {
+    public function getTimeSegment(?t:Float = null):Float {
         t = ((Math.isNaN(t))) ? _time : t;
         return Math.floor(_path.numSegments * t);
     }
@@ -297,7 +299,7 @@ class PathAnimator extends EventDispatcher {
 
     public function set_rotations(value:Vector<Vector3D>):Vector<Vector3D> {
         _rotations = value;
-        if (_rotations && !_rot) {
+        if (_rotations && _rot==null) {
             _rot = new Vector3D();
             _tmpOffset = new Vector3D();
         }
@@ -399,7 +401,7 @@ class PathAnimator extends EventDispatcher {
     }
 
     private function updateObjectPosition(rotate:Bool = false):Void {
-        if (rotate && _offset) {
+        if (rotate !=null&& _offset!=null) {
             _tmpOffset.x = _offset.x;
             _tmpOffset.y = _offset.y;
             _tmpOffset.z = _offset.z;

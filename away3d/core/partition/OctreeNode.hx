@@ -36,6 +36,7 @@ class OctreeNode extends NodeBase {
 
     public function new(maxDepth:Int = 5, size:Float = 10000, centerX:Float = 0, centerY:Float = 0, centerZ:Float = 0, depth:Int = 0) {
         init(size, centerX, centerY, centerZ, depth, maxDepth);
+        super();
     }
 
     private function init(size:Float, centerX:Float, centerY:Float, centerZ:Float, depth:Int, maxDepth:Int):Void {

@@ -13,15 +13,15 @@ import away3d.animators.states.ParticleFollowState;
 class ParticleFollowNode extends ParticleNodeBase {
 
 /** @private */
-    static private var FOLLOW_POSITION_INDEX:Int = 0;
+    static public var FOLLOW_POSITION_INDEX:Int = 0;
 /** @private */
-    static private var FOLLOW_ROTATION_INDEX:Int = 1;
+    static public var FOLLOW_ROTATION_INDEX:Int = 1;
 /** @private */
-    private var _usesPosition:Bool;
+    public var _usesPosition:Bool;
 /** @private */
-    private var _usesRotation:Bool;
+    public var _usesRotation:Bool;
 /** @private */
-    private var _smooth:Bool;
+    public var _smooth:Bool;
 /**
 	 * Creates a new <code>ParticleFollowNode</code>
 	 *

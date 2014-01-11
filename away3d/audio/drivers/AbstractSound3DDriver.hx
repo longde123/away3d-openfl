@@ -22,6 +22,7 @@ class AbstractSound3DDriver extends EventDispatcher {
         _volume = 1;
         _scale = 1000;
         _playing = false;
+        super();
     }
 
     public function get_sourceSound():Sound {
@@ -29,7 +30,7 @@ class AbstractSound3DDriver extends EventDispatcher {
     }
 
     public function set_sourceSound(val:Sound):Sound {
-        if (_src == val) return;
+        if (_src == val) return val;
         _src = val;
         return val;
     }
@@ -57,7 +58,7 @@ class AbstractSound3DDriver extends EventDispatcher {
     }
 
     public function set_mute(val:Bool):Bool {
-        if (_mute == val) return;
+        if (_mute == val) return val;
         _mute = val;
         return val;
     }

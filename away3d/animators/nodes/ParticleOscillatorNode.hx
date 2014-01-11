@@ -16,9 +16,9 @@ import flash.geom.Vector3D;
 class ParticleOscillatorNode extends ParticleNodeBase {
 
 /** @private */
-    static private var OSCILLATOR_INDEX:Int = 0;
+    static public var OSCILLATOR_INDEX:Int = 0;
 /** @private */
-    private var _oscillator:Vector3D;
+    public var _oscillator:Vector3D;
 /**
 	 * Reference for ocsillator node properties on a single particle (when in local property mode).
 	 * Expects a <code>Vector3D</code> object representing the axis (x,y,z) and cycle speed (w) of the motion on the particle.

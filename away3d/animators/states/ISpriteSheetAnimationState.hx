@@ -7,7 +7,7 @@ package away3d.animators.states;
 
 
 import away3d.animators.data.SpriteSheetAnimationFrame;
-interface ISpriteSheetAnimationState implements IAnimationState {
+interface ISpriteSheetAnimationState extends IAnimationState {
     var currentFrameData(get_currentFrameData, never):SpriteSheetAnimationFrame;
     var currentFrameNumber(get_currentFrameNumber, never):Int;
 

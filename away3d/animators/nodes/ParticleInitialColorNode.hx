@@ -12,16 +12,16 @@ import away3d.animators.states.ParticleInitialColorState;
 class ParticleInitialColorNode extends ParticleNodeBase {
 
 /** @private */
-    static private var MULTIPLIER_INDEX:Int = 0;
+    static public var MULTIPLIER_INDEX:Int = 0;
 /** @private */
-    static private var OFFSET_INDEX:Int = 1;
+    static public var OFFSET_INDEX:Int = 1;
 //default values used when creating states
 /** @private */
-    private var _usesMultiplier:Bool;
+    public var _usesMultiplier:Bool;
 /** @private */
-    private var _usesOffset:Bool;
+    public var _usesOffset:Bool;
 /** @private */
-    private var _initialColor:ColorTransform;
+    public var _initialColor:ColorTransform;
 /**
 	 * Reference for color node properties on a single particle (when in local property mode).
 	 * Expects a <code>ColorTransform</code> object representing the color transform applied to the particle.
@@ -62,7 +62,7 @@ class ParticleInitialColorNode extends ParticleNodeBase {
 	 * @inheritDoc
 	 */
 
-    override private function processAnimationSetting(particleAnimationSet:ParticleAnimationSet):Void {
+    override public function processAnimationSetting(particleAnimationSet:ParticleAnimationSet):Void {
         if (_usesMultiplier) particleAnimationSet.hasColorMulNode = true;
         if (_usesOffset) particleAnimationSet.hasColorAddNode = true;
     }
@@ -71,7 +71,7 @@ class ParticleInitialColorNode extends ParticleNodeBase {
 	 * @inheritDoc
 	 */
 
-    override private function generatePropertyOfOneParticle(param:ParticleProperties):Void {
+    override public function generatePropertyOfOneParticle(param:ParticleProperties):Void {
         var initialColor:ColorTransform = param[COLOR_INITIAL_COLORTRANSFORM];
         if (!initialColor) throw (new Error("there is no " + COLOR_INITIAL_COLORTRANSFORM + " in param!"));
         var i:Int;

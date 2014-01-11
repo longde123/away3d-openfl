@@ -12,6 +12,7 @@ class ParticleGeometry extends Geometry {
     public var numParticles:Int;
 
     public function new() {
+        super();
     }
 
 }

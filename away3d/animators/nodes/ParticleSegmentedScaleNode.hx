@@ -12,15 +12,15 @@ import flash.geom.Vector3D;
 class ParticleSegmentedScaleNode extends ParticleNodeBase {
 
 /** @private */
-    static private var START_INDEX:Int = 0;
+    static public var START_INDEX:Int = 0;
 /** @private */
-    private var _startScale:Vector3D;
+    public var _startScale:Vector3D;
 /** @private */
-    private var _endScale:Vector3D;
+    public var _endScale:Vector3D;
 /** @private */
-    private var _numSegmentPoint:Int;
+    public var _numSegmentPoint:Int;
 /** @private */
-    private var _segmentScales:Vector<Vector3D>;
+    public var _segmentScales:Vector<Vector3D>;
 /**
 	 *
 	 * @param	numSegmentPoint

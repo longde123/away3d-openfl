@@ -54,7 +54,7 @@ class SoundTransform3D {
 	 */
 
     public function update():Void {
-        if (_emitter && _listener) {
+        if (_emitter!=null && _listener!=null) {
             _inv_ref_mtx.rawData = _listener.sceneTransform.rawData;
             _inv_ref_mtx.invert();
             _refv = _inv_ref_mtx.deltaTransformVector(_listener.position);

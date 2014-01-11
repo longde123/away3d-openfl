@@ -15,23 +15,23 @@ import flash.geom.ColorTransform;
 class ParticleSegmentedColorNode extends ParticleNodeBase {
 
 /** @private */
-    static private var START_MULTIPLIER_INDEX:Int = 0;
+    static public var START_MULTIPLIER_INDEX:Int = 0;
 /** @private */
-    static private var START_OFFSET_INDEX:Int = 1;
+    static public var START_OFFSET_INDEX:Int = 1;
 /** @private */
-    static private var TIME_DATA_INDEX:Int = 2;
+    static public var TIME_DATA_INDEX:Int = 2;
 /** @private */
-    private var _usesMultiplier:Bool;
+    public var _usesMultiplier:Bool;
 /** @private */
-    private var _usesOffset:Bool;
+    public var _usesOffset:Bool;
 /** @private */
-    private var _startColor:ColorTransform;
+    public var _startColor:ColorTransform;
 /** @private */
-    private var _endColor:ColorTransform;
+    public var _endColor:ColorTransform;
 /** @private */
-    private var _numSegmentPoint:Int;
+    public var _numSegmentPoint:Int;
 /** @private */
-    private var _segmentPoints:Vector<ColorSegmentPoint>;
+    public var _segmentPoints:Vector<ColorSegmentPoint>;
 
     public function new(usesMultiplier:Bool, usesOffset:Bool, numSegmentPoint:Int, startColor:ColorTransform, endColor:ColorTransform, segmentPoints:Vector<ColorSegmentPoint>) {
         _stateClass = ParticleSegmentedColorState;
@@ -50,7 +50,7 @@ class ParticleSegmentedColorNode extends ParticleNodeBase {
 	 * @inheritDoc
 	 */
 
-    override private function processAnimationSetting(particleAnimationSet:ParticleAnimationSet):Void {
+    override public function processAnimationSetting(particleAnimationSet:ParticleAnimationSet):Void {
         if (_usesMultiplier) particleAnimationSet.hasColorMulNode = true;
         if (_usesOffset) particleAnimationSet.hasColorAddNode = true;
     }

@@ -42,7 +42,7 @@ class FirstPersonController extends ControllerBase {
 
     public function set_steps(val:Int):Int {
         val = ((val < 1)) ? 1 : val;
-        if (_steps == val) return;
+        if (_steps == val) return val;
         _steps = val;
         notifyUpdate();
         return val;
@@ -57,7 +57,7 @@ class FirstPersonController extends ControllerBase {
     }
 
     public function set_panAngle(val:Float):Float {
-        if (_panAngle == val) return;
+        if (_panAngle == val) return val;
         _panAngle = val;
         notifyUpdate();
         return val;
@@ -73,7 +73,7 @@ class FirstPersonController extends ControllerBase {
 
     public function set_tiltAngle(val:Float):Float {
         val = Math.max(_minTiltAngle, Math.min(_maxTiltAngle, val));
-        if (_tiltAngle == val) return;
+        if (_tiltAngle == val) return val;
         _tiltAngle = val;
         notifyUpdate();
         return val;
@@ -90,7 +90,7 @@ class FirstPersonController extends ControllerBase {
     }
 
     public function set_minTiltAngle(val:Float):Float {
-        if (_minTiltAngle == val) return;
+        if (_minTiltAngle == val) return val;
         _minTiltAngle = val;
         tiltAngle = Math.max(_minTiltAngle, Math.min(_maxTiltAngle, _tiltAngle));
         return val;
@@ -107,7 +107,7 @@ class FirstPersonController extends ControllerBase {
     }
 
     public function set_maxTiltAngle(val:Float):Float {
-        if (_maxTiltAngle == val) return;
+        if (_maxTiltAngle == val) return val;
         _maxTiltAngle = val;
         tiltAngle = Math.max(_minTiltAngle, Math.min(_maxTiltAngle, _tiltAngle));
         return val;
@@ -122,7 +122,7 @@ class FirstPersonController extends ControllerBase {
     }
 
     public function set_wrapPanAngle(val:Bool):Bool {
-        if (_wrapPanAngle == val) return;
+        if (_wrapPanAngle == val) return val;
         _wrapPanAngle = val;
         notifyUpdate();
         return val;
@@ -203,7 +203,7 @@ class FirstPersonController extends ControllerBase {
         }
         targetObject.rotationX = _currentTiltAngle;
         targetObject.rotationY = _currentPanAngle;
-        if (_walkIncrement) {
+        if (_walkIncrement!=null) {
             if (fly) targetObject.moveForward(_walkIncrement)
             else {
                 targetObject.x += _walkIncrement * Math.sin(_panAngle * MathConsts.DEGREES_TO_RADIANS);
@@ -212,7 +212,7 @@ class FirstPersonController extends ControllerBase {
 
             _walkIncrement = 0;
         }
-        if (_strafeIncrement) {
+        if (_strafeIncrement!=null) {
             targetObject.moveRight(_strafeIncrement);
             _strafeIncrement = 0;
         }

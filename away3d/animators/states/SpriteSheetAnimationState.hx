@@ -9,7 +9,7 @@ class SpriteSheetAnimationState extends AnimationClipState implements ISpriteShe
     public var backAndForth(never, set_backAndForth):Bool;
     public var currentFrameData(get_currentFrameData, never):SpriteSheetAnimationFrame;
     public var currentFrameNumber(get_currentFrameNumber, set_currentFrameNumber):Int;
-    var totalFrames(get_totalFrames, never):Int;
+    public var totalFrames(get_totalFrames, never):Int;
 
     private var _frames:Vector<SpriteSheetAnimationFrame>;
     private var _clipNode:SpriteSheetClipNode;
@@ -68,7 +68,7 @@ class SpriteSheetAnimationState extends AnimationClipState implements ISpriteShe
 	 */
 
     private function get_totalFrames():Int {
-        return ((!_frames)) ? 0 : _frames.length;
+        return ((_frames==null)) ? 0 : _frames.length;
     }
 
 /**

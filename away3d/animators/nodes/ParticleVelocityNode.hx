@@ -3,6 +3,7 @@
  */
 package away3d.animators.nodes;
 
+import Reflect;
 import away3d.animators.states.ParticleVelocityState;
 import away3d.animators.data.ParticleProperties;
 import flash.errors.Error;
@@ -14,9 +15,9 @@ import flash.geom.Vector3D;
 class ParticleVelocityNode extends ParticleNodeBase {
 
 /** @private */
-    static private var VELOCITY_INDEX:Int = 0;
+    static public var VELOCITY_INDEX:Int = 0;
 /** @private */
-    private var _velocity:Vector3D;
+    public var _velocity:Vector3D;
 /**
 	 * Reference for velocity node properties on a single particle (when in local property mode).
 	 * Expects a <code>Vector3D</code> object representing the direction of movement on the particle.
@@ -32,7 +33,8 @@ class ParticleVelocityNode extends ParticleNodeBase {
     public function new(mode:Int, velocity:Vector3D = null) {
         super("ParticleVelocity", mode, 3);
         _stateClass = ParticleVelocityState;
-        _velocity = velocity || new Vector3D();
+        _velocity = velocity;
+        if(_velocity==null) _velocity = new Vector3D();
     }
 
 /**
@@ -40,7 +42,7 @@ class ParticleVelocityNode extends ParticleNodeBase {
 	 */
 
     override public function getAGALVertexCode(pass:MaterialPassBase, animationRegisterCache:AnimationRegisterCache):String {
-        pass = pass;
+
         var velocityValue:ShaderRegisterElement = ((_mode == ParticlePropertiesMode.GLOBAL)) ? animationRegisterCache.getFreeVertexConstant() : animationRegisterCache.getFreeVertexAttribute();
         animationRegisterCache.setRegisterIndex(this, VELOCITY_INDEX, velocityValue.index);
         var distance:ShaderRegisterElement = animationRegisterCache.getFreeVertexVectorTemp();
@@ -63,8 +65,8 @@ class ParticleVelocityNode extends ParticleNodeBase {
 	 * @inheritDoc
 	 */
 
-    override private function generatePropertyOfOneParticle(param:ParticleProperties):Void {
-        var _tempVelocity:Vector3D = param[VELOCITY_VECTOR3D];
+    override public function generatePropertyOfOneParticle(param:ParticleProperties):Void {
+        var _tempVelocity:Vector3D = Reflect.field(param,VELOCITY_VECTOR3D);
         if (!_tempVelocity) throw new Error("there is no " + VELOCITY_VECTOR3D + " in param!");
         _oneData[0] = _tempVelocity.x;
         _oneData[1] = _tempVelocity.y;

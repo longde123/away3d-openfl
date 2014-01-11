@@ -13,9 +13,9 @@ import flash.geom.Vector3D;
 class ParticleBillboardNode extends ParticleNodeBase {
 
 /** @private */
-    static private var MATRIX_INDEX:Int = 0;
+    static public var MATRIX_INDEX:Int = 0;
 /** @private */
-    private var _billboardAxis:Vector3D;
+    public var _billboardAxis:Vector3D;
 /**
 	 * Creates a new <code>ParticleBillboardNode</code>
 	 */

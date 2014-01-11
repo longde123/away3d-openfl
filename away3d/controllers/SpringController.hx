@@ -51,10 +51,10 @@ class SpringController extends LookAtController {
     }
 
     override public function update(interpolate:Bool = true):Void {
-        interpolate = interpolate;
+
 // prevents unused warning
         var offs:Vector3D;
-        if (!_lookAtObject || !_targetObject) return;
+        if (_lookAtObject==null || _targetObject==null) return;
         offs = _lookAtObject.transform.deltaTransformVector(positionOffset);
         _desiredPosition.x = _lookAtObject.x + offs.x;
         _desiredPosition.y = _lookAtObject.y + offs.y;

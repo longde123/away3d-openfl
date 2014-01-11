@@ -109,8 +109,7 @@ class ParticleColorState extends ParticleStateBase {
 
     override public function setRenderState(stage3DProxy:Stage3DProxy, renderable:IRenderable, animationSubGeometry:AnimationSubGeometry, animationRegisterCache:AnimationRegisterCache, camera:Camera3D):Void {
 // TODO: not used
-        renderable = renderable;
-        camera = camera;
+
         if (animationRegisterCache.needFragmentAnimation) {
             var dataOffset:Int = _particleColorNode.dataOffset;
             if (_usesCycle) animationRegisterCache.setVertexConst(animationRegisterCache.getRegisterIndex(_animationNode, ParticleColorNode.CYCLE_INDEX), _cycleData.x, _cycleData.y, _cycleData.z, _cycleData.w);

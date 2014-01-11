@@ -14,9 +14,9 @@ class ParticleUVNode extends ParticleNodeBase {
     public var axis(get_axis, set_axis):String;
 
 /** @private */
-    static private var UV_INDEX:Int = 0;
+    static public var UV_INDEX:Int = 0;
 /** @private */
-    private var _uvData:Vector3D;
+    public var _uvData:Vector3D;
 /**
 	 * Used to set the time node into global property mode.
 	 */
@@ -96,7 +96,7 @@ class ParticleUVNode extends ParticleNodeBase {
 	 */
 
     override public function getAGALUVCode(pass:MaterialPassBase, animationRegisterCache:AnimationRegisterCache):String {
-        pass = pass;
+
         var code:String = "";
         if (animationRegisterCache.needUVAnimation) {
             var uvConst:ShaderRegisterElement = animationRegisterCache.getFreeVertexConstant();
@@ -128,7 +128,7 @@ class ParticleUVNode extends ParticleNodeBase {
 	 * @inheritDoc
 	 */
 
-    override private function processAnimationSetting(particleAnimationSet:ParticleAnimationSet):Void {
+    override public function processAnimationSetting(particleAnimationSet:ParticleAnimationSet):Void {
         particleAnimationSet.hasUVNode = true;
     }
 

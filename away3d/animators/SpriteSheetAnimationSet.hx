@@ -9,12 +9,14 @@ package away3d.animators;
 import away3d.core.managers.Stage3DProxy;
 import away3d.materials.passes.MaterialPassBase;
 import flash.display3D.Context3D;
+import flash.Vector;
 
 class SpriteSheetAnimationSet extends AnimationSetBase implements IAnimationSet {
 
     private var _agalCode:String;
 
-    function new() {
+    public function new() {
+        super();
     }
 
 /**
@@ -24,7 +26,7 @@ class SpriteSheetAnimationSet extends AnimationSetBase implements IAnimationSet 
     public function getAGALVertexCode(pass:MaterialPassBase, sourceRegisters:Vector<String>, targetRegisters:Vector<String>, profile:String):String {
         _agalCode = "mov " + targetRegisters[0] + ", " + sourceRegisters[0] + "\n";
         return "";
-    }
+    } 
 
 /**
 	 * @inheritDoc

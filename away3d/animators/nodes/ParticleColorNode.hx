@@ -15,32 +15,32 @@ import flash.geom.ColorTransform;
 class ParticleColorNode extends ParticleNodeBase {
 
 /** @private */
-    static private var START_MULTIPLIER_INDEX:Int = 0;
+    static public var START_MULTIPLIER_INDEX:Int = 0;
 /** @private */
-    static private var DELTA_MULTIPLIER_INDEX:Int = 1;
+    static public var DELTA_MULTIPLIER_INDEX:Int = 1;
 /** @private */
-    static private var START_OFFSET_INDEX:Int = 2;
+    static public var START_OFFSET_INDEX:Int = 2;
 /** @private */
-    static private var DELTA_OFFSET_INDEX:Int = 3;
+    static public var DELTA_OFFSET_INDEX:Int = 3;
 /** @private */
-    static private var CYCLE_INDEX:Int = 4;
+    static public var CYCLE_INDEX:Int = 4;
 //default values used when creating states
 /** @private */
-    private var _usesMultiplier:Bool;
+    public var _usesMultiplier:Bool;
 /** @private */
-    private var _usesOffset:Bool;
+    public var _usesOffset:Bool;
 /** @private */
-    private var _usesCycle:Bool;
+    public var _usesCycle:Bool;
 /** @private */
-    private var _usesPhase:Bool;
+    public var _usesPhase:Bool;
 /** @private */
-    private var _startColor:ColorTransform;
+    public var _startColor:ColorTransform;
 /** @private */
-    private var _endColor:ColorTransform;
+    public var _endColor:ColorTransform;
 /** @private */
-    private var _cycleDuration:Float;
+    public var _cycleDuration:Float;
 /** @private */
-    private var _cyclePhase:Float;
+    public var _cyclePhase:Float;
 /**
 	 * Reference for color node properties on a single particle (when in local property mode).
 	 * Expects a <code>ColorTransform</code> object representing the start color transform applied to the particle.
@@ -83,7 +83,7 @@ class ParticleColorNode extends ParticleNodeBase {
 	 */
 
     override public function getAGALVertexCode(pass:MaterialPassBase, animationRegisterCache:AnimationRegisterCache):String {
-        pass = pass;
+
         var code:String = "";
         if (animationRegisterCache.needFragmentAnimation) {
             var temp:ShaderRegisterElement = animationRegisterCache.getFreeVertexVectorTemp();

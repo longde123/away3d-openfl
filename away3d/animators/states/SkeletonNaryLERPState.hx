@@ -28,7 +28,7 @@ class SkeletonNaryLERPState extends AnimationStateBase implements ISkeletonAnima
         super(animator, skeletonAnimationNode);
         _skeletonAnimationNode = skeletonAnimationNode;
         var i:Int = _skeletonAnimationNode.numInputs;
-        while (i--)_inputs[i] = cast(animator.getAnimationState(_skeletonAnimationNode._inputs[i]), ISkeletonAnimationState) ;
+        while (i-- >0)_inputs[i] = cast(animator.getAnimationState(_skeletonAnimationNode._inputs[i]), ISkeletonAnimationState) ;
     }
 
 /**
@@ -40,7 +40,7 @@ class SkeletonNaryLERPState extends AnimationStateBase implements ISkeletonAnima
         _positionDeltaDirty = true;
         var j:Int = 0;
         while (j < _skeletonAnimationNode.numInputs) {
-            if (_blendWeights[j]) _inputs[j].update(value);
+            if (_blendWeights[j]>0) _inputs[j].update(Std.int(value));
             ++j;
         }
     }
@@ -52,7 +52,7 @@ class SkeletonNaryLERPState extends AnimationStateBase implements ISkeletonAnima
     override private function updateTime(time:Int):Void {
         var j:Int = 0;
         while (j < _skeletonAnimationNode.numInputs) {
-            if (_blendWeights[j]) _inputs[j].update(time);
+            if (_blendWeights[j]>0) _inputs[j].update(time);
             ++j;
         }
         super.updateTime(time);
@@ -104,7 +104,7 @@ class SkeletonNaryLERPState extends AnimationStateBase implements ISkeletonAnima
         var j:Int = 0;
         while (j < _skeletonAnimationNode.numInputs) {
             weight = _blendWeights[j];
-            if (weight) {
+            if (weight>0) {
                 delta = _inputs[j].positionDelta;
                 positionDelta.x += weight * delta.x;
                 positionDelta.y += weight * delta.y;
@@ -147,17 +147,17 @@ class SkeletonNaryLERPState extends AnimationStateBase implements ISkeletonAnima
         var j:Int = 0;
         while (j < _skeletonAnimationNode.numInputs) {
             weight = _blendWeights[j];
-            if (!weight) {
+            if (weight==0) {
                 ++j;
                 continue;
             }
-            ;
             poses = _inputs[j].getSkeletonPose(skeleton).jointPoses;
-            if (!firstPose) {
+            if (firstPose==null) {
                 firstPose = poses;
                 i = 0;
                 while (i < numJoints) {
-                    endPose = endPoses[i] || = new JointPose();
+					if (endPoses[i] == null) endPoses[i] = new JointPose();
+                    endPose = endPoses[i];
                     pose = poses[i];
                     q = pose.orientation;
                     tr = pose.translation;

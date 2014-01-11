@@ -51,9 +51,11 @@ class Face {
 	 * @param    uvs            [optional] 6 entries long Vector.&lt;Number&gt; representing the u and v of uv0, uv1, and uv2 of a face
 	 */
 
-    function new(vertices:Vector<Float> = null, uvs:Vector<Float> = null) {
-        _vertices = vertices || Vector.ofArray(cast [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]);
-        _uvs = uvs || Vector.ofArray(cast [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]);
+    public function new(vertices:Vector<Float> = null, uvs:Vector<Float> = null) {
+        _vertices = vertices ;
+        if(_vertices==null)_vertices= Vector.ofArray(cast [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]);
+        _uvs = uvs;
+        if(_uvs==null)_uvs=Vector.ofArray(cast [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]);
     }
 
 //uvs
@@ -444,7 +446,8 @@ class Face {
 
     public function containsPoint(point:Vector3D, maxDistanceToPlane:Float = .007):Bool {
         if (!planeContains(point, maxDistanceToPlane)) return false;
-        getBarycentricCoords(point, _calcPoint || = new Point());
+		if (_calcPoint == null)_calcPoint = new Point();
+        getBarycentricCoords(point, _calcPoint  );
         var s:Float = _calcPoint.x;
         var t:Float = _calcPoint.y;
         return s >= 0.0 && t >= 0.0 && (s + t) <= 1.0;
@@ -485,13 +488,15 @@ class Face {
 	 */
 
     public function getUVAtPoint(point:Vector3D, target:UV = null):UV {
-        getBarycentricCoords(point, _calcPoint || = new Point());
+		if (_calcPoint == null)_calcPoint = new Point();
+        getBarycentricCoords(point, _calcPoint  );
         var s:Float = _calcPoint.x;
         var t:Float = _calcPoint.y;
         if (s >= 0.0 && t >= 0.0 && (s + t) <= 1.0) {
             var u0:Float = _uvs[0];
             var v0:Float = _uvs[1];
-            target || = new UV();
+            if(target==null)target  = new UV();
+			
             target.u = u0 + t * (_uvs[4] - u0) + s * (_uvs[2] - u0);
             target.v = v0 + t * (_uvs[5] - v0) + s * (_uvs[3] - v0);
             return target;

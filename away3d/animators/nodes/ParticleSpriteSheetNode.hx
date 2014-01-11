@@ -18,23 +18,23 @@ class ParticleSpriteSheetNode extends ParticleNodeBase {
     public var totalFrames(get_totalFrames, never):Float;
 
 /** @private */
-    static private var UV_INDEX_0:Int = 0;
+    static public var UV_INDEX_0:Int = 0;
 /** @private */
-    static private var UV_INDEX_1:Int = 1;
+    static public var UV_INDEX_1:Int = 1;
 /** @private */
-    private var _usesCycle:Bool;
+    public var _usesCycle:Bool;
 /** @private */
-    private var _usesPhase:Bool;
+    public var _usesPhase:Bool;
 /** @private */
-    private var _totalFrames:Int;
+    public var _totalFrames:Int;
 /** @private */
-    private var _numColumns:Int;
+    public var _numColumns:Int;
 /** @private */
-    private var _numRows:Int;
+    public var _numRows:Int;
 /** @private */
-    private var _cycleDuration:Float;
+    public var _cycleDuration:Float;
 /** @private */
-    private var _cyclePhase:Float;
+    public var _cyclePhase:Float;
 /**
 	 * Reference for spritesheet node properties on a single particle (when in local property mode).
 	 * Expects a <code>Vector3D</code> representing the cycleDuration (x), optional phaseTime (y).
@@ -158,7 +158,7 @@ class ParticleSpriteSheetNode extends ParticleNodeBase {
 	 * @inheritDoc
 	 */
 
-    override private function processAnimationSetting(particleAnimationSet:ParticleAnimationSet):Void {
+    override public function processAnimationSetting(particleAnimationSet:ParticleAnimationSet):Void {
         particleAnimationSet.hasUVNode = true;
     }
 
@@ -166,7 +166,7 @@ class ParticleSpriteSheetNode extends ParticleNodeBase {
 	 * @inheritDoc
 	 */
 
-    override private function generatePropertyOfOneParticle(param:ParticleProperties):Void {
+    override public function generatePropertyOfOneParticle(param:ParticleProperties):Void {
         if (_usesCycle) {
             var uvCycle:Vector3D = param[UV_VECTOR3D];
             if (!uvCycle) throw (new Error("there is no " + UV_VECTOR3D + " in param!"));

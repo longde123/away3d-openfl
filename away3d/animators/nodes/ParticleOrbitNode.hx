@@ -14,23 +14,23 @@ import flash.geom.Vector3D;
 class ParticleOrbitNode extends ParticleNodeBase {
 
 /** @private */
-    static private var ORBIT_INDEX:Int = 0;
+    static public var ORBIT_INDEX:Int = 0;
 /** @private */
-    static private var EULERS_INDEX:Int = 1;
+    static public var EULERS_INDEX:Int = 1;
 /** @private */
-    private var _usesEulers:Bool;
+    public var _usesEulers:Bool;
 /** @private */
-    private var _usesCycle:Bool;
+    public var _usesCycle:Bool;
 /** @private */
-    private var _usesPhase:Bool;
+    public var _usesPhase:Bool;
 /** @private */
-    private var _radius:Float;
+    public var _radius:Float;
 /** @private */
-    private var _cycleDuration:Float;
+    public var _cycleDuration:Float;
 /** @private */
-    private var _cyclePhase:Float;
+    public var _cyclePhase:Float;
 /** @private */
-    private var _eulers:Vector3D;
+    public var _eulers:Vector3D;
 /**
 	 * Reference for orbit node properties on a single particle (when in local property mode).
 	 * Expects a <code>Vector3D</code> object representing the radius (x), cycle speed (y) and cycle phase (z) of the motion on the particle.

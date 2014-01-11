@@ -15,9 +15,9 @@ import flash.geom.Vector3D;
 class ParticleAccelerationNode extends ParticleNodeBase {
 
 /** @private */
-    static private var ACCELERATION_INDEX:Int = 0;
+    static public var ACCELERATION_INDEX:Int = 0;
 /** @private */
-    private var _acceleration:Vector3D;
+    public var _acceleration:Vector3D;
 /**
 	 * Reference for acceleration node properties on a single particle (when in local property mode).
 	 * Expects a <code>Vector3D</code> object representing the direction of acceleration on the particle.
@@ -41,7 +41,7 @@ class ParticleAccelerationNode extends ParticleNodeBase {
 	 */
 
     override public function getAGALVertexCode(pass:MaterialPassBase, animationRegisterCache:AnimationRegisterCache):String {
-        pass = pass;
+
         var accelerationValue:ShaderRegisterElement = ((_mode == ParticlePropertiesMode.GLOBAL)) ? animationRegisterCache.getFreeVertexConstant() : animationRegisterCache.getFreeVertexAttribute();
         animationRegisterCache.setRegisterIndex(this, ACCELERATION_INDEX, accelerationValue.index);
         var temp:ShaderRegisterElement = animationRegisterCache.getFreeVertexVectorTemp();

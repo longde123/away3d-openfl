@@ -25,6 +25,7 @@ class SkeletonDirectionalNode extends AnimationNodeBase {
 
     public function new() {
         _stateClass = SkeletonDirectionalState;
+        super();
     }
 
 /**

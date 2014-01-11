@@ -34,7 +34,7 @@ class ParticleBillboardState extends ParticleStateBase {
 
     override public function setRenderState(stage3DProxy:Stage3DProxy, renderable:IRenderable, animationSubGeometry:AnimationSubGeometry, animationRegisterCache:AnimationRegisterCache, camera:Camera3D):Void {
 // TODO: not used
-        animationSubGeometry = animationSubGeometry;
+
         var comps:Vector<Vector3D>;
         if (_billboardAxis) {
             var pos:Vector3D = renderable.sceneTransform.position;

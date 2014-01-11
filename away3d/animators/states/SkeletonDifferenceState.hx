@@ -118,7 +118,8 @@ class SkeletonDifferenceState extends AnimationStateBase implements ISkeletonAni
         if (endPoses.length != numJoints) endPoses.length = numJoints;
         var i:Int = 0;
         while (i < numJoints) {
-            endPose = endPoses[i] || = new JointPose();
+			if(endPoses[i]==null)endPoses[i]= new JointPose();
+            endPose = endPoses[i] ;			
             base = basePoses[i];
             diff = diffPoses[i];
             basePos = base.translation;

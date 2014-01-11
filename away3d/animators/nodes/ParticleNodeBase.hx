@@ -8,8 +8,7 @@ import flash.Vector;
 import away3d.animators.data.ParticleProperties;
 import away3d.animators.ParticleAnimationSet;
 import away3d.animators.data.AnimationRegisterCache;
-import away3d.materials.passes.MaterialPassBase;
-import flash.utils.GetQualifiedClassName;
+import away3d.materials.passes.MaterialPassBase; 
 
 class ParticleNodeBase extends AnimationNodeBase {
     public var mode(get_mode, never):Int;
@@ -21,7 +20,7 @@ class ParticleNodeBase extends AnimationNodeBase {
     private var _priority:Int;
     private var _dataLength:Int;
     private var _oneData:Vector<Float>;
-    private var dataOffset:Int;
+    public var dataOffset:Int;
 /**
 	 * Returns the property mode of the particle animation node. Typically set in the node constructor
 	 *
@@ -71,9 +70,9 @@ class ParticleNodeBase extends AnimationNodeBase {
     static private var LOCAL_DYNAMIC:String = "LocalDynamic";
 //modes list
     static private var MODES:Dynamic = {
-    0 : GLOBAL
-    1 : LOCAL_STATIC,
-    2 : LOCAL_DYNAMIC,
+    "0" : GLOBAL,
+    "1" : LOCAL_STATIC,
+    "2" : LOCAL_DYNAMIC
 
     };
 /**
@@ -84,13 +83,13 @@ class ParticleNodeBase extends AnimationNodeBase {
 	 */
 
     static public function getParticleNodeName(particleNodeClass:Dynamic, particleNodeMode:Int):String {
-        var nodeName:String = particleNodeClass["ANIMATION_NODE_NAME"];
-        if (!nodeName) nodeName = getNodeNameFromClass(particleNodeClass);
+        var nodeName:String = Reflect.field( particleNodeClass,"ANIMATION_NODE_NAME");
+        if (nodeName==null) nodeName = getNodeNameFromClass(particleNodeClass);
         return nodeName + MODES[particleNodeMode];
     }
 
     static private function getNodeNameFromClass(particleNodeClass:Dynamic):String {
-        return getQualifiedClassName(particleNodeClass).replace("Node", "").split("::")[1];
+        return StringTools.replace(Type.getClassName(particleNodeClass),"Node", "").split("::")[1];
     }
 
 /**
@@ -110,6 +109,7 @@ class ParticleNodeBase extends AnimationNodeBase {
         _priority = priority;
         _dataLength = dataLength;
         _oneData = new Vector<Float>(_dataLength, true);
+        super();
     }
 
 /**
@@ -117,8 +117,7 @@ class ParticleNodeBase extends AnimationNodeBase {
 	 */
 
     public function getAGALVertexCode(pass:MaterialPassBase, animationRegisterCache:AnimationRegisterCache):String {
-        pass = pass;
-        animationRegisterCache = animationRegisterCache;
+
         return "";
     }
 
@@ -127,8 +126,7 @@ class ParticleNodeBase extends AnimationNodeBase {
 	 */
 
     public function getAGALFragmentCode(pass:MaterialPassBase, animationRegisterCache:AnimationRegisterCache):String {
-        pass = pass;
-        animationRegisterCache = animationRegisterCache;
+
         return "";
     }
 
@@ -137,8 +135,7 @@ class ParticleNodeBase extends AnimationNodeBase {
 	 */
 
     public function getAGALUVCode(pass:MaterialPassBase, animationRegisterCache:AnimationRegisterCache):String {
-        pass = pass;
-        animationRegisterCache = animationRegisterCache;
+
         return "";
     }
 
@@ -148,14 +145,14 @@ class ParticleNodeBase extends AnimationNodeBase {
 	 * @see away3d.animators.ParticleAnimationSet#initParticleFunc
 	 */
 
-    private function generatePropertyOfOneParticle(param:ParticleProperties):Void {
+    public function generatePropertyOfOneParticle(param:ParticleProperties):Void {
     }
 
 /**
 	 * Called internally by the particle animation set when determining the requirements of the particle animation node AGAL.
 	 */
 
-    private function processAnimationSetting(particleAnimationSet:ParticleAnimationSet):Void {
+    public function processAnimationSetting(particleAnimationSet:ParticleAnimationSet):Void {
     }
 
 }

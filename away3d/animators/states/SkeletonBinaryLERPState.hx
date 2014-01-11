@@ -114,7 +114,8 @@ class SkeletonBinaryLERPState extends AnimationStateBase implements ISkeletonAni
         if (endPoses.length != numJoints) endPoses.length = numJoints;
         var i:Int = 0;
         while (i < numJoints) {
-            endPose = endPoses[i] || = new JointPose();
+			if (endPoses[i] == null) endPoses[i] = new JointPose();
+            endPose = endPoses[i];
             pose1 = poses1[i];
             pose2 = poses2[i];
             p1 = pose1.translation;

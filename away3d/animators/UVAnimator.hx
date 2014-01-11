@@ -143,8 +143,7 @@ class UVAnimator extends AnimatorBase implements IAnimator {
 	 */
 
     public function play(name:String, transition:IAnimationTransition = null, offset:Float = NaN):Void {
-        transition = transition;
-        offset = offset;
+
         if (_activeAnimationName == name) return;
         _activeAnimationName = name;
         if (!_animationSet.hasAnimation(name)) throw new Error("Animation root node " + name + " not found!");

@@ -1,9 +1,10 @@
 package away3d.audio.drivers;
 
+import flash.geom.Vector3D;
 import flash.media.Sound;
 import flash.events.IEventDispatcher;
 
-interface ISound3DDriver implements IEventDispatcher {
+interface ISound3DDriver extends IEventDispatcher {
     var sourceSound(get_sourceSound, set_sourceSound):Sound;
     var scale(get_scale, set_scale):Float;
     var volume(get_volume, set_volume):Float;
@@ -59,6 +60,6 @@ interface ISound3DDriver implements IEventDispatcher {
 	 *
 	 * @param v Sound source position vector relative to the listener.
 	 */
-    function updateReferenceVector(v:Vector3D):Void;
+    function updateReferenceVector(v:Vector3D):Void; 
 }
 

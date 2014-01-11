@@ -21,6 +21,7 @@ class SkeletonBinaryLERPNode extends AnimationNodeBase {
 
     public function new() {
         _stateClass = SkeletonBinaryLERPState;
+        super();
     }
 
 /**

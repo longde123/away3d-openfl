@@ -15,13 +15,13 @@ import flash.geom.Vector3D;
 class ParticleBezierCurveNode extends ParticleNodeBase {
 
 /** @private */
-    static private var BEZIER_CONTROL_INDEX:Int = 0;
+    static public var BEZIER_CONTROL_INDEX:Int = 0;
 /** @private */
-    static private var BEZIER_END_INDEX:Int = 1;
+    static public var BEZIER_END_INDEX:Int = 1;
 /** @private */
-    private var _controlPoint:Vector3D;
+    public var _controlPoint:Vector3D;
 /** @private */
-    private var _endPoint:Vector3D;
+    public var _endPoint:Vector3D;
 /**
 	 * Reference for bezier curve node properties on a single particle (when in local property mode).
 	 * Expects a <code>Vector3D</code> object representing the control point position (0, 1, 2) of the curve.
@@ -52,7 +52,7 @@ class ParticleBezierCurveNode extends ParticleNodeBase {
 	 */
 
     override public function getAGALVertexCode(pass:MaterialPassBase, animationRegisterCache:AnimationRegisterCache):String {
-        pass = pass;
+
         var controlValue:ShaderRegisterElement = ((_mode == ParticlePropertiesMode.GLOBAL)) ? animationRegisterCache.getFreeVertexConstant() : animationRegisterCache.getFreeVertexAttribute();
         animationRegisterCache.setRegisterIndex(this, BEZIER_CONTROL_INDEX, controlValue.index);
         var endValue:ShaderRegisterElement = ((_mode == ParticlePropertiesMode.GLOBAL)) ? animationRegisterCache.getFreeVertexConstant() : animationRegisterCache.getFreeVertexAttribute();

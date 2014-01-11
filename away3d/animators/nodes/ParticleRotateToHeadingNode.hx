@@ -169,7 +169,7 @@ class ParticleRotateToHeadingNode extends ParticleNodeBase {
 	 * @inheritDoc
 	 */
 
-    override private function processAnimationSetting(particleAnimationSet:ParticleAnimationSet):Void {
+    override public function processAnimationSetting(particleAnimationSet:ParticleAnimationSet):Void {
         particleAnimationSet.needVelocity = true;
     }
 

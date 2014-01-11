@@ -51,8 +51,7 @@ class ParticleInitialColorState extends ParticleStateBase {
 
     override public function setRenderState(stage3DProxy:Stage3DProxy, renderable:IRenderable, animationSubGeometry:AnimationSubGeometry, animationRegisterCache:AnimationRegisterCache, camera:Camera3D):Void {
 // TODO: not used
-        renderable = renderable;
-        camera = camera;
+
         if (animationRegisterCache.needFragmentAnimation) {
             if (_particleInitialColorNode.mode == ParticlePropertiesMode.LOCAL_STATIC) {
                 var dataOffset:Int = _particleInitialColorNode.dataOffset;

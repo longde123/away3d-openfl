@@ -11,9 +11,9 @@ import away3d.materials.compilation.ShaderRegisterElement;
 class ParticleTimeNode extends ParticleNodeBase {
 
 /** @private */
-    static private var TIME_STREAM_INDEX:Int = 0;
+    static public var TIME_STREAM_INDEX:Int = 0;
 /** @private */
-    static private var TIME_CONSTANT_INDEX:Int = 1;
+    static public var TIME_CONSTANT_INDEX:Int = 1;
 /** @private */
     private var _usesDuration:Bool;
 /** @private */
@@ -41,7 +41,7 @@ class ParticleTimeNode extends ParticleNodeBase {
 	 */
 
     override public function getAGALVertexCode(pass:MaterialPassBase, animationRegisterCache:AnimationRegisterCache):String {
-        pass = pass;
+
         var timeStreamRegister:ShaderRegisterElement = animationRegisterCache.getFreeVertexAttribute();
 //timeStreamRegister.x is start，timeStreamRegister.y is during time
         animationRegisterCache.setRegisterIndex(this, TIME_STREAM_INDEX, timeStreamRegister.index);
@@ -95,7 +95,7 @@ class ParticleTimeNode extends ParticleNodeBase {
 	 * @inheritDoc
 	 */
 
-    override private function generatePropertyOfOneParticle(param:ParticleProperties):Void {
+    override public function generatePropertyOfOneParticle(param:ParticleProperties):Void {
         _oneData[0] = param.startTime;
         _oneData[1] = param.duration;
         _oneData[2] = param.delay + param.duration;

@@ -60,7 +60,7 @@ class ParticlePositionNode extends ParticleNodeBase {
 	 * @inheritDoc
 	 */
 
-    override private function generatePropertyOfOneParticle(param:ParticleProperties):Void {
+    override public function generatePropertyOfOneParticle(param:ParticleProperties):Void {
         var offset:Vector3D = param[POSITION_VECTOR3D];
         if (!offset) throw (new Error("there is no " + POSITION_VECTOR3D + " in param!"));
         _oneData[0] = offset.x;

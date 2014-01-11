@@ -7,7 +7,7 @@ package away3d.animators;
 
 import flash.Vector;
 import away3d.animators.data.VertexAnimationMode;
-import flash.Vector.Vector;
+import flash.Vector;
 
 import away3d.core.managers.Stage3DProxy;
 import away3d.materials.passes.MaterialPassBase;
