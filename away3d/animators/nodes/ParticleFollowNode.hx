@@ -43,7 +43,7 @@ class ParticleFollowNode extends ParticleNodeBase {
 	 */
 
     override public function getAGALVertexCode(pass:MaterialPassBase, animationRegisterCache:AnimationRegisterCache):String {
-        pass = pass;
+
 //TODO: use Quaternion to implement this function
         var code:String = "";
         if (_usesRotation) {
@@ -54,7 +54,7 @@ class ParticleFollowNode extends ParticleNodeBase {
             var temp2:ShaderRegisterElement = animationRegisterCache.getFreeVertexVectorTemp();
             animationRegisterCache.addVertexTempUsages(temp2, 1);
             var temp3:ShaderRegisterElement = animationRegisterCache.getFreeVertexVectorTemp();
-            var temp4:ShaderRegisterElement;
+            var temp4:ShaderRegisterElement=null;
             if (animationRegisterCache.hasBillboard) {
                 animationRegisterCache.addVertexTempUsages(temp3, 1);
                 temp4 = animationRegisterCache.getFreeVertexVectorTemp();

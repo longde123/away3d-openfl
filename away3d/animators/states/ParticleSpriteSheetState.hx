@@ -3,6 +3,7 @@
  */
 package away3d.animators.states;
 
+import flash.errors.Error;
 import flash.Vector;
 import away3d.animators.data.ParticlePropertiesMode;
 

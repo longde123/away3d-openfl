@@ -34,7 +34,8 @@ class ParticleOscillatorNode extends ParticleNodeBase {
     public function new(mode:Int, oscillator:Vector3D = null) {
         super("ParticleOscillator", mode, 4);
         _stateClass = ParticleOscillatorState;
-        _oscillator = oscillator || new Vector3D();
+        _oscillator = oscillator ;
+        if(_oscillator==null)_oscillator =new Vector3D();
     }
 
 /**
@@ -42,7 +43,7 @@ class ParticleOscillatorNode extends ParticleNodeBase {
 	 */
 
     override public function getAGALVertexCode(pass:MaterialPassBase, animationRegisterCache:AnimationRegisterCache):String {
-        pass = pass;
+
         var oscillatorRegister:ShaderRegisterElement = ((_mode == ParticlePropertiesMode.GLOBAL)) ? animationRegisterCache.getFreeVertexConstant() : animationRegisterCache.getFreeVertexAttribute();
         animationRegisterCache.setRegisterIndex(this, OSCILLATOR_INDEX, oscillatorRegister.index);
         var temp:ShaderRegisterElement = animationRegisterCache.getFreeVertexVectorTemp();
@@ -78,10 +79,10 @@ class ParticleOscillatorNode extends ParticleNodeBase {
 	 * @inheritDoc
 	 */
 
-    override private function generatePropertyOfOneParticle(param:ParticleProperties):Void {
+    override public function generatePropertyOfOneParticle(param:ParticleProperties):Void {
 //(Vector3D.x,Vector3D.y,Vector3D.z) is oscillator axis, Vector3D.w is oscillator cycle duration
-        var drift:Vector3D = param[OSCILLATOR_VECTOR3D];
-        if (!drift) throw (new Error("there is no " + OSCILLATOR_VECTOR3D + " in param!"));
+        var drift:Vector3D =Reflect.field( param,OSCILLATOR_VECTOR3D);
+        if (drift==null) throw (new Error("there is no " + OSCILLATOR_VECTOR3D + " in param!"));
         _oneData[0] = drift.x;
         _oneData[1] = drift.y;
         _oneData[2] = drift.z;

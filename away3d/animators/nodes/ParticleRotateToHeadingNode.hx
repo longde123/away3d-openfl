@@ -13,7 +13,7 @@ import away3d.materials.compilation.ShaderRegisterElement;
 class ParticleRotateToHeadingNode extends ParticleNodeBase {
 
 /** @private */
-    static private var MATRIX_INDEX:Int = 0;
+    static public var MATRIX_INDEX:Int = 0;
 /**
 	 * Creates a new <code>ParticleBillboardNode</code>
 	 */
@@ -28,7 +28,7 @@ class ParticleRotateToHeadingNode extends ParticleNodeBase {
 	 */
 
     override public function getAGALVertexCode(pass:MaterialPassBase, animationRegisterCache:AnimationRegisterCache):String {
-        pass = pass;
+
         var code:String = "";
         var len:Int = animationRegisterCache.rotationRegisters.length;
         var i:Int;

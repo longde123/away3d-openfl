@@ -117,7 +117,7 @@ class PathAnimator extends EventDispatcher {
         if (_offset != null) _target.position = _basePosition;
         var nT:Float = multi - _index;
         updatePosition(nT, _path.segments[_index]);
-        var rotate:Bool;
+        var rotate:Bool=false;
         if (_lookAtTarget!=null) {
             if (_offset!=null) {
                 _target.moveRight(_offset.x);
@@ -299,7 +299,7 @@ class PathAnimator extends EventDispatcher {
 
     public function set_rotations(value:Vector<Vector3D>):Vector<Vector3D> {
         _rotations = value;
-        if (_rotations && _rot==null) {
+        if (_rotations!=null && _rot==null) {
             _rot = new Vector3D();
             _tmpOffset = new Vector3D();
         }
@@ -401,7 +401,7 @@ class PathAnimator extends EventDispatcher {
     }
 
     private function updateObjectPosition(rotate:Bool = false):Void {
-        if (rotate !=null&& _offset!=null) {
+        if (rotate && _offset!=null) {
             _tmpOffset.x = _offset.x;
             _tmpOffset.y = _offset.y;
             _tmpOffset.z = _offset.z;
@@ -411,7 +411,7 @@ class PathAnimator extends EventDispatcher {
             _position.z += _tmpOffset.z;
         }
 
-        else if (_offset) {
+        else if (_offset!=null) {
             _position.x += _offset.x;
             _position.y += _offset.y;
             _position.z += _offset.z;

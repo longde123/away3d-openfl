@@ -55,7 +55,7 @@ class SpriteSheetMaterial extends TextureMaterial {
         _currentMapID = 0;
     }
 
-    private function swap(mapID:Int = 0):Bool {
+    public function swap(mapID:Int = 0):Bool {
         if (_currentMapID != mapID) {
             _currentMapID = mapID;
             _TBDiffuse = _diffuses[mapID];

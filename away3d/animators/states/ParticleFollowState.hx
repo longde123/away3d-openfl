@@ -66,7 +66,7 @@ class ParticleFollowState extends ParticleStateBase {
     override public function setRenderState(stage3DProxy:Stage3DProxy, renderable:IRenderable, animationSubGeometry:AnimationSubGeometry, animationRegisterCache:AnimationRegisterCache, camera:Camera3D):Void {
 // TODO: not used
 
-        if (_followTarget) {
+        if (_followTarget!=null) {
             if (_particleFollowNode._usesPosition) {
                 _targetPos.x = _followTarget.position.x / renderable.sourceEntity.scaleX;
                 _targetPos.y = _followTarget.position.y / renderable.sourceEntity.scaleY;
@@ -79,8 +79,8 @@ class ParticleFollowState extends ParticleStateBase {
                 _targetEuler.scaleBy(MathConsts.DEGREES_TO_RADIANS);
             }
         }
-        if (!_prePos) _prePos = _targetPos.clone();
-        if (!_preEuler) _preEuler = _targetEuler.clone();
+        if (_prePos==null) _prePos = _targetPos.clone();
+        if (_preEuler==null) _preEuler = _targetEuler.clone();
         var currentTime:Float = _time / 1000;
         var previousTime:Float = animationSubGeometry.previousTime;
         var deltaTime:Float = currentTime - previousTime;
@@ -110,8 +110,8 @@ class ParticleFollowState extends ParticleStateBase {
         var vertexData:Vector<Float> = animationSubGeometry.vertexData;
         var changed:Bool = false;
         var len:Int = data.length;
-        var interpolatedPos:Vector3D;
-        var posVelocity:Vector3D;
+        var interpolatedPos:Vector3D=null;
+        var posVelocity:Vector3D=null;
         if (_smooth) {
             posVelocity = _prePos.subtract(_targetPos);
             posVelocity.scaleBy(1 / deltaTime);
@@ -150,8 +150,8 @@ class ParticleFollowState extends ParticleStateBase {
         var vertexData:Vector<Float> = animationSubGeometry.vertexData;
         var changed:Bool = false;
         var len:Int = data.length;
-        var interpolatedRotation:Vector3D;
-        var rotationVelocity:Vector3D;
+        var interpolatedRotation:Vector3D=null;
+        var rotationVelocity:Vector3D=null;
         if (_smooth) {
             rotationVelocity = _preEuler.subtract(_targetEuler);
             rotationVelocity.scaleBy(1 / deltaTime);
@@ -190,10 +190,10 @@ class ParticleFollowState extends ParticleStateBase {
         var vertexData:Vector<Float> = animationSubGeometry.vertexData;
         var changed:Bool = false;
         var len:Int = data.length;
-        var interpolatedPos:Vector3D;
-        var interpolatedRotation:Vector3D;
-        var posVelocity:Vector3D;
-        var rotationVelocity:Vector3D;
+        var interpolatedPos:Vector3D=null;
+        var interpolatedRotation:Vector3D=null;
+        var posVelocity:Vector3D=null;
+        var rotationVelocity:Vector3D=null;
         if (_smooth) {
             posVelocity = _prePos.subtract(_targetPos);
             posVelocity.scaleBy(1 / deltaTime);

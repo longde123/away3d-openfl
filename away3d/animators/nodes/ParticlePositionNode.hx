@@ -4,6 +4,7 @@
 package away3d.animators.nodes;
 
 
+import Reflect;
 import away3d.animators.states.ParticlePositionState;
 import away3d.animators.data.ParticleProperties;
 import flash.errors.Error;
@@ -16,9 +17,9 @@ import flash.geom.Vector3D;
 class ParticlePositionNode extends ParticleNodeBase {
 
 /** @private */
-    static private var POSITION_INDEX:Int = 0;
+    static public var POSITION_INDEX:Int = 0;
 /** @private */
-    private var _position:Vector3D;
+    public var _position:Vector3D;
 /**
 	 * Reference for position node properties on a single particle (when in local property mode).
 	 * Expects a <code>Vector3D</code> object representing position of the particle.
@@ -34,7 +35,8 @@ class ParticlePositionNode extends ParticleNodeBase {
     public function new(mode:Int, position:Vector3D = null) {
         super("ParticlePosition", mode, 3);
         _stateClass = ParticlePositionState;
-        _position = position || new Vector3D();
+        _position = position ;
+        if(_position==null)_position= new Vector3D();
     }
 
 /**
@@ -42,7 +44,7 @@ class ParticlePositionNode extends ParticleNodeBase {
 	 */
 
     override public function getAGALVertexCode(pass:MaterialPassBase, animationRegisterCache:AnimationRegisterCache):String {
-        pass = pass;
+
         var positionAttribute:ShaderRegisterElement = ((_mode == ParticlePropertiesMode.GLOBAL)) ? animationRegisterCache.getFreeVertexConstant() : animationRegisterCache.getFreeVertexAttribute();
         animationRegisterCache.setRegisterIndex(this, POSITION_INDEX, positionAttribute.index);
         return "add " + animationRegisterCache.positionTarget + ".xyz," + positionAttribute + ".xyz," + animationRegisterCache.positionTarget + ".xyz\n";
@@ -61,8 +63,8 @@ class ParticlePositionNode extends ParticleNodeBase {
 	 */
 
     override public function generatePropertyOfOneParticle(param:ParticleProperties):Void {
-        var offset:Vector3D = param[POSITION_VECTOR3D];
-        if (!offset) throw (new Error("there is no " + POSITION_VECTOR3D + " in param!"));
+        var offset:Vector3D = Reflect.field(param,POSITION_VECTOR3D);
+        if (offset==null) throw (new Error("there is no " + POSITION_VECTOR3D + " in param!"));
         _oneData[0] = offset.x;
         _oneData[1] = offset.y;
         _oneData[2] = offset.z;

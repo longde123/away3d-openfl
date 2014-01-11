@@ -33,7 +33,8 @@ class ParticleAccelerationNode extends ParticleNodeBase {
     public function new(mode:Int, acceleration:Vector3D = null) {
         super("ParticleAcceleration", mode, 3);
         _stateClass = ParticleAccelerationState;
-        _acceleration = acceleration || new Vector3D();
+        _acceleration = acceleration ;
+        if(_acceleration==null)_acceleration= new Vector3D();
     }
 
 /**
@@ -70,9 +71,9 @@ class ParticleAccelerationNode extends ParticleNodeBase {
 	 * @inheritDoc
 	 */
 
-    override private function generatePropertyOfOneParticle(param:ParticleProperties):Void {
-        var tempAcceleration:Vector3D = param[ACCELERATION_VECTOR3D];
-        if (!tempAcceleration) throw new Error("there is no " + ACCELERATION_VECTOR3D + " in param!");
+    override public function generatePropertyOfOneParticle(param:ParticleProperties):Void {
+        var tempAcceleration:Vector3D =Reflect.field( param,ACCELERATION_VECTOR3D);
+        if (tempAcceleration==null) throw new Error("there is no " + ACCELERATION_VECTOR3D + " in param!");
         _oneData[0] = tempAcceleration.x / 2;
         _oneData[1] = tempAcceleration.y / 2;
         _oneData[2] = tempAcceleration.z / 2;

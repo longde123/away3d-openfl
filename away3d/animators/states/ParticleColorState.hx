@@ -4,6 +4,7 @@
  */
 package away3d.animators.states;
 
+import flash.errors.Error;
 import flash.geom.ColorTransform;
 import away3d.animators.data.ParticlePropertiesMode;
 import flash.geom.Vector3D;

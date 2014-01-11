@@ -67,7 +67,7 @@ class ParticleVelocityNode extends ParticleNodeBase {
 
     override public function generatePropertyOfOneParticle(param:ParticleProperties):Void {
         var _tempVelocity:Vector3D = Reflect.field(param,VELOCITY_VECTOR3D);
-        if (!_tempVelocity) throw new Error("there is no " + VELOCITY_VECTOR3D + " in param!");
+        if (_tempVelocity==null) throw new Error("there is no " + VELOCITY_VECTOR3D + " in param!");
         _oneData[0] = _tempVelocity.x;
         _oneData[1] = _tempVelocity.y;
         _oneData[2] = _tempVelocity.z;

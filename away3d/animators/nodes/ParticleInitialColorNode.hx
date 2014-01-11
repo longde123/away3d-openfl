@@ -1,5 +1,6 @@
 package away3d.animators.nodes;
 
+import Reflect;
 import away3d.animators.data.ParticleProperties;
 import flash.errors.Error;
 import away3d.materials.passes.MaterialPassBase;
@@ -32,7 +33,8 @@ class ParticleInitialColorNode extends ParticleNodeBase {
         _stateClass = ParticleInitialColorState;
         _usesMultiplier = usesMultiplier;
         _usesOffset = usesOffset;
-        _initialColor = initialColor || new ColorTransform();
+        _initialColor = initialColor ;
+        if(_initialColor ==null)_initialColor = new ColorTransform();
         super("ParticleInitialColor", mode, ((_usesMultiplier && _usesOffset)) ? 8 : 4, ParticleAnimationSet.COLOR_PRIORITY);
     }
 
@@ -41,7 +43,7 @@ class ParticleInitialColorNode extends ParticleNodeBase {
 	 */
 
     override public function getAGALVertexCode(pass:MaterialPassBase, animationRegisterCache:AnimationRegisterCache):String {
-        pass = pass;
+
         var code:String = "";
         if (animationRegisterCache.needFragmentAnimation) {
             if (_usesMultiplier) {
@@ -72,9 +74,9 @@ class ParticleInitialColorNode extends ParticleNodeBase {
 	 */
 
     override public function generatePropertyOfOneParticle(param:ParticleProperties):Void {
-        var initialColor:ColorTransform = param[COLOR_INITIAL_COLORTRANSFORM];
-        if (!initialColor) throw (new Error("there is no " + COLOR_INITIAL_COLORTRANSFORM + " in param!"));
-        var i:Int;
+        var initialColor:ColorTransform = Reflect.field(param,COLOR_INITIAL_COLORTRANSFORM);
+        if (initialColor==null) throw (new Error("there is no " + COLOR_INITIAL_COLORTRANSFORM + " in param!"));
+        var i:Int=0;
 //multiplier
         if (_usesMultiplier) {
             _oneData[i++] = initialColor.redMultiplier;

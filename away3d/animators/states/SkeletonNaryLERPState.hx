@@ -131,7 +131,7 @@ class SkeletonNaryLERPState extends AnimationStateBase implements ISkeletonAnima
         var tr:Vector3D;
         var endQuat:Quaternion;
         var q:Quaternion;
-        var firstPose:Vector<JointPose>;
+        var firstPose:Vector<JointPose> =null;
         var i:Int;
         var w0:Float;
         var x0:Float;

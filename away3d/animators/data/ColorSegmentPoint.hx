@@ -1,5 +1,6 @@
 package away3d.animators.data;
 
+import flash.errors.Error;
 import flash.geom.ColorTransform;
 
 class ColorSegmentPoint {

@@ -4,6 +4,7 @@
 package away3d.animators.nodes;
 
 
+import Reflect;
 import away3d.animators.states.ParticleRotateToPositionState;
 import away3d.animators.data.ParticleProperties;
 import flash.errors.Error;
@@ -33,7 +34,8 @@ class ParticleRotateToPositionNode extends ParticleNodeBase {
     public function new(mode:Int, position:Vector3D = null) {
         super("ParticleRotateToPosition", mode, 3, 3);
         _stateClass = ParticleRotateToPositionState;
-        _position = position || new Vector3D();
+        _position = position;
+        if(_position==null)_position=new Vector3D();
     }
 
 /**
@@ -41,7 +43,7 @@ class ParticleRotateToPositionNode extends ParticleNodeBase {
 	 */
 
     override public function getAGALVertexCode(pass:MaterialPassBase, animationRegisterCache:AnimationRegisterCache):String {
-        pass = pass;
+
         var positionAttribute:ShaderRegisterElement = ((_mode == ParticlePropertiesMode.GLOBAL)) ? animationRegisterCache.getFreeVertexConstant() : animationRegisterCache.getFreeVertexAttribute();
         animationRegisterCache.setRegisterIndex(this, POSITION_INDEX, positionAttribute.index);
         var code:String = "";
@@ -189,8 +191,8 @@ class ParticleRotateToPositionNode extends ParticleNodeBase {
 	 */
 
     override public function generatePropertyOfOneParticle(param:ParticleProperties):Void {
-        var offset:Vector3D = param[POSITION_VECTOR3D];
-        if (!offset) throw (new Error("there is no " + POSITION_VECTOR3D + " in param!"));
+        var offset:Vector3D = Reflect.field(param,POSITION_VECTOR3D);
+        if (offset==null) throw (new Error("there is no " + POSITION_VECTOR3D + " in param!"));
         _oneData[0] = offset.x;
         _oneData[1] = offset.y;
         _oneData[2] = offset.z;

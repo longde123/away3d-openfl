@@ -60,7 +60,8 @@ class ParticleOrbitNode extends ParticleNodeBase {
         _radius = radius;
         _cycleDuration = cycleDuration;
         _cyclePhase = cyclePhase;
-        _eulers = eulers || new Vector3D();
+        _eulers = eulers;
+        if(_eulers==null)_eulers= new Vector3D();
     }
 
 /**
@@ -68,7 +69,7 @@ class ParticleOrbitNode extends ParticleNodeBase {
 	 */
 
     override public function getAGALVertexCode(pass:MaterialPassBase, animationRegisterCache:AnimationRegisterCache):String {
-        pass = pass;
+
         var orbitRegister:ShaderRegisterElement = ((_mode == ParticlePropertiesMode.GLOBAL)) ? animationRegisterCache.getFreeVertexConstant() : animationRegisterCache.getFreeVertexAttribute();
         animationRegisterCache.setRegisterIndex(this, ORBIT_INDEX, orbitRegister.index);
         var eulersMatrixRegister:ShaderRegisterElement = animationRegisterCache.getFreeVertexConstant();
@@ -123,10 +124,10 @@ class ParticleOrbitNode extends ParticleNodeBase {
 	 * @inheritDoc
 	 */
 
-    override private function generatePropertyOfOneParticle(param:ParticleProperties):Void {
+    override public function generatePropertyOfOneParticle(param:ParticleProperties):Void {
 //Vector3D.x is radius, Vector3D.y is cycle duration, Vector3D.z is phase
-        var orbit:Vector3D = param[ORBIT_VECTOR3D];
-        if (!orbit) throw new Error("there is no " + ORBIT_VECTOR3D + " in param!");
+        var orbit:Vector3D = Reflect.field( param,ORBIT_VECTOR3D);
+        if (orbit==null) throw new Error("there is no " + ORBIT_VECTOR3D + " in param!");
         _oneData[0] = orbit.x;
         if (_usesCycle && orbit.y <= 0) throw (new Error("the cycle duration must be greater than zero"));
         _oneData[1] = Math.PI * 2 / (!(_usesCycle) ? 1 : orbit.y);

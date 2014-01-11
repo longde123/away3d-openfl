@@ -5,6 +5,7 @@
  */
 package away3d.animators;
 
+import haxe.Timer;
 import flash.Lib;
 import away3d.materials.passes.MaterialPassBase;
 import flash.errors.Error;
@@ -121,11 +122,11 @@ class SpriteSheetAnimator extends AnimatorBase implements IAnimator {
 
     public function setRenderState(stage3DProxy:Stage3DProxy, renderable:IRenderable, vertexConstantOffset:Int, vertexStreamOffset:Int, camera:Camera3D):Void {
         var material:MaterialBase = renderable.material;
-        if (!material || Std.is(!material, TextureMaterial)) return;
+        if (material==null || !Std.is(material, TextureMaterial)) return;
         var subMesh:SubMesh = cast(renderable, SubMesh) ;
-        if (!subMesh) return;
-        var swapped:Bool;
-        if (Std.is(material, SpriteSheetMaterial && _mapDirty)) swapped = cast((material), SpriteSheetMaterial).swap(_frame.mapID);
+        if (subMesh==null ) return;
+        var swapped:Bool=false;
+        if (Std.is(material, SpriteSheetMaterial) && _mapDirty) swapped = cast((material), SpriteSheetMaterial).swap(_frame.mapID);
         if (!swapped) {
             _vectorFrame[0] = _frame.offsetU;
             _vectorFrame[1] = _frame.offsetV;
@@ -139,7 +140,7 @@ class SpriteSheetAnimator extends AnimatorBase implements IAnimator {
 	 * @inheritDoc
 	 */
 
-    public function play(name:String, transition:IAnimationTransition = null, offset:Float = NaN):Void {
+    public function play(name:String, transition:IAnimationTransition = null, ?offset:Float = null):Void {
 
         if (_activeAnimationName == name) return;
         _activeAnimationName = name;
@@ -155,14 +156,14 @@ class SpriteSheetAnimator extends AnimatorBase implements IAnimator {
 	 * Applies the calculated time delta to the active animation state node.
 	 */
 
-    override private function updateDeltaTime(dt:Float):Void {
+    override private function updateDeltaTime(dt:Int):Void {
         if (_specsDirty) {
             cast((_activeSpriteSheetState), SpriteSheetAnimationState).reverse = _reverse;
             cast((_activeSpriteSheetState), SpriteSheetAnimationState).backAndForth = _backAndForth;
             _specsDirty = false;
         }
         _absoluteTime += dt;
-        var now:Int = getTimer();
+        var now:Int = Lib.getTimer();
         if ((now - _lastTime) > _ms) {
             _mapDirty = true;
             _activeSpriteSheetState.update(_absoluteTime);
@@ -190,7 +191,7 @@ class SpriteSheetAnimator extends AnimatorBase implements IAnimator {
             if (currentMapID != _frame.mapID) {
                 _mapDirty = true;
 
-                setTimeout(stop, _fps);
+                Timer.delay(stop, _fps);
             }
 
             else stop();

@@ -44,7 +44,7 @@ class ParticleSegmentedScaleNode extends ParticleNodeBase {
 	 */
 
     override public function getAGALVertexCode(pass:MaterialPassBase, animationRegisterCache:AnimationRegisterCache):String {
-        pass = pass;
+
         var code:String = "";
         var accScale:ShaderRegisterElement;
         accScale = animationRegisterCache.getFreeVertexVectorTemp();

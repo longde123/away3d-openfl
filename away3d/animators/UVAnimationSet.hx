@@ -17,6 +17,7 @@ class UVAnimationSet extends AnimationSetBase implements IAnimationSet {
     private var _agalCode:String;
 
     public function new() {
+        super();
     }
 
 /**

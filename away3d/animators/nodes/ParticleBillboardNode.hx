@@ -31,7 +31,7 @@ class ParticleBillboardNode extends ParticleNodeBase {
 	 */
 
     override public function getAGALVertexCode(pass:MaterialPassBase, animationRegisterCache:AnimationRegisterCache):String {
-        pass = pass;
+
         var rotationMatrixRegister:ShaderRegisterElement = animationRegisterCache.getFreeVertexConstant();
         animationRegisterCache.setRegisterIndex(this, MATRIX_INDEX, rotationMatrixRegister.index);
         animationRegisterCache.getFreeVertexConstant();
@@ -55,7 +55,7 @@ class ParticleBillboardNode extends ParticleNodeBase {
 	 * @inheritDoc
 	 */
 
-    override private function processAnimationSetting(particleAnimationSet:ParticleAnimationSet):Void {
+    override public function processAnimationSetting(particleAnimationSet:ParticleAnimationSet):Void {
         particleAnimationSet.hasBillboard = true;
     }
 

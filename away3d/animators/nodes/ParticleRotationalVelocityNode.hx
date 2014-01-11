@@ -4,6 +4,7 @@
 package away3d.animators.nodes;
 
 
+import Reflect;
 import away3d.animators.states.ParticleRotationalVelocityState;
 import away3d.animators.data.ParticleProperties;
 import flash.errors.Error;
@@ -16,9 +17,9 @@ import flash.geom.Vector3D;
 class ParticleRotationalVelocityNode extends ParticleNodeBase {
 
 /** @private */
-    static private var ROTATIONALVELOCITY_INDEX:Int = 0;
+    static public var ROTATIONALVELOCITY_INDEX:Int = 0;
 /** @private */
-    private var _rotationalVelocity:Vector3D;
+    public var _rotationalVelocity:Vector3D;
 /**
 	 * Reference for rotational velocity node properties on a single particle (when in local property mode).
 	 * Expects a <code>Vector3D</code> object representing the rotational velocity around an axis of the particle.
@@ -33,7 +34,8 @@ class ParticleRotationalVelocityNode extends ParticleNodeBase {
     public function new(mode:Int, rotationalVelocity:Vector3D = null) {
         _stateClass = ParticleRotationalVelocityState;
         super("ParticleRotationalVelocity", mode, 4);
-        _rotationalVelocity = rotationalVelocity || new Vector3D();
+        _rotationalVelocity = rotationalVelocity ;
+        if(  _rotationalVelocity ==null)   _rotationalVelocity =new Vector3D();
     }
 
 /**
@@ -41,7 +43,7 @@ class ParticleRotationalVelocityNode extends ParticleNodeBase {
 	 */
 
     override public function getAGALVertexCode(pass:MaterialPassBase, animationRegisterCache:AnimationRegisterCache):String {
-        pass = pass;
+
         var rotationRegister:ShaderRegisterElement = ((_mode == ParticlePropertiesMode.GLOBAL)) ? animationRegisterCache.getFreeVertexConstant() : animationRegisterCache.getFreeVertexAttribute();
         animationRegisterCache.setRegisterIndex(this, ROTATIONALVELOCITY_INDEX, rotationRegister.index);
         var nrmVel:ShaderRegisterElement = animationRegisterCache.getFreeVertexVectorTemp();
@@ -119,8 +121,8 @@ class ParticleRotationalVelocityNode extends ParticleNodeBase {
 
     override public function generatePropertyOfOneParticle(param:ParticleProperties):Void {
 //(Vector3d.x,Vector3d.y,Vector3d.z) is rotation axis,Vector3d.w is cycle duration
-        var rotate:Vector3D = param[ROTATIONALVELOCITY_VECTOR3D];
-        if (!rotate) throw (new Error("there is no " + ROTATIONALVELOCITY_VECTOR3D + " in param!"));
+        var rotate:Vector3D = Reflect.field(param,ROTATIONALVELOCITY_VECTOR3D);
+        if (rotate==null) throw (new Error("there is no " + ROTATIONALVELOCITY_VECTOR3D + " in param!"));
         if (rotate.length <= 0) rotate.z = 1
         else rotate.normalize();
         _oneData[0] = rotate.x;

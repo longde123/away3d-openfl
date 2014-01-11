@@ -3,6 +3,7 @@
  */
 package away3d.animators.nodes;
 
+import Reflect;
 import away3d.animators.data.ParticleProperties;
 import flash.errors.Error;
 import away3d.animators.data.ParticlePropertiesMode;
@@ -71,8 +72,10 @@ class ParticleColorNode extends ParticleNodeBase {
         _usesOffset = usesOffset;
         _usesCycle = usesCycle;
         _usesPhase = usesPhase;
-        _startColor = startColor || new ColorTransform();
-        _endColor = endColor || new ColorTransform();
+        _startColor = startColor ;
+        if(_startColor==null)_startColor=new ColorTransform();
+        _endColor = endColor;
+        if(_endColor==null)_endColor= new ColorTransform();
         _cycleDuration = cycleDuration;
         _cyclePhase = cyclePhase;
         super("ParticleColor", mode, ((_usesMultiplier && _usesOffset)) ? 16 : 8, ParticleAnimationSet.COLOR_PRIORITY);
@@ -102,7 +105,7 @@ class ParticleColorNode extends ParticleNodeBase {
                 var deltaMultiplierValue:ShaderRegisterElement = ((_mode == ParticlePropertiesMode.GLOBAL)) ? animationRegisterCache.getFreeVertexConstant() : animationRegisterCache.getFreeVertexAttribute();
                 animationRegisterCache.setRegisterIndex(this, START_MULTIPLIER_INDEX, startMultiplierValue.index);
                 animationRegisterCache.setRegisterIndex(this, DELTA_MULTIPLIER_INDEX, deltaMultiplierValue.index);
-                code += "mul " + temp + "," + deltaMultiplierValue + "," + ((_usesCycle) ? sin : animationRegisterCache.vertexLife) + "\n";
+                code += "mul " + temp + "," + deltaMultiplierValue + "," + ((_usesCycle) ? "sin " : animationRegisterCache.vertexLife.toString()) + "\n";
                 code += "add " + temp + "," + temp + "," + startMultiplierValue + "\n";
                 code += "mul " + animationRegisterCache.colorMulTarget + "," + temp + "," + animationRegisterCache.colorMulTarget + "\n";
             }
@@ -111,7 +114,7 @@ class ParticleColorNode extends ParticleNodeBase {
                 var deltaOffsetValue:ShaderRegisterElement = ((_mode == ParticlePropertiesMode.LOCAL_STATIC)) ? animationRegisterCache.getFreeVertexAttribute() : animationRegisterCache.getFreeVertexConstant();
                 animationRegisterCache.setRegisterIndex(this, START_OFFSET_INDEX, startOffsetValue.index);
                 animationRegisterCache.setRegisterIndex(this, DELTA_OFFSET_INDEX, deltaOffsetValue.index);
-                code += "mul " + temp + "," + deltaOffsetValue + "," + ((_usesCycle) ? sin : animationRegisterCache.vertexLife) + "\n";
+                code += "mul " + temp + "," + deltaOffsetValue + "," + ((_usesCycle) ? "sin ": animationRegisterCache.vertexLife.toString()) + "\n";
                 code += "add " + temp + "," + temp + "," + startOffsetValue + "\n";
                 code += "add " + animationRegisterCache.colorAddTarget + "," + temp + "," + animationRegisterCache.colorAddTarget + "\n";
             }
@@ -131,7 +134,7 @@ class ParticleColorNode extends ParticleNodeBase {
 	 * @inheritDoc
 	 */
 
-    override private function processAnimationSetting(particleAnimationSet:ParticleAnimationSet):Void {
+    override public function processAnimationSetting(particleAnimationSet:ParticleAnimationSet):Void {
         if (_usesMultiplier) particleAnimationSet.hasColorMulNode = true;
         if (_usesOffset) particleAnimationSet.hasColorAddNode = true;
     }
@@ -140,12 +143,12 @@ class ParticleColorNode extends ParticleNodeBase {
 	 * @inheritDoc
 	 */
 
-    override private function generatePropertyOfOneParticle(param:ParticleProperties):Void {
-        var startColor:ColorTransform = param[COLOR_START_COLORTRANSFORM];
-        if (!startColor) throw (new Error("there is no " + COLOR_START_COLORTRANSFORM + " in param!"));
-        var endColor:ColorTransform = param[COLOR_END_COLORTRANSFORM];
-        if (!endColor) throw (new Error("there is no " + COLOR_END_COLORTRANSFORM + " in param!"));
-        var i:Int;
+    override public function generatePropertyOfOneParticle(param:ParticleProperties):Void {
+        var startColor:ColorTransform = Reflect.field(param,COLOR_START_COLORTRANSFORM);
+        if (startColor==null) throw (new Error("there is no " + COLOR_START_COLORTRANSFORM + " in param!"));
+        var endColor:ColorTransform = Reflect.field(param,COLOR_END_COLORTRANSFORM);
+        if (endColor==null) throw (new Error("there is no " + COLOR_END_COLORTRANSFORM + " in param!"));
+        var i:Int=0;
         if (!_usesCycle) {
 //multiplier
             if (_usesMultiplier) {
