@@ -170,7 +170,8 @@ class Stage3DProxy extends EventDispatcher {
         if (oldWidth != _backBufferWidth || oldHeight != _backBufferHeight) notifyViewportUpdated();
         _antiAlias = antiAlias;
         _enableDepthAndStencil = enableDepthAndStencil;
-        if (_context3D == null) _context3D.configureBackBuffer(backBufferWidth, backBufferHeight, antiAlias, enableDepthAndStencil);
+        if (_context3D != null) _context3D.configureBackBuffer(backBufferWidth, backBufferHeight, antiAlias, enableDepthAndStencil);
+	 
     }
 
 /*
