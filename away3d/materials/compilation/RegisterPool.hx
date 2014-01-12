@@ -11,7 +11,9 @@ package away3d.materials.compilation;
 import flash.errors.Error;
 import flash.Vector;
 import haxe.ds.StringMap;
-
+#if (cpp || neko || js)
+using away3d.Stage3DUtils;
+#end
 class RegisterPool {
 
     public static var _regPool:StringMap<Vector<ShaderRegisterElement>> = new StringMap<Vector<ShaderRegisterElement>>();
@@ -144,6 +146,15 @@ class RegisterPool {
         _usedSingleCount[1] = new Vector<UInt>(regCount, true);
         _usedSingleCount[2] = new Vector<UInt>(regCount, true);
         _usedSingleCount[3] = new Vector<UInt>(regCount, true);
+		
+		
+		#if (cpp || neko || js) 
+			_usedVectorCount.fillVector(0, regCount,0);
+			_usedSingleCount[0].fillVector(0, regCount, 0);
+			_usedSingleCount[1].fillVector(0, regCount, 0);
+			_usedSingleCount[2].fillVector(0, regCount, 0);
+			_usedSingleCount[3].fillVector(0, regCount,0);
+		#end
     }
 
     static private function _initPool(regName:String, regCount:Int):String {

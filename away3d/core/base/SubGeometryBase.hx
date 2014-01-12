@@ -188,6 +188,7 @@ class SubGeometryBase {
         var texOffset:Int = UVOffset;
         if (_faceTangents == null)
             _faceTangents = new Vector<Float>(_indices.length, true);
+		
         while (i < len) {
             index1 = _indices[i];
             index2 = _indices[i + 1];
@@ -257,6 +258,7 @@ class SubGeometryBase {
         if (_faceNormals == null)
             _faceNormals = new Vector<Float>(len, true);
         if (_faceWeights == null) _faceWeights = new Vector<Float>(Std.int(len / 3), true);
+		 
         while (i < len) {
             index = posOffset + _indices[i++] * posStride;
             x1 = vertices[index];

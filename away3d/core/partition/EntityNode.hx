@@ -61,8 +61,13 @@ class EntityNode extends NodeBase {
     }
 
     override public function isInFrustum(planes:Vector<Plane3D>, numPlanes:Int):Bool {
-        if (!_entity.isVisible) return false;
-        return _entity.worldBounds.isInFrustum(planes, numPlanes);
+        if (!_entity.isVisible) {
+		 
+			return false;
+		}
+		return _entity.worldBounds.isInFrustum(planes, numPlanes);
+	 
+         
     }
 
 /**

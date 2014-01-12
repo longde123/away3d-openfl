@@ -30,7 +30,7 @@ class BasicNormalMethod extends ShadingMethodBase {
 	 */
 
     override public function initVO(vo:MethodVO):Void {
-        vo.needsUV = cast((_texture), Bool);
+        vo.needsUV = cast((_texture!=null), Bool);
     }
 
 /**

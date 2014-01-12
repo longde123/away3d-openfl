@@ -64,7 +64,7 @@ class TextureMultiPassMaterial extends MultiPassMaterialBase {
 
     public function set_ambientTexture(value:Texture2DBase):Texture2DBase {
         ambientMethod.texture = value;
-        diffuseMethod.useAmbientTexture = cast((value), Bool);
+        diffuseMethod.useAmbientTexture = cast((value!=null), Bool);
         return value;
     }
 

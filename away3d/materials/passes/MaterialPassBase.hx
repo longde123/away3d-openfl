@@ -389,6 +389,7 @@ class MaterialPassBase extends EventDispatcher {
             updateProgram(stage3DProxy);
             dispatchEvent(new Event(Event.CHANGE));
         }
+		context.setProgram(_program3Ds[contextIndex]);
         var prevUsed:Int = _previousUsedStreams[contextIndex];
         var i:Int = 0;
         i = _numUsedStreams;
@@ -403,7 +404,7 @@ class MaterialPassBase extends EventDispatcher {
             ++i;
         }
         if (_animationSet != null && !_animationSet.usesCPU) _animationSet.activate(stage3DProxy, this);
-        context.setProgram(_program3Ds[contextIndex]);
+        
         context.setCulling((_bothSides) ? Context3DTriangleFace.NONE : _defaultCulling);
         if (_renderToTexture) {
             _oldTarget = stage3DProxy.renderTarget;

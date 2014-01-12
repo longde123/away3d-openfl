@@ -243,6 +243,7 @@ class RendererBase {
 // clear buffers
         var i:Int = 0;
         while (i < 8) {
+			
             _context.setVertexBufferAt(i, null);
             _context.setTextureAt(i, null);
             ++i;
@@ -266,7 +267,7 @@ class RendererBase {
         if ((target != null || !_shareContext) && _clearOnRender) _context.clear(_backgroundR, _backgroundG, _backgroundB, _backgroundAlpha, 1, 0);
         _context.setDepthTest(false, Context3DCompareMode.ALWAYS);
         _stage3DProxy.scissorRect = scissorRect;
-        if (_backgroundImageRenderer != null) _backgroundImageRenderer.render();
+        if (_backgroundImageRenderer != null) _backgroundImageRenderer.render();  
         draw(entityCollector, target);
 //line required for correct rendering when using away3d with starling. DO NOT REMOVE UNLESS STARLING INTEGRATION IS RETESTED!
         _context.setDepthTest(false, Context3DCompareMode.LESS_EQUAL);

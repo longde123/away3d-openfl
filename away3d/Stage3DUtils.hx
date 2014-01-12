@@ -1,13 +1,23 @@
 package away3d;
 
+import flash.Lib;
 import flash.Vector;
 import flash.errors.Error;
-import flash.geom.Vector3D;
-import flash.geom.Vector3D;
+import flash.geom.Vector3D; 
 import flash.geom.Matrix3D;
 class Stage3DUtils {
 
-
+    static public function fillArray<T>(f:Array<T>, start:Int, len:Int, value:T):Void {
+		for (i in start...start + len) {
+			f[i] = value;
+		}
+	  
+	}
+    static public function fillVector<T>(f:Vector<T>, start:Int, len:Int, value:T):Void {
+		for (i in start...start + len) {
+			f[i] = value;
+		}
+	}
     static public function copyColumnTo(mat:Matrix3D, column:Int, vector3D:Vector3D):Void {
 
 // Initial Tests - OK

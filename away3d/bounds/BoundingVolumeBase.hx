@@ -140,7 +140,7 @@ class BoundingVolumeBase {
 	 * @param geometry The Geometry object to be bounded.
 	 */
 
-    public function fromGeometry(geometry:Geometry):Void {
+    public function fromGeometry(geometry:Geometry):Void { 
         var subGeoms:Vector<ISubGeometry> = geometry.subGeometries;
         var numSubGeoms:Int = subGeoms.length;
         var minX:Float;
@@ -170,8 +170,7 @@ class BoundingVolumeBase {
                     if (v < minZ) minZ = v
                     else if (v > maxZ) maxZ = v;
                     i += stride;
-                }
-
+                } 
             }
 
             fromExtremes(minX, minY, minZ, maxX, maxY, maxZ);

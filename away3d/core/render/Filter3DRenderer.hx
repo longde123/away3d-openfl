@@ -114,14 +114,14 @@ class Filter3DRenderer {
         while (i < len) {
             task = _tasks[i];
             stage3DProxy.setRenderTarget(task.target);
+			context.setProgram(task.getProgram3D(stage3DProxy));
             if (task.target == null) {
                 stage3DProxy.scissorRect = null;
                 vertexBuffer = _rttManager.renderToScreenVertexBuffer;
                 context.setVertexBufferAt(0, vertexBuffer, 0, Context3DVertexBufferFormat.FLOAT_2);
                 context.setVertexBufferAt(1, vertexBuffer, 2, Context3DVertexBufferFormat.FLOAT_2);
             }
-            context.setTextureAt(0, task.getMainInputTexture(stage3DProxy));
-            context.setProgram(task.getProgram3D(stage3DProxy));
+            context.setTextureAt(0, task.getMainInputTexture(stage3DProxy));            
             context.clear(0.0, 0.0, 0.0, 0.0);
             task.activate(stage3DProxy, camera3D, depthTexture);
             context.setBlendFactors(Context3DBlendFactor.ONE, Context3DBlendFactor.ZERO);

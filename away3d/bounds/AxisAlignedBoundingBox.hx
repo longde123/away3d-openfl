@@ -66,7 +66,10 @@ class AxisAlignedBoundingBox extends BoundingVolumeBase {
             var flippedExtentY:Float = b < (0) ? -_halfExtentsY : _halfExtentsY;
             var flippedExtentZ:Float = c < (0) ? -_halfExtentsZ : _halfExtentsZ;
             var projDist:Float = a * (_centerX + flippedExtentX) + b * (_centerY + flippedExtentY) + c * (_centerZ + flippedExtentZ) - plane.d;
-            if (projDist < 0) return false;
+            if (projDist < 0) { 
+				return false;
+			
+			}  
             ++i;
         }
         return true;

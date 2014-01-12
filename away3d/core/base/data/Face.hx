@@ -471,7 +471,6 @@ class Face {
         b *= len;
         c *= len;
         var dist:Float = a * (point.x - v0x) + b * (point.y - v0y) + c * (point.z - v0z);
-        trace(dist);
         return dist > -epsilon && dist < epsilon;
     }
 

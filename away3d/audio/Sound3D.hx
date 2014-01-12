@@ -168,7 +168,6 @@ class Sound3D extends ObjectContainer3D {
 	 */
 
     private function onSceneChanged(ev:Object3DEvent):Void {
-        trace("scene changed");
 // mute driver if there is no scene available, i.e. when the
 // sound3d object has been removed from the scene
         _driver.mute = (_scene == null);

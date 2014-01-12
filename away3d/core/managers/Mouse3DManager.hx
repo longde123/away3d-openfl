@@ -83,10 +83,14 @@ class Mouse3DManager {
             }
 
             else {
+				//why
+				//todo
+				/*
                 if (view.getBounds(view.parent).contains(view.mouseX + view.x, view.mouseY + view.y)) {
                     if (_collidingViewObjects == null) _collidingViewObjects = new Vector<PickingCollisionVO>(_viewCount);
                     _collidingObject = _collidingViewObjects[_view3Ds.get(view)] = _mousePicker.getViewCollision(view.mouseX, view.mouseY, view);
                 }
+				*/
             }
 
         }
@@ -237,6 +241,9 @@ class Mouse3DManager {
     }
 
     private function traverseDisplayObjects(container:DisplayObjectContainer):Void {
+		//why 
+		//todo
+		/*
         var childCount:Int = container.numChildren;
         var c:Int = 0;
         var child:DisplayObject;
@@ -255,6 +262,7 @@ class Mouse3DManager {
                 traverseDisplayObjects(cast(child, DisplayObjectContainer));
             }
         }
+		*/
     }
 
 // ---------------------------------------------------------------------

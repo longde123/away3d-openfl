@@ -204,6 +204,7 @@ class EntityCollector extends PartitionTraverser {
 	 */
 
     override public function enterNode(node:NodeBase):Bool {
+		
         var enter:Bool = (PartitionTraverser._collectionMark != node._collectionMark) && node.isInFrustum(_cullPlanes, _numCullPlanes);
         node._collectionMark = PartitionTraverser._collectionMark;
         return enter;
@@ -229,8 +230,9 @@ class EntityCollector extends PartitionTraverser {
         if (renderable.mouseEnabled) ++_numMouseEnableds;
         _numTriangles += renderable.numTriangles;
         material = renderable.material;
-        if (material != null) {
-            var item:RenderableListItem = _renderableListItemPool.getItem();
+		
+        if (material != null) { 
+            var item:RenderableListItem = _renderableListItemPool.getItem(); 
             item.renderable = renderable;
             item.materialId = material._uniqueId;
             item.renderOrderId = material._renderOrderId;
@@ -259,8 +261,9 @@ class EntityCollector extends PartitionTraverser {
 	 */
 
     override public function applyEntity(entity:Entity):Void {
-        ++_numEntities;
+        ++_numEntities; 
         var item:EntityListItem = _entityListItemPool.getItem();
+	
         item.entity = entity;
         item.next = _entityHead;
         _entityHead = item;

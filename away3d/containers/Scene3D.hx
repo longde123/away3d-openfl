@@ -33,7 +33,8 @@ class Scene3D extends EventDispatcher {
         _sceneGraphRoot.scene = this;
         _sceneGraphRoot._isRoot = true;
         _sceneGraphRoot.partition = new Partition3D(new NodeBase());
-        super();
+        super(); 
+		
     }
 
 /**
@@ -48,7 +49,9 @@ class Scene3D extends EventDispatcher {
         var i:Int = 0;
         var len:Int = _partitions.length;
         traverser.scene = this;
+		 
         while (i < len)_partitions[i++].traverse(traverser);
+	 
     }
 
 /**

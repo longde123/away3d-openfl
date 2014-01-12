@@ -114,7 +114,7 @@ class BasicDiffuseMethod extends LightingMethodBase {
         if (cast((value != null), Bool) != _useTexture || (value != null && _texture != null && (value.hasMipMaps != _texture.hasMipMaps || value.format != _texture.format))) {
             invalidateShaderProgram();
         }
-        _useTexture = cast((value), Bool);
+        _useTexture = cast((value!=null), Bool);
         _texture = value;
         return value;
     }

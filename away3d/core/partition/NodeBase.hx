@@ -34,6 +34,9 @@ class NodeBase {
 
     public function new() {
         _childNodes = new Vector<NodeBase>();
+		_numEntities = 0;
+		_collectionMark = 0;
+		_numChildNodes= 0;
     }
 
     public function get_showDebugBounds():Bool {
@@ -73,6 +76,7 @@ class NodeBase {
 	 */
 
     public function addNode(node:NodeBase):Void {
+	
         node._parent = this;
         _numEntities += node._numEntities;
         _childNodes[_numChildNodes++] = node;
@@ -154,12 +158,16 @@ class NodeBase {
 	 */
 
     public function acceptTraverser(traverser:PartitionTraverser):Void {
+		
         if (_numEntities == 0 && _debugPrimitive == null) return;
+		
         if (traverser.enterNode(this)) {
             var i:Int = 0;
             while (i < _numChildNodes)_childNodes[i++].acceptTraverser(traverser);
             if (_debugPrimitive != null) traverser.applyRenderable(_debugPrimitive);
+			 
         }
+		
     }
 
     private function createDebugBounds():WireframePrimitiveBase {

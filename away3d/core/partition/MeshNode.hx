@@ -36,12 +36,17 @@ class MeshNode extends EntityNode {
 	 */
 
     override public function acceptTraverser(traverser:PartitionTraverser):Void {
+		
         if (traverser.enterNode(this)) {
             super.acceptTraverser(traverser);
             var subs:Vector<SubMesh> = _mesh.subMeshes;
             var i:Int = 0;
             var len:Int = subs.length;
-            while (i < len)traverser.applyRenderable(subs[i++]);
+		
+            while (i < len) { 
+				traverser.applyRenderable(subs[i++]);
+			}
+			
         }
     }
 

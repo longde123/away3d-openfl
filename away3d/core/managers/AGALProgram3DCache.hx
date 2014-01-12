@@ -83,7 +83,7 @@ class AGALProgram3DCache {
             _ids.set(key, _currentId);
             ++_currentId;
             program = _stage3DProxy.context3D.createProgram();
-
+ 
             var vertexByteCode = AGLSLShaderUtils.createShader(Context3DProgramType.VERTEX, vertexCode);
             var fragmentByteCode = AGLSLShaderUtils.createShader(Context3DProgramType.FRAGMENT, fragmentCode);
 

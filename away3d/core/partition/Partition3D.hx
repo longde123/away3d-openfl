@@ -45,6 +45,7 @@ class Partition3D {
         if (_updatesMade) updateEntities();
         ++PartitionTraverser._collectionMark;
         _rootNode.acceptTraverser(traverser);
+		
     }
 
 /**
@@ -103,15 +104,18 @@ class Partition3D {
         _updatesMade = false;
         do {
             targetNode = _rootNode.findPartitionForEntity(node.entity);
+		 
 // if changed, find and attach the mesh node to the best suited partition node
             if (node.parent != targetNode) {
                 if (node != null) node.removeFromParent();
                 targetNode.addNode(node);
+				
             }
             t = node._updateQueueNext;
             node._updateQueueNext = null;
 //call an internal update on the entity to fire any attached logic
             node.entity.internalUpdate();
+			
         }
         while (((node = t) != null));
     }

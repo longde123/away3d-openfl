@@ -8,6 +8,8 @@ class RenderableListItemPool {
     private var _poolSize:Int;
 
     public function new() {
+		_index = 0;
+		_poolSize = 0;
         _pool = new Vector<RenderableListItem>();
     }
 

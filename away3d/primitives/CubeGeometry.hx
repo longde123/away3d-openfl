@@ -6,7 +6,9 @@ package away3d.primitives;
 
 import flash.Vector;
 import away3d.core.base.CompactSubGeometry;
-
+#if (cpp || neko || js)
+using away3d.Stage3DUtils;
+#end
 class CubeGeometry extends PrimitiveBase {
     public var width(get_width, set_width):Float;
     public var height(get_height, set_height):Float;
@@ -158,23 +160,23 @@ class CubeGeometry extends PrimitiveBase {
     override private function buildGeometry(target:CompactSubGeometry):Void {
         var data:Vector<Float>;
         var indices:Vector<UInt>;
-        var tl:Int;
-        var tr:Int;
-        var bl:Int;
-        var br:Int;
+        var tl:Int= 0;
+        var tr:Int= 0;
+        var bl:Int= 0;
+        var br:Int= 0;
         var i:Int = 0;
-        var j:Int;
+        var j:Int= 0;
         var inc:Int = 0;
-        var vidx:Int;
-        var fidx:Int;
+        var vidx:Int= 0;
+        var fidx:Int= 0;
 // indices
-        var hw:Float;
-        var hh:Float;
-        var hd:Float;
+        var hw:Float= 0;
+        var hh:Float= 0;
+        var hd:Float= 0;
 // halves
-        var dw:Float;
-        var dh:Float;
-        var dd:Float;
+        var dw:Float= 0;
+        var dh:Float= 0;
+        var dd:Float= 0;
 // deltas
         var outer_pos:Float;
         var numVerts:Int = Std.int(((_segmentsW + 1) * (_segmentsH + 1) + (_segmentsW + 1) * (_segmentsD + 1) + (_segmentsH + 1) * (_segmentsD + 1)) * 2);
@@ -188,8 +190,12 @@ class CubeGeometry extends PrimitiveBase {
 
         else {
             data = new Vector<Float>(numVerts * stride, true);
-            indices = new Vector<UInt>(Std.int((_segmentsW * _segmentsH + _segmentsW * _segmentsD + _segmentsH * _segmentsD) * 12), true);
-            invalidateUVs();
+            indices = new Vector<UInt>(Std.int((_segmentsW * _segmentsH + _segmentsW * _segmentsD + _segmentsH * _segmentsD) * 12), true); 
+			#if (cpp || neko || js) 
+				data.fillVector(0, numVerts * stride,0);
+				indices.fillVector(0, Std.int((_segmentsW * _segmentsH + _segmentsW * _segmentsD + _segmentsH * _segmentsD) * 12),0);
+			#end
+            invalidateUVs();  
         }
 
 // Indices

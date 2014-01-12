@@ -12,9 +12,11 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
+ 
 
-
-base test...
+now demo test...
+flash 
+html  webgl 
 https://github.com/longde123/away3d-openfl-test
 
 it need 

@@ -74,11 +74,12 @@ class StereoRenderer {
         vertexBuffer = _rttManager.renderToScreenVertexBuffer;
         indexBuffer = _rttManager.indexBuffer;
         _method.activate(stage3DProxy);
+		context.setProgram(getProgram3D(stage3DProxy));
         context.setVertexBufferAt(0, vertexBuffer, 0, Context3DVertexBufferFormat.FLOAT_2);
         context.setVertexBufferAt(1, vertexBuffer, 2, Context3DVertexBufferFormat.FLOAT_2);
         context.setTextureAt(0, _leftTexture);
         context.setTextureAt(1, _rightTexture);
-        context.setProgram(getProgram3D(stage3DProxy));
+        
         context.clear(0.0, 0.0, 0.0, 1.0);
         context.drawTriangles(indexBuffer, 0, 2);
 // Clean up

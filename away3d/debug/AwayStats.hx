@@ -509,13 +509,16 @@ class AwayStats extends Sprite {
     }
 
     private function _redrawStats():Void {
+			#if flash
         var dia_y:Int;
 // Redraw counters
         _fps_tf.text = Std.string(_fps) + ("/" + Std.string(stage.frameRate));
         _afps_tf.text = Std.string(Math.round(_avg_fps));
         _ram_tf.text = _getRamString(_ram) + (" / " + _getRamString(_max_ram));
 // Move entire diagram
+	
         _dia_bmp.scroll(1, 0);
+		
 // Only redraw polycount if there is a  view available
 // or they won't have been calculated properly
         if (_views.length > 0) {
@@ -553,6 +556,7 @@ class AwayStats extends Sprite {
         else if (_updates % 5 == 0) _redrawMemGraph();
         _mem_graph.x = _updates % 5;
         _updates++;
+		#end
     }
 
     private function _redrawMemGraph():Void {

@@ -187,7 +187,11 @@ class Entity extends ObjectContainer3D {
     }
 
     public function get_worldBounds():BoundingVolumeBase {
-        if (_worldBoundsInvalid) updateWorldBounds();
+		//why
+        if (_worldBoundsInvalid) {
+			updateWorldBounds();
+		}
+	
         return _worldBounds;
     }
 

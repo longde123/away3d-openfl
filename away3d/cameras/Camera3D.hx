@@ -78,7 +78,7 @@ class Camera3D extends Entity {
 	 */
 
     public function get_frustumPlanes():Vector<Plane3D> {
-        if (_frustumPlanesDirty) updateFrustum();
+        if (_frustumPlanesDirty) updateFrustum(); 
         return _frustumPlanes;
     }
 
@@ -105,7 +105,7 @@ class Camera3D extends Entity {
         var c44:Float;
         var p:Plane3D;
         var raw:Vector<Float> = Matrix3DUtils.RAW_DATA_CONTAINER;
-        var invLen:Float;
+        var invLen:Float; 
         viewProjection.copyRawDataTo(raw);
         c11 = raw[(0)];
         c12 = raw[(4)];
