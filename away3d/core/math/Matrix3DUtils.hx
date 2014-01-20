@@ -4,6 +4,7 @@
 package away3d.core.math;
 
 
+import away3d.utils.ArrayUtils;
 import flash.geom.Vector3D;
 import flash.Vector;
 import flash.geom.Matrix3D;
@@ -15,7 +16,7 @@ class Matrix3DUtils {
 /**
 	 * A reference to a Vector to be used as a temporary raw data container, to prevent object creation.
 	 */
-    static public var RAW_DATA_CONTAINER:Vector<Float> = new Vector<Float>(16);
+    static public var RAW_DATA_CONTAINER:Vector<Float> =ArrayUtils.Prefill( new Vector<Float>(16),16,0);
     static public var CALCULATION_MATRIX:Matrix3D = new Matrix3D();
 /**
 	 * Fills the 3d matrix object with values representing the transformation made by the given quaternion.

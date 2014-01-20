@@ -1,6 +1,7 @@
 package away3d.lights.shadowmaps;
 
 
+import away3d.utils.ArrayUtils;
 import flash.Vector;
 import away3d.cameras.Camera3D;
 import away3d.cameras.lenses.FreeMatrixLens;
@@ -39,6 +40,7 @@ class DirectionalShadowMapper extends ShadowMapperBase {
         _overallDepthLens = new FreeMatrixLens();
         _overallDepthCamera = new Camera3D(_overallDepthLens);
         _localFrustum = new Vector<Float>(8 * 3);
+        ArrayUtils.Prefill(_localFrustum,8*3,0);
         _matrix = new Matrix3D();
     }
 

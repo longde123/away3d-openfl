@@ -122,6 +122,8 @@ class View3D  extends EventDispatcher {
     public function new(scene:Scene3D = null, camera:Camera3D = null, renderer:RendererBase = null, forceSoftware:Bool = false, profile:String = "baseline") {
         _width = 0;
         _height = 0;
+		_x = 0;
+        _y = 0;
         _localPos = new Point();
         _globalPos = new Point();
         _time = 0;

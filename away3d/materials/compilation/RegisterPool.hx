@@ -8,6 +8,7 @@
  */
 package away3d.materials.compilation;
 
+import away3d.utils.ArrayUtils;
 import flash.errors.Error;
 import flash.Vector;
 import haxe.ds.StringMap;
@@ -146,15 +147,14 @@ class RegisterPool {
         _usedSingleCount[1] = new Vector<UInt>(regCount, true);
         _usedSingleCount[2] = new Vector<UInt>(regCount, true);
         _usedSingleCount[3] = new Vector<UInt>(regCount, true);
-		
-		
-		#if (cpp || neko || js) 
-			_usedVectorCount.fillVector(0, regCount,0);
-			_usedSingleCount[0].fillVector(0, regCount, 0);
-			_usedSingleCount[1].fillVector(0, regCount, 0);
-			_usedSingleCount[2].fillVector(0, regCount, 0);
-			_usedSingleCount[3].fillVector(0, regCount,0);
-		#end
+
+
+	    ArrayUtils.Prefill(_usedVectorCount, regCount,0);
+        ArrayUtils.Prefill(_usedSingleCount[0],regCount, 0);
+        ArrayUtils.Prefill(_usedSingleCount[1], regCount, 0);
+        ArrayUtils.Prefill(_usedSingleCount[2], regCount, 0);
+        ArrayUtils.Prefill(_usedSingleCount[3], regCount,0);
+
     }
 
     static private function _initPool(regName:String, regCount:Int):String {

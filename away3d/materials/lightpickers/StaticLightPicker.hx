@@ -5,6 +5,7 @@
  */
 package away3d.materials.lightpickers;
 
+import away3d.utils.ArrayUtils;
 import flash.Vector;
 import flash.events.Event;
 import away3d.events.LightEvent;
@@ -78,6 +79,7 @@ class StaticLightPicker extends LightPickerBase {
         _numLightProbes = numLightProbes;
 // MUST HAVE MULTIPLE OF 4 ELEMENTS!
         _lightProbeWeights = new Vector<Float>(Math.ceil(numLightProbes / 4) * 4, true);
+        ArrayUtils.Prefill(_lightProbeWeights, Math.ceil(numLightProbes / 4) * 4,0);
 // notify material lights have changed
         dispatchEvent(new Event(Event.CHANGE));
         return value;

@@ -241,6 +241,8 @@ class RendererBase {
         _rttViewProjectionMatrix.appendScale(_textureRatioX, _textureRatioY, 1);
         executeRender(entityCollector, target, scissorRect, surfaceSelector);
 // clear buffers
+//todo  stage3d 
+/*
         var i:Int = 0;
         while (i < 8) {
 			
@@ -248,6 +250,7 @@ class RendererBase {
             _context.setTextureAt(i, null);
             ++i;
         }
+*/		
     }
 
 /**
@@ -268,6 +271,8 @@ class RendererBase {
         _context.setDepthTest(false, Context3DCompareMode.ALWAYS);
         _stage3DProxy.scissorRect = scissorRect;
         if (_backgroundImageRenderer != null) _backgroundImageRenderer.render();  
+		
+		//trace(entityCollector, target);
         draw(entityCollector, target);
 //line required for correct rendering when using away3d with starling. DO NOT REMOVE UNLESS STARLING INTEGRATION IS RETESTED!
         _context.setDepthTest(false, Context3DCompareMode.LESS_EQUAL);
