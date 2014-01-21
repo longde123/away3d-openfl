@@ -7,7 +7,7 @@ import flash.geom.Vector3D;
 import flash.geom.Matrix3D;
 class Stage3DUtils {
 
-
+#if js
     static public function copyColumnTo(mat:Matrix3D, column:Int, vector3D:Vector3D):Void {
 
       if (column > 3) {
@@ -49,12 +49,7 @@ class Stage3DUtils {
     }
 
 	
-	
-	
-	static private var flashMatIndex:Array<Int>  =[0,4,8,12,
-        1, 5, 9, 13,
-        2, 6, 10, 14,
-        3, 7, 11, 15];
+#end	
     static public function copyRawDataFrom(mat:Matrix3D, vector:Vector<Float>, ?index:Int = 0, ?transpose:Bool = false):Void {
 // Initial Tests - OK
         if (transpose) {
@@ -63,7 +58,7 @@ class Stage3DUtils {
 		 
         var l:Int = vector.length - index;
         for (c in 0...l) {
-            mat.rawData[flashMatIndex[c]] = vector[c + index];
+            mat.rawData[c] = vector[c + index];
         }
 
         if (transpose) {
@@ -80,7 +75,7 @@ class Stage3DUtils {
         }
         var l:Int = mat.rawData.length;
         for (c in 0...l) {
-            vector[c + index ] = mat.rawData[flashMatIndex[c]];
+            vector[c + index ] = mat.rawData[c];
         }
         if (transpose) {
             mat.transpose();
