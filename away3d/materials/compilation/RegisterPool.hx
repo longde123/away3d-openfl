@@ -11,10 +11,7 @@ package away3d.materials.compilation;
 import away3d.utils.ArrayUtils;
 import flash.errors.Error;
 import flash.Vector;
-import haxe.ds.StringMap;
-#if (cpp || neko || js)
-using away3d.Stage3DUtils;
-#end
+import haxe.ds.StringMap; 
 class RegisterPool {
 
     public static var _regPool:StringMap<Vector<ShaderRegisterElement>> = new StringMap<Vector<ShaderRegisterElement>>();

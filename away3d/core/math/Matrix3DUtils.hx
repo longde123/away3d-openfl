@@ -7,10 +7,7 @@ package away3d.core.math;
 import away3d.utils.ArrayUtils;
 import flash.geom.Vector3D;
 import flash.Vector;
-import flash.geom.Matrix3D;
-#if (cpp || neko || js)
-using away3d.Stage3DUtils;
-#end
+import flash.geom.Matrix3D; 
 class Matrix3DUtils {
 
 /**

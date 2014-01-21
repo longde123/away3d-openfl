@@ -21,10 +21,7 @@ import flash.display3D.Context3DCompareMode;
 import flash.display3D.textures.TextureBase;
 import flash.geom.Matrix3D;
 import flash.geom.Rectangle;
-import flash.geom.Vector3D;
-#if (cpp || neko || js)
-using away3d.Stage3DUtils;
-#end
+import flash.geom.Vector3D; 
 class DefaultRenderer extends RendererBase {
 
     static private var RTT_PASSES:Int = 1;

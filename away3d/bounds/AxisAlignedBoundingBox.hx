@@ -12,10 +12,7 @@ import away3d.primitives.WireframeCube;
 import away3d.primitives.WireframePrimitiveBase;
 import flash.geom.Vector3D;
 import flash.Vector;
-import away3d.core.math.Plane3D;
-#if (cpp || neko || js)
-using away3d.Stage3DUtils;
-#end
+import away3d.core.math.Plane3D; 
 class AxisAlignedBoundingBox extends BoundingVolumeBase {
     public var halfExtentsX(get_halfExtentsX, never):Float;
     public var halfExtentsY(get_halfExtentsY, never):Float;
