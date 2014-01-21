@@ -20,7 +20,4 @@ html  webgl
 https://github.com/longde123/away3d-openfl-test
 
 it need 
-
  
-https://github.com/longde123/openfl-stage3d
-https://github.com/longde123/openfl-aglsl
