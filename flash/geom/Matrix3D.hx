@@ -39,6 +39,7 @@ package flash.geom;
 import flash.geom.Vector3D;
 import flash.errors.Error;
 
+import flash.Vector;
 class Matrix3D
 {
    
@@ -48,23 +49,24 @@ class Matrix3D
     * <p>An exception is thrown if the rawData property is set to a matrix that is not invertible. The Matrix3D 
     * object must be invertible. If a non-invertible matrix is needed, create a subclass of the Matrix3D object.</p>
     */
-   public var rawData:Array<Float>;
+   public var rawData:Vector<Float>;
    
    /**
     * Creates a Matrix3D object.
     */
    public function new ( ?v:Array<Float> )
    {
+	   
       if( v != null && v.length == 16 )
       {
          this.rawData = v;
       }
       else
       {
-         this.rawData = [ 1, 0, 0, 0,
+         this.rawData =Vector.ofArray([ 1., 0, 0, 0,
                       0, 1, 0, 0,
                       0, 0, 1, 0,
-                      0, 0, 0, 1 ];
+                      0, 0, 0, 1 ]);
       }
    }
    
@@ -250,7 +252,7 @@ class Matrix3D
       //this.rawData = sourceMatrix3D.rawData.slice( 0 );
    }
    
-   public function copyRawDataFrom( vector:Array<Float>, index:UInt = 0, transpose:Bool = false ):Void
+   public function copyRawDataFrom( vector:Vector<Float>, index:UInt = 0, transpose:Bool = false ):Void
    {
       // Initial Tests - OK
       if ( transpose )
@@ -270,17 +272,17 @@ class Matrix3D
          }
    }
    
-   public function copyRawDataTo( vector:Array<Float>, index:UInt = 0, transpose:Bool = false ) : Void
+   public function copyRawDataTo( vector:Vector<Float>, index:UInt = 0, transpose:Bool = false ) : Void
    {
 
          // Initial Tests - OK
-
+			
 
          if ( transpose )
          {
+			
              this.transpose();
          }
-
          var l : UInt = this.rawData.length;
          for ( c in 0...l )     // for ( var c : UInt = 0; c < l ; c ++ )
          {
@@ -288,7 +290,6 @@ class Matrix3D
              vector[c + index ] = this.rawData[c];
 
          }
-
          if ( transpose )
          {
              this.transpose();
@@ -374,19 +375,19 @@ class Matrix3D
 
          // Initial Tests - OK
 
-      dest.rawData = Lambda.array(this.rawData);
+      dest.rawData =this.rawData.copy();
    }
    
    // TODO orientationStyle:string = "eulerAngles"
    /**
     * Returns the transformation matrix's translation, rotation, and scale settings as a Vector of three Vector3D objects.
     */
-   public function decompose():Array<Vector3D>
+   public function decompose():Vector<Vector3D>
    {
 
          // Initial Tests - Not OK
 
-      var vec:Array<Vector3D> = [];
+      var vec:Vector<Vector3D> =new Vector<Vector3D>();
       var m = this.clone();
       var mr = Lambda.array(m.rawData);
       
@@ -616,7 +617,7 @@ class Matrix3D
    /**
     * Sets the transformation matrix's translation, rotation, and scale settings.
     */
-   public function recompose( components:Array<Vector3D> ): Bool
+   public function recompose( components:Vector<Vector3D> ): Bool
    {
 
          // Initial Tests - OK
@@ -661,7 +662,7 @@ class Matrix3D
    /**
     * Uses the transformation matrix to transform a Vector of Numbers from one coordinate space to another.
     */
-   public function transformVectors( vin:Array<Float>, vout:Array<Float> )
+   public function transformVectors( vin:Vector<Float>, vout:Vector<Float> )
    {
 
          // Initial Tests - OK
@@ -689,7 +690,7 @@ class Matrix3D
 
          // Initial Tests - OK
 
-      var oRawData:Array<Float> = Lambda.array(this.rawData);
+      var oRawData:Vector<Float> = this.rawData.copy();
       
       this.rawData[1] = oRawData[4];
       this.rawData[2] = oRawData[8];
