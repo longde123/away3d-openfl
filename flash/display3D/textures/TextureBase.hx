@@ -12,18 +12,21 @@ import openfl.gl.GL;
 import openfl.gl.GLTexture;
 import flash.events.EventDispatcher;
 
-class TextureBase extends EventDispatcher {
+class TextureBase extends EventDispatcher 
+{
     public var glTexture:GLTexture;
 
-    public function new(glTexture:GLTexture) {
-        super();
+   public function new(glTexture:GLTexture) 
+   {
+      super();
 
         this.glTexture = glTexture;
     }
 
-    public function dispose():Void {
+   public function dispose():Void 
+   {
         GL.deleteTexture(glTexture);
-    }
+   }
 }
 
 #end
