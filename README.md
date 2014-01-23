@@ -1,4 +1,8 @@
-from https://github.com/away3d/ 
+Project merger to https://github.com/away3d/away3d-core-openfl, no longer updated
+
+
+
+
 
  
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,10 +18,5 @@ See the License for the specific language governing permissions and
 limitations under the License.
  
 
-now demo test...
-flash 
-html  webgl 
-https://github.com/longde123/away3d-openfl-test
-
-it need 
+ 
  
