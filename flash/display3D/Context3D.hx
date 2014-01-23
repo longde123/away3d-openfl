@@ -544,6 +544,10 @@ class Context3D
    public function setScissorRectangle(rectangle:Rectangle):Void 
    {
         // TODO test it
+		if (rectangle == null) {
+			 
+			return;
+		}
         GL.scissor(Std.int(rectangle.x), Std.int(rectangle.y), Std.int(rectangle.width), Std.int(rectangle.height));
    }
 

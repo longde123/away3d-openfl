@@ -6,8 +6,7 @@ package away3d.primitives;
 
 import away3d.utils.ArrayUtils;
 import flash.Vector;
-import away3d.core.base.CompactSubGeometry;
- 
+import away3d.core.base.CompactSubGeometry; 
 class CubeGeometry extends PrimitiveBase {
     public var width(get_width, set_width):Float;
     public var height(get_height, set_height):Float;

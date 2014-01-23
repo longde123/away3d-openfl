@@ -16,8 +16,7 @@ class AGLSLShaderUtils{
  
 	inline public static   function compile(programType : String, source : String) : ByteArray {
 		var agalMiniAssembler : AGALMiniAssembler = new AGALMiniAssembler();
-	 
-		var data : ByteArray;
+		var data : ByteArray=null;
 		var concatSource : String;
 		switch(programType) {
 		case "vertex":
@@ -77,7 +76,7 @@ class AGLSLShaderUtils{
 
 		} 
 		
-		trace("--- ERR ---\n" + shaderSourceString);
+		//trace("--- ERR ---\n" + shaderSourceString);
 		return shader;
 
 		#else

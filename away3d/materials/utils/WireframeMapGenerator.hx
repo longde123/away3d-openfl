@@ -81,6 +81,7 @@ class WireframeMapGenerator {
         while ((++i < len));
         len = indices.length;
         indexClone = new Vector<Int>(len, true);
+		ArrayUtils.Prefill(indexClone,len,0);
         i = 0;
 // awesome, just to convert from uint to int vector -_-
         do {

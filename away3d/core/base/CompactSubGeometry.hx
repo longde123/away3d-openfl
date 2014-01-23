@@ -70,6 +70,8 @@ class CompactSubGeometry extends SubGeometryBase implements ISubGeometry {
         if (contextIndex != _contextIndex) updateActiveBuffer(contextIndex);
         if (_activeBuffer == null || _activeContext != context) createBuffer(contextIndex, context);
         if (_activeDataInvalid) uploadData(contextIndex);
+		//todo 
+		//trace(index, _vertexData, 0, Context3DVertexBufferFormat.FLOAT_3);
         context.setVertexBufferAt(index, _activeBuffer, 0, Context3DVertexBufferFormat.FLOAT_3);
     }
 

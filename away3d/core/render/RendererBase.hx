@@ -274,7 +274,7 @@ class RendererBase {
         if ((target != null || !_shareContext) && _clearOnRender) _context.clear(_backgroundR, _backgroundG, _backgroundB, _backgroundAlpha, 1, 0);
         _context.setDepthTest(false, Context3DCompareMode.ALWAYS);
 		//return;
-        //_stage3DProxy.scissorRect = scissorRect;
+        _stage3DProxy.scissorRect = scissorRect;
         if (_backgroundImageRenderer != null) _backgroundImageRenderer.render();  
 			
 		//trace(entityCollector.entityHead, target);
@@ -287,7 +287,7 @@ class RendererBase {
                 _snapshotRequired = false;
             }
         }
-      // _stage3DProxy.scissorRect = null;
+        _stage3DProxy.scissorRect = null;
     }
 
 /*

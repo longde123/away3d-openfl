@@ -150,6 +150,8 @@ class SubGeometryBase {
             _indexBuffer[contextIndex].uploadFromVector(_indices, 0, _numIndices);
             _indicesInvalid[contextIndex] = false;
         }
+		//todo
+		//trace(_indices, 0, _numIndices);
         return _indexBuffer[contextIndex];
     }
 

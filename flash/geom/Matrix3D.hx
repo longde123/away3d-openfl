@@ -780,6 +780,32 @@ class Matrix3D
 
       return value;
    }
+   
+   
+   /**
+    * A flash.geom.Matrix3D equivalent of the current Matrix
+    */
+   public var flashMatrix3D(get, set) : flash.geom.Matrix3D; 
+   private function get_flashMatrix3D() : flash.geom.Matrix3D {
+      return new flash.geom.Matrix3D( [
+        rawData[0], rawData[4], rawData[8], rawData[12],
+        rawData[1], rawData[5], rawData[9], rawData[13],
+        rawData[2], rawData[6], rawData[10], rawData[14],
+        rawData[3], rawData[7], rawData[11], rawData[15]
+      ] );
+   }
+
+   private function set_flashMatrix3D(mat:flash.geom.Matrix3D) : flash.geom.Matrix3D {
+      var raw:Vector<Float> = mat.rawData;
+      this.rawData =Vector.ofArray( [
+        raw[0], raw[4], raw[8], raw[12],
+        raw[1], raw[5], raw[9], raw[13],
+        raw[2], raw[6], raw[10], raw[14],
+        raw[3], raw[7], raw[11], raw[15]
+      ]);
+      return mat;
+   }
+
 
  
 }
